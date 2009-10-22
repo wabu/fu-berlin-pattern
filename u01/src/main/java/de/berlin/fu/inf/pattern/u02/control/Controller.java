@@ -40,15 +40,14 @@ public class Controller {
         return simpleDatabase.getDataView();
     }
     
-    public Classifer<Digit, Integer> getClassifier(){
-        return new SimpleKNNClassifier<Digit, Integer>(1,simpleDatabase);
+    public Classifer<Digit, Integer> getClassifier(int k){
+        return new SimpleKNNClassifier<Digit, Integer>(k,simpleDatabase);
     }
     
-    public float testOnFile(String fileName){
-    	
-    	Classifer<Digit, Integer> classifier = getClassifier();
+    public float testOnFile(String fileName, int k){
         Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
         
+    	Classifer<Digit, Integer> classifier = getClassifier(k);
         int succ = 0;
         for(Digit digit : digitCollection) {
         	if(digit.getGroup() == classifier.classify(digit)) {
