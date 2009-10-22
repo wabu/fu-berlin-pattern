@@ -1,4 +1,4 @@
-package de.berlin.fu.inf.pattern.u01;
+package de.berlin.fu.inf.pattern.u03;
 
 import de.berlin.fu.inf.pattern.types.Messurable;
 

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -20,25 +21,24 @@ import java.util.List;
 public class DigitReader {
 
     public Digit readDigitFromLine(String line) {
-        String[] fields = line.split(" ");
+    	StringTokenizer t = new StringTokenizer(line);
 
-
-        if(fields.length <= 16) {
+        if(t.countTokens() <= 16) {
             throw new IllegalStateException("line length...");
         }
 
         DigitPoint point;
         Digit digit = new Digit();
-        for(int i=0; i<Digit.POINT_NUMBER; i*=2) {
-
+        
+        for(int i=0; i<Digit.POINT_NUMBER; i++) {
             point = new DigitPoint(
-                    Integer.parseInt(fields[i]),
-                    Integer.parseInt(fields[i+1]));
-
+                    Integer.parseInt(t.nextToken()),
+                    Integer.parseInt(t.nextToken()));
             digit.addPoint(point);
         }
+        digit.setGroup(Integer.parseInt(t.nextToken()));
         
-        return new Digit();
+        return digit;
     }
 
     public Collection<Digit> readDigitsFromFile(String filename) {

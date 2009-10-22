@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import de.berlin.fu.inf.pattern.u03.RunTest;
+
 public class ExersizeTest {
 	
 	public void runTest(int k, int n){
