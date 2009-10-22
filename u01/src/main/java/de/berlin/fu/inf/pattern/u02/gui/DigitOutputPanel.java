@@ -17,18 +17,30 @@ import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
 import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitReader;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.util.Collection;
 import java.util.Iterator;
-import javax.xml.stream.events.StartDocument;
+
+import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.html.Option;
+
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author alex
  */
-public class DigitOutputPanel extends javax.swing.JPanel {
-
+public class DigitOutputPanel extends javax.swing.JPanel implements ListSelectionListener {
+	private Logger logger = Logger.getLogger(DigitOutputPanel.class);
     private DigitTableModel digitTableModel = new DigitTableModel();
 
+    private DigitDrawingPanel jDrawingPanel = new DigitDrawingPanel();
+    
     DigitReader digitRead = new DigitReader();
 
     SimpleDatabase<Digit, Integer>  simpleDatabase;
@@ -48,25 +60,24 @@ public class DigitOutputPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable(digitTableModel);
+        jTable1.getSelectionModel().addListSelectionListener(this);
+        
+        
         jLabel1 = new javax.swing.JLabel();
         jTextFieldTrainingFile = new javax.swing.JTextField();
+        jTextFieldTrainingFile.setPreferredSize(new Dimension(160, 20));
+        
         jLabel2 = new javax.swing.JLabel();
         jTextFieldTestFile = new javax.swing.JTextField();
+        
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Punkt 1", "Punkt 2", "Punkt 3", "Punkt 4", "Punkt 5", "Punkt 6", "Punkt 7", "Punk 8", "Klasse"
-            }
-        ));
+        jDrawingPanel = new DigitDrawingPanel();
+        
+        
+        
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Learning File:");
@@ -88,12 +99,33 @@ public class DigitOutputPanel extends javax.swing.JPanel {
 
         jButton2.setText("Test");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+           public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+   
+
+        BorderLayout borderLayout = new BorderLayout();
+        
+        JPanel jPanelTop = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        this.jDrawingPanel.setPreferredSize(new Dimension(200, 200));
+        
+        
+        this.setLayout(borderLayout);
+        jPanelTop.add(jLabel1, BorderLayout.NORTH);
+        jPanelTop.add(jTextFieldTrainingFile, BorderLayout.NORTH);
+        jPanelTop.add(jButton1, BorderLayout.NORTH);
+        this.add(jPanelTop, BorderLayout.NORTH);
+        //this.add(jLabel2);
+        //this.add(jTextFieldTestFile);
+        //this.add(jButton2);
+        this.add(jScrollPane1, BorderLayout.CENTER);
+        this.add(jDrawingPanel, BorderLayout.EAST);
+        
+        
+        
+        /*
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,6 +161,7 @@ public class DigitOutputPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
         );
+        */
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextFieldTestFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTestFileActionPerformed
@@ -149,7 +182,7 @@ public class DigitOutputPanel extends javax.swing.JPanel {
                     DigitReader reader = new DigitReader();
 
                     digitTableModel.setData(reader.readDigitsFromFile(fileName));
-
+                    jTable1.validate();
                 }
             }
         ).start();
@@ -168,6 +201,17 @@ public class DigitOutputPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldTrainingFile;
     // End of variables declaration//GEN-END:variables
 
+    
+    
+	public void valueChanged(ListSelectionEvent e) {
+		// int index = e.getFirstIndex();
+		int index = this.jTable1.getSelectedRow();
+		Digit digit = this.digitTableModel.getDigit(index);
+		
+		logger.debug("Selection: " + digit);
+		jDrawingPanel.setDigit(digit);
+	}
 
+    
 
 }

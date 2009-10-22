@@ -69,6 +69,20 @@ public class Digit implements Messurable<Digit>{
         return distance;
     }
 
+    @Override
+    public String toString() {
+    	StringBuilder builder = new StringBuilder();
+    	
+    	for(DigitPoint point : pointPath) {
+    		builder.append(point);
+    		builder.append(" ");
+    	}
+    	
+    	if( this.group >= 0) builder.append("class: " + group);
+    	else builder.append("class: unknown");
+    	
+    	return builder.toString(); 
+    }
 
 
 }

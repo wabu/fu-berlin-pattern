@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 public class JMainWindow extends JFrame {
 
     private DigitOutputPanel digitTablePanel;
-    private DigitDrawingPanel digitDrawPanel;
 
     public JMainWindow() {
         init();
@@ -31,14 +30,12 @@ public class JMainWindow extends JFrame {
         content.setLayout(new BorderLayout());
         
         this.digitTablePanel = new DigitOutputPanel();
-        this.digitDrawPanel = new DigitDrawingPanel();
+     
 
 
-        content.add(this.digitTablePanel, BorderLayout.WEST);
-        content.add(this.digitDrawPanel, BorderLayout.CENTER);
 
-        
-        this.pack();
+        this.setLayout(new BorderLayout());
+        this.setContentPane(digitTablePanel);
 
     }
 

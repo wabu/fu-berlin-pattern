@@ -15,14 +15,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Alexander Münn
  */
 public class DigitReader {
+	private final Logger logger = Logger.getLogger(DigitReader.class);  
 
     public Digit readDigitFromLine(String line) {
-        System.out.println("üarse: " + line);
+        logger.trace("readDigitFromLine: " + line);
 
         StringTokenizer tokenizer = new StringTokenizer(line);
 
@@ -59,7 +62,7 @@ public class DigitReader {
             List<Digit> readDigits = new ArrayList<Digit>();
             int i = 0;
             while( (line = reader.readLine()) != null) {
-                System.out.println("Read line: " + i++);
+                logger.trace("Read line: " + i++);
                 readDigits.add(this.readDigitFromLine(line));
 
             }

@@ -12,7 +12,8 @@ import de.berlin.fu.inf.pattern.types.Messurable;
  * @author alex
  */
 public class DigitPoint extends java.awt.Point implements Messurable<DigitPoint> {
-
+	public static int MAX_Y = 100;
+	
     public DigitPoint(int arg0, int arg1) {
         super(arg0, arg1);
     }
