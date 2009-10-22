@@ -61,7 +61,7 @@ public class Controller {
         	}
         	num++;
     		if(log.isDebugEnabled() && num%100==0) {
-    			log.debug(succ+"/"+num +"("+digitCollection.size()+")");
+    			log.debug("processed "+num +"/"+digitCollection.size()+", rate "+(float)succ/(float)num);
         	}
         }
         return (float)succ/(float)digitCollection.size();

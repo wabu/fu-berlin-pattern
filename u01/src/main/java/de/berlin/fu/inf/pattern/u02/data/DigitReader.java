@@ -6,19 +6,22 @@
 package de.berlin.fu.inf.pattern.u02.data;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Alexander Münn
  */
 public class DigitReader {
+	Logger log = Logger.getLogger(DigitReader.class);
 
     public Digit readDigitFromLine(String line) {
     	StringTokenizer t = new StringTokenizer(line);
@@ -43,7 +46,8 @@ public class DigitReader {
 
     public Collection<Digit> readDigitsFromFile(String filename) {
         try{
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            BufferedReader reader = new BufferedReader(
+            		new InputStreamReader(ClassLoader.getSystemResourceAsStream(filename)));
 
             String line = null;
             List<Digit> readDigits = new LinkedList<Digit>();
@@ -55,8 +59,8 @@ public class DigitReader {
             return readDigits;
 
         } catch (IOException ioEx) {
-            ioEx.printStackTrace();
-            return null;
+        	log.error("error while opening resource "+filename, ioEx);
+        	throw new RuntimeException(ioEx);
         }
     }
 
