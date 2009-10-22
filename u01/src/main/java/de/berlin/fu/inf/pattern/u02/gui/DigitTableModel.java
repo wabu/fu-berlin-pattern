@@ -7,6 +7,8 @@ package de.berlin.fu.inf.pattern.u02.gui;
 
 import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitPoint;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +45,10 @@ public class DigitTableModel extends AbstractTableModel {
             return new Integer(digit.getGroup());
     }
 
+
+    public void setData(Collection<Digit> elements) {
+        this.digitList = new ArrayList<Digit>(elements);
+    }
 
 
 

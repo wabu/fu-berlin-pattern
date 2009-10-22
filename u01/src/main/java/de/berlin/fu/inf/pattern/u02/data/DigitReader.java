@@ -9,9 +9,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -20,25 +22,33 @@ import java.util.List;
 public class DigitReader {
 
     public Digit readDigitFromLine(String line) {
-        String[] fields = line.split(" ");
+        System.out.println("üarse: " + line);
+
+        StringTokenizer tokenizer = new StringTokenizer(line);
 
 
-        if(fields.length <= 16) {
+
+
+        if(tokenizer.countTokens() <= 2*Digit.POINT_NUMBER) {
             throw new IllegalStateException("line length...");
         }
 
         DigitPoint point;
         Digit digit = new Digit();
-        for(int i=0; i<Digit.POINT_NUMBER; i*=2) {
 
+        for(int i=0; i<2*Digit.POINT_NUMBER; i+=2) {
             point = new DigitPoint(
-                    Integer.parseInt(fields[i]),
-                    Integer.parseInt(fields[i+1]));
+                    Integer.parseInt(tokenizer.nextToken()),
+                    Integer.parseInt(tokenizer.nextToken()));
 
             digit.addPoint(point);
         }
+
+        if(tokenizer.hasMoreTokens()) {
+            digit.setGroup(Integer.parseInt(tokenizer.nextToken()));
+        }
         
-        return new Digit();
+        return digit;
     }
 
     public Collection<Digit> readDigitsFromFile(String filename) {
@@ -46,10 +56,12 @@ public class DigitReader {
             BufferedReader reader = new BufferedReader(new FileReader(filename));
 
             String line = null;
-            List<Digit> readDigits = new LinkedList<Digit>();
-
+            List<Digit> readDigits = new ArrayList<Digit>();
+            int i = 0;
             while( (line = reader.readLine()) != null) {
+                System.out.println("Read line: " + i++);
                 readDigits.add(this.readDigitFromLine(line));
+
             }
 
             return readDigits;

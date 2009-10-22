@@ -19,6 +19,7 @@ import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitReader;
 import java.util.Collection;
 import java.util.Iterator;
+import javax.xml.stream.events.StartDocument;
 
 /**
  *
@@ -27,6 +28,7 @@ import java.util.Iterator;
 public class DigitOutputPanel extends javax.swing.JPanel {
 
     private DigitTableModel digitTableModel = new DigitTableModel();
+
     DigitReader digitRead = new DigitReader();
 
     SimpleDatabase<Digit, Integer>  simpleDatabase;
@@ -138,7 +140,19 @@ public class DigitOutputPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String fileName = this.jTextFieldTrainingFile.getText();
+        final String fileName = this.jTextFieldTrainingFile.getText();
+
+        new Thread (
+            new Runnable() {
+
+                public void run() {
+                    DigitReader reader = new DigitReader();
+
+                    digitTableModel.setData(reader.readDigitsFromFile(fileName));
+
+                }
+            }
+        ).start();
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
