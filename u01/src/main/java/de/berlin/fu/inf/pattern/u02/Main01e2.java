@@ -6,10 +6,12 @@ import de.berlin.fu.inf.pattern.u02.control.Controller;
 
 public class Main01e2 {
 	public static void main(String[] args) {
+		Logger log = Logger.getLogger(Main01e2.class);
+		log.info("1.2) PINDIGITS TEST");
+		
 		String training = "pendigits-training.txt";
 		String testing = "pendigits-testing.txt";
 		
-		Logger log = Logger.getLogger(Main01e2.class);
 		Controller controller = new Controller();
 		
 		log.info("learning from "+training);
