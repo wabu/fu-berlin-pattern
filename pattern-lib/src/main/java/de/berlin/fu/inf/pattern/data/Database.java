@@ -1,6 +1,7 @@
 package de.berlin.fu.inf.pattern.data;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * hold some enties
@@ -20,6 +21,6 @@ public interface Database<D, C> extends Iterable<Entry<D, C>>{
 
 	public abstract int size();
 
-	public abstract Iterable<D> getDataView();
+	public abstract List<D> getDataView();
 
 }

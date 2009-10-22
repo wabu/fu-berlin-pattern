@@ -5,14 +5,15 @@
 
 package de.berlin.fu.inf.pattern.u02.control;
 
+import java.util.Collection;
+import java.util.List;
+
 import de.berlin.fu.inf.pattern.classificators.Classifer;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
 import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitReader;
-import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -22,13 +23,9 @@ public class Controller {
     private SimpleDatabase<Digit, Integer> simpleDatabase = new SimpleDatabase<Digit, Integer>();
 
     private DigitReader digitReader = new DigitReader();
-
-
     
 
     public List<Digit> learnFromFile(String fileName) {
-
-
         Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
 
         simpleDatabase = new SimpleDatabase<Digit, Integer>();
@@ -39,11 +36,25 @@ public class Controller {
             simpleDatabase.add(new Entry<Digit, Integer>(digit, digit.getGroup()));
         }
 
-        Classifer<Digit, Integer> classifier = new SimpleKNNClassifier<Digit, Integer>(1,simpleDatabase);
 
-        return null;
+        return simpleDatabase.getDataView();
     }
-
-
-
+    
+    public Classifer<Digit, Integer> getClassifier(){
+        return new SimpleKNNClassifier<Digit, Integer>(1,simpleDatabase);
+    }
+    
+    public float testOnFile(String fileName){
+    	
+    	Classifer<Digit, Integer> classifier = getClassifier();
+        Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
+        
+        int succ = 0;
+        for(Digit digit : digitCollection) {
+        	if(digit.getGroup() == classifier.classify(digit)) {
+        		succ++;
+        	}
+        }
+        return (float)succ/(float)digitCollection.size();
+    }
 }

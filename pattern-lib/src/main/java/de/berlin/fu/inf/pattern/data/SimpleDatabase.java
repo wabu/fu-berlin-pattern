@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class SimpleDatabase<D, C> implements Iterable<Entry<D,C>>, Database<D, C> {
 	private final List<Entry<D, C>> enties;
@@ -34,8 +35,8 @@ public class SimpleDatabase<D, C> implements Iterable<Entry<D,C>>, Database<D, C
 		return enties.iterator();
 	}
 	
-	public Iterable<D> getDataView() {
-		return Iterables.transform(this, Entry.<D,C>getDataFunction());
+	public List<D> getDataView() {
+		return Lists.transform(this.enties, Entry.<D,C>getDataFunction());
 	}
 	
 	@Override
