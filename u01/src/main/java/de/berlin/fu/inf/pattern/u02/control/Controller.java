@@ -8,6 +8,8 @@ package de.berlin.fu.inf.pattern.u02.control;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.berlin.fu.inf.pattern.classificators.Classifer;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Entry;
@@ -20,6 +22,8 @@ import de.berlin.fu.inf.pattern.u02.data.DigitReader;
  * @author alex
  */
 public class Controller {
+	final Logger log = Logger.getLogger(Controller.class);
+	
     private SimpleDatabase<Digit, Integer> simpleDatabase = new SimpleDatabase<Digit, Integer>();
 
     private DigitReader digitReader = new DigitReader();
@@ -46,12 +50,18 @@ public class Controller {
     
     public float testOnFile(String fileName, int k){
         Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
-        
     	Classifer<Digit, Integer> classifier = getClassifier(k);
         int succ = 0;
+        int num = 0;
         for(Digit digit : digitCollection) {
-        	if(digit.getGroup() == classifier.classify(digit)) {
+        	int expected = digit.getGroup();
+        	int classified = classifier.classify(digit);
+        	if(expected == classified) {
         		succ++;
+        	}
+        	num++;
+    		if(log.isDebugEnabled() && num%100==0) {
+    			log.debug(succ+"/"+num +"("+digitCollection.size()+")");
         	}
         }
         return (float)succ/(float)digitCollection.size();

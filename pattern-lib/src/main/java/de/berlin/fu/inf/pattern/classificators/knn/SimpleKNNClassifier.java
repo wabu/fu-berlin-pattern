@@ -4,9 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-
 import de.berlin.fu.inf.pattern.classificators.Classifer;
 import de.berlin.fu.inf.pattern.data.Database;
 import de.berlin.fu.inf.pattern.data.Entry;
@@ -23,8 +20,7 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classife
 	private final Database<D, C> database;
 	private final int k;
 
-	@Inject
-	public SimpleKNNClassifier(@Named("k-nn") int k, Database<D, C> database) {
+	public SimpleKNNClassifier(int k, Database<D, C> database) {
 		this.database = database;
 		this.k = k;
 	}

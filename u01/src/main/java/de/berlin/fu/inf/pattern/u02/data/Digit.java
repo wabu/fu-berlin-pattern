@@ -65,10 +65,11 @@ public class Digit implements Messurable<Digit>{
         for( DigitPoint point : pointPath) {
             distance += point.getDistance(iterPoint.next());
         }
-
         return distance;
     }
-
-
-
+    
+    @Override
+    public String toString() {
+    	return group + ":" + pointPath.toString();
+    }
 }

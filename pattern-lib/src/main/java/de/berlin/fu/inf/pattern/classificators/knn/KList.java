@@ -30,7 +30,8 @@ class KList<K,V> {
 	public void add(final K key, V value){
 		map.put(key,value);
 		if(map.size() > k){
-			assert map.remove(map.lastKey()) != null;
+			V removed = map.remove(map.lastKey());
+			assert removed != null;
 		}
 	}
 	
