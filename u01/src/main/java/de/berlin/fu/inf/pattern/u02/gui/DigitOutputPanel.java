@@ -9,7 +9,7 @@
  * Created on 22.10.2009, 12:01:45
  */
 
-package de.berlin.fu.inf.pattern.u01.gui;
+package de.berlin.fu.inf.pattern.u02.gui;
 
 import de.berlin.fu.inf.pattern.classificators.Classifer;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
@@ -139,17 +139,7 @@ public class DigitOutputPanel extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String fileName = this.jTextFieldTrainingFile.getText();
-        Collection<Digit> digitCollection = digitRead.readDigitsFromFile(fileName);
-        simpleDatabase = new SimpleDatabase<Digit, Integer>();
-
-
-
-        for(Digit digit : digitCollection) {
-            simpleDatabase.add(new Entry<Digit, Integer>(digit, digit.getGroup()));
-        }
-
-        Classifer<Digit, Integer> classifier = new SimpleKNNClassifier<Digit, Integer>(1,simpleDatabase);
-
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package de.berlin.fu.inf.pattern.u01.gui;
+package de.berlin.fu.inf.pattern.u02.gui;
 
 import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitPoint;
