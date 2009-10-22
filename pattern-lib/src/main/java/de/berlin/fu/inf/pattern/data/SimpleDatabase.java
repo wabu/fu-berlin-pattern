@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public class SimpleDatabase<D, C> implements Iterable<Entry<D,C>>, Database<D, C> {
