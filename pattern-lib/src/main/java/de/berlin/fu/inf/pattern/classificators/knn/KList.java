@@ -10,6 +10,13 @@ import javax.annotation.Nullable;
 import de.berlin.fu.inf.pattern.types.DistanceComperator;
 import de.berlin.fu.inf.pattern.types.Messurable;
 
+/**
+ * collect the k best elements
+ * @author wabu
+ *
+ * @param <K>
+ * @param <V>
+ */
 class KList<K,V> {
 	final int k;
 	final NavigableMap<K,V> map;
@@ -17,16 +24,25 @@ class KList<K,V> {
 	public KList(int k) {
 		this(k,(Comparator<K>)null);
 	}
+	
+	/**
+	 * use distance to a reference point as definition of best
+	 * @param k
+	 * @param refPoint
+	 */
 	public KList(int k, Messurable<K> refPoint) {
 		this(k, new DistanceComperator<K>(refPoint));
 	}
-	
-	
 	public KList(int k, @Nullable final Comparator<K> compare) {
 		this.k = k;
 		this.map = new TreeMap<K,V>(compare);
 	}
 	
+	/**
+	 * add value to collection, if it's key is under the k best keys 
+	 * @param key
+	 * @param value
+	 */
 	public void add(final K key, V value){
 		// put data point into map
 		map.put(key,value);

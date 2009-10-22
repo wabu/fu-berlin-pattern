@@ -34,7 +34,7 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classife
 	}
 	
 	public C classify(D data){
-		// compare to all points in database and save the k best in the list
+		// get the k neareast neighbours out of the database
 		KList<D,C> nearestNeighbours = new KList<D, C>(k, data); 
 		for(Entry<D,C> e : database){
 			nearestNeighbours.add(e.getData(), e.getClassification());
