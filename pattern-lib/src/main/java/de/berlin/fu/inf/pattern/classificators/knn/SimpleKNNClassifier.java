@@ -34,17 +34,17 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classife
 	}
 	
 	public C classify(D data){
-		// get k nearest neighbors
-		KList<D,C> nN = new KList<D, C>(k, data); 
+		// compare to all points in database and save the k best in the list
+		KList<D,C> nearestNeighbours = new KList<D, C>(k, data); 
 		for(Entry<D,C> e : database){
-			nN.add(e.getData(), e.getClassification());
+			nearestNeighbours.add(e.getData(), e.getClassification());
 		}
 		
-		// get class count
+		// get class with best hits
 		Map<C,Integer> classes = new HashMap<C, Integer>(k);
 		int bestCount = 0;
 		C bestClass = null;
-		for(C c : nN.getValues()){
+		for(C c : nearestNeighbours.getValues()){
 			int count = 1;
 			if(classes.containsKey(c)) {
 				count += classes.get(c);

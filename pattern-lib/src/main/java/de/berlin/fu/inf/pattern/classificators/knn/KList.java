@@ -28,8 +28,10 @@ class KList<K,V> {
 	}
 	
 	public void add(final K key, V value){
+		// put data point into map
 		map.put(key,value);
 		if(map.size() > k){
+			// remove worst data point
 			V removed = map.remove(map.lastKey());
 			assert removed != null;
 		}
