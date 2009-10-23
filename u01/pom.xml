@@ -25,7 +25,7 @@
         <artifactId>maven-shade-plugin</artifactId>
         <configuration>
           <shadedArtifactAttached>true</shadedArtifactAttached>
-          <shadedClassifierName>complete</shadedClassifierName>
+          <shadedClassifierName>shaded</shadedClassifierName>
           <transformers>
             <transformer 
               implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
@@ -38,6 +38,18 @@
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
             </goals>
           </execution>
         </executions>

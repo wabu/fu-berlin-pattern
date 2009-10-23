@@ -61,7 +61,7 @@ public class DigitReader {
            return readDigitsFromStream(new FileReader(name));
         } catch (IOException ioEx) {
         	logger.error("error while opening file "+name, ioEx);
-	        return readDigitsFromStream(new InputStreamReader(ClassLoader.getSystemResourceAsStream("name")));
+	        return readDigitsFromStream(new InputStreamReader(ClassLoader.getSystemResourceAsStream(name)));
         }
     }
 
@@ -84,7 +84,6 @@ public class DigitReader {
             while( (line = reader.readLine()) != null) {
                 logger.trace("Read line: " + i++);
                 readDigits.add(this.readDigitFromLine(line));
-
             }
 
             return readDigits;

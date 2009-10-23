@@ -181,7 +181,7 @@ public class DigitOutputPanel extends javax.swing.JPanel implements ListSelectio
                 public void run() {
                     DigitReader reader = new DigitReader();
 
-                    digitTableModel.setData(reader.readDigitsFromFile(fileName));
+                    digitTableModel.setData(reader.readDigits(fileName));
                     jTable1.validate();
                 }
             }

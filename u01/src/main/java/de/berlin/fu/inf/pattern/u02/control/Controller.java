@@ -30,7 +30,7 @@ public class Controller {
     
 
     public List<Digit> learnFromFile(String fileName) {
-        Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
+        Collection<Digit> digitCollection = digitReader.readDigits(fileName);
 
         simpleDatabase = new SimpleDatabase<Digit, Integer>();
 
@@ -49,7 +49,7 @@ public class Controller {
     }
     
     public float testOnFile(String fileName, int k){
-        Collection<Digit> digitCollection = digitReader.readDigitsFromFile(fileName);
+        Collection<Digit> digitCollection = digitReader.readDigits(fileName);
     	Classifer<Digit, Integer> classifier = getClassifier(k);
         int succ = 0;
         int num = 0;
