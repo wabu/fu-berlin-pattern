@@ -1,5 +1,8 @@
 package de.berlin.fu.inf.pattern.classificators;
 
+import java.util.Collection;
+
+
 
 /**
  * classifies data into classes
@@ -9,6 +12,6 @@ package de.berlin.fu.inf.pattern.classificators;
  * @param <C> type of classes
  */
 public interface Classifier<D, C> {
-	public abstract C classify(D data);
-
+	C classify(D data);
+	void train(Collection<Entry<D,C>> trainingData);
 }

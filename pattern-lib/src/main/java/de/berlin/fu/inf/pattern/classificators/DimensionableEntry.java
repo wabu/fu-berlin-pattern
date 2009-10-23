@@ -1,10 +1,12 @@
-package de.berlin.fu.inf.pattern.data;
+package de.berlin.fu.inf.pattern.classificators;
+
+import javax.annotation.Nullable;
 
 import de.berlin.fu.inf.pattern.data.kdtree.Dimensionable;
 
 public class DimensionableEntry<D extends Dimensionable<D>, C> extends Entry<D, C>  implements Dimensionable<DimensionableEntry<D,C>> {
 
-	public DimensionableEntry(D data, C klass) {
+	public DimensionableEntry(D data, @Nullable C klass) {
 		super(data, klass);
 	}
 

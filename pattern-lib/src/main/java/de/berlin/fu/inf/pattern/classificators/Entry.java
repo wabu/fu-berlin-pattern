@@ -1,4 +1,6 @@
-package de.berlin.fu.inf.pattern.data;
+package de.berlin.fu.inf.pattern.classificators;
+
+import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 
@@ -11,9 +13,9 @@ import com.google.common.base.Function;
  */
 public class Entry<D,C> {
 	final D data;
-	final C classification;
+	@Nullable final C classification;
 	
-	public Entry(D data, C klass) {
+	public Entry(D data, @Nullable C klass) {
 		this.data = data;
 		this.classification = klass;
 	}
@@ -22,6 +24,7 @@ public class Entry<D,C> {
 		return data;
 	}
 	
+	@Nullable
 	public C getClassification() {
 		return classification;
 	}

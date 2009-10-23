@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import de.berlin.fu.inf.pattern.classificators.Entry;
+
 public class SimpleDatabase<D, C> implements Iterable<Entry<D,C>>, Database<D, C> {
 	private final List<Entry<D, C>> enties;
 	

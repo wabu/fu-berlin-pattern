@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.berlin.fu.inf.pattern.classificators.Classifier;
+import de.berlin.fu.inf.pattern.classificators.Entry;
 import de.berlin.fu.inf.pattern.data.Database;
-import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.types.Messurable;
 
 /**
@@ -23,6 +23,10 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classifi
 	public SimpleKNNClassifier(int k, Database<D, C> database) {
 		this.database = database;
 		this.k = k;
+	}
+	
+	public void train(Collection<Entry<D, C>> trainingData) {
+		this.database.addAll(trainingData);
 	}
 
 	public C classify(D data){
@@ -51,4 +55,5 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classifi
 		
 		return bestClass;
 	}
+
 }

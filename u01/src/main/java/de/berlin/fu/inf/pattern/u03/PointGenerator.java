@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.berlin.fu.inf.pattern.data.Entry;
+import de.berlin.fu.inf.pattern.classificators.Entry;
 
 public class PointGenerator {
 	private final Random rnd = new Random();
