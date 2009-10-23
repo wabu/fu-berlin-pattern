@@ -13,6 +13,7 @@
   <modules>
     <module>pattern-lib</module>
     <module>u01</module>
+    <module>u02</module>
   </modules>
 
   <dependencies>
