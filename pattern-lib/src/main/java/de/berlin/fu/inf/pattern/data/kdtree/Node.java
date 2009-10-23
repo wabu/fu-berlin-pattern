@@ -9,4 +9,6 @@ package de.berlin.fu.inf.pattern.data.kdtree;
 public class Node<E extends Dimensionable> {
 	private E entry;
 	private Node<E> leftNode, rightNode, parentNode;
+	
+	
 }
