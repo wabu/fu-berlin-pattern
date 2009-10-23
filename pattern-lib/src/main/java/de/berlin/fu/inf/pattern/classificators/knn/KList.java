@@ -39,7 +39,7 @@ class KList<K,V> {
 	}
 	
 	/**
-	 * add value to collection, if it's key is under the k best keys 
+	 * add value to collection, if its key is one of the k best keys 
 	 * @param key
 	 * @param value
 	 */
