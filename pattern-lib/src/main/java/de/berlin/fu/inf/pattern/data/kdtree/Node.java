@@ -6,7 +6,7 @@ package de.berlin.fu.inf.pattern.data.kdtree;
  *
  * @param <E> datatype of entry
  */
-public class Node<E extends Dimensionable> {
+public class Node<E extends Dimensionable<E>> {
 	private E entry;
 	private Node<E> leftNode, rightNode, parentNode;
 	

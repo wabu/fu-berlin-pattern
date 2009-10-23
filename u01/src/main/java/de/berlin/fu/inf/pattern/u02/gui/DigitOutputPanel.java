@@ -11,7 +11,7 @@
 
 package de.berlin.fu.inf.pattern.u02.gui;
 
-import de.berlin.fu.inf.pattern.classificators.Classifer;
+import de.berlin.fu.inf.pattern.classificators.Classifier;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;

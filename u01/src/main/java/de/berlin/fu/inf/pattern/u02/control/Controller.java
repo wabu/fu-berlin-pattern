@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.berlin.fu.inf.pattern.classificators.Classifer;
+import de.berlin.fu.inf.pattern.classificators.Classifier;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
@@ -44,13 +44,13 @@ public class Controller {
         return simpleDatabase.getDataView();
     }
     
-    public Classifer<Digit, Integer> getClassifier(int k){
+    public Classifier<Digit, Integer> getClassifier(int k){
         return new SimpleKNNClassifier<Digit, Integer>(k,simpleDatabase);
     }
     
     public float testOnFile(String fileName, int k){
         Collection<Digit> digitCollection = digitReader.readDigits(fileName);
-    	Classifer<Digit, Integer> classifier = getClassifier(k);
+    	Classifier<Digit, Integer> classifier = getClassifier(k);
         int succ = 0;
         int num = 0;
         for(Digit digit : digitCollection) {

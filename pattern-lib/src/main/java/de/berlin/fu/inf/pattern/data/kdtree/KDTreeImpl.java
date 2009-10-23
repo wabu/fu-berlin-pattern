@@ -1,7 +1,5 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -9,7 +7,7 @@ import org.apache.log4j.Logger;
  * @author alex
  *
  */
-public class KDTreeImpl<V extends Dimensionable> implements KDTree<V>{
+public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	private final Logger logger = Logger.getLogger(KDTreeImpl.class);
 
 	private Node<V> root = null;

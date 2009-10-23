@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import de.berlin.fu.inf.pattern.classificators.Classifer;
+import de.berlin.fu.inf.pattern.classificators.Classifier;
 import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Database;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
@@ -32,7 +32,7 @@ public class RunTest {
 			data.addAll(e.getValue().generateEntries(n, e.getKey()));
 		}
 		
-		Classifer<DoublePoint, Integer> classifier = new SimpleKNNClassifier<DoublePoint, Integer>(k, data);
+		Classifier<DoublePoint, Integer> classifier = new SimpleKNNClassifier<DoublePoint, Integer>(k, data);
 		
 		PointGenerator gen = gens.get(klass);
 		DoublePoint p = gen.generate(); 

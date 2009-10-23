@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.berlin.fu.inf.pattern.classificators.Classifer;
+import de.berlin.fu.inf.pattern.classificators.Classifier;
 import de.berlin.fu.inf.pattern.data.Database;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.types.Messurable;
@@ -16,7 +16,7 @@ import de.berlin.fu.inf.pattern.types.Messurable;
  * @param <D> type of objects that will be classified
  * @param <C> type of classes
  */
-public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classifer<D, C> {
+public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classifier<D, C> {
 	private final Database<D, C> database;
 	private final int k;
 
@@ -25,14 +25,6 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Classife
 		this.k = k;
 	}
 
-	public boolean add(Entry<D, C> e) {
-		return database.add(e);
-	}
-
-	public boolean addAll(Collection<? extends Entry<D, C>> c) {
-		return database.addAll(c);
-	}
-	
 	public C classify(D data){
 		// get the k neareast neighbours out of the database
 		KList<D,C> nearestNeighbours = new KList<D, C>(k, data); 

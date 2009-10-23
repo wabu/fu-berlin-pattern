@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
-public interface KDTree<V extends Dimensionable> {
+public interface KDTree<V extends Dimensionable<V>> {
 
 	
 	public void buildTree(V[] values);

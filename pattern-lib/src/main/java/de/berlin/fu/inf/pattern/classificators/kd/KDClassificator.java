@@ -1,40 +1,39 @@
 package de.berlin.fu.inf.pattern.classificators.kd;
 
-import java.rmi.AccessException;
 import java.util.Collection;
 
-import javax.print.attribute.SupportedValuesAttribute;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
-import de.berlin.fu.inf.pattern.classificators.Classifer;
+import de.berlin.fu.inf.pattern.classificators.Classifier;
+import de.berlin.fu.inf.pattern.data.DimensionableEntry;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.kdtree.Dimensionable;
 import de.berlin.fu.inf.pattern.data.kdtree.KDTree;
 import de.berlin.fu.inf.pattern.data.kdtree.KDTreeImpl;
 
-public class KDClassificator<D extends Dimensionable & Classifiable> implements Classificator<D> {
+public class KDClassificator<D extends Dimensionable<D>, C> implements Classifier<D, C> {
 
-	private KDTree<D> kdTree = null;
-	
-	
+	private KDTree<DimensionableEntry<D, C>> kdTree = null;
 	
 	public KDClassificator(){
-		this.kdTree = new KDTreeImpl<D>();
+		this.kdTree = new KDTreeImpl<DimensionableEntry<D, C>>();
 	}
-	
-	/**
-	 * training method fills KDTree with data
-	 * 
-	 */
+	@SuppressWarnings("unchecked") /* can't create generic array */
+	public void add(Collection<Entry<D, C>> entries) {
+		DimensionableEntry<D, C>[] kdEntries = (DimensionableEntry<D, C>[]) 
+			Collections2.transform(entries, new Function<Entry<D,C>, DimensionableEntry<D, C>>() {
+				public DimensionableEntry<D, C> apply(Entry<D, C> e) {
+					return new DimensionableEntry<D, C>(e.getData(), e.getClassification());
+				}
+			}).toArray(new DimensionableEntry<?, ?>[entries.size()]);
+		
+		kdTree.buildTree(kdEntries);
+	}
 
-	public Classification classify(D data) {
-		// TODO Auto-generated method stub
+	public C classify(D data) {
+		// TODO 
 		return null;
-	}
-
-
-	public boolean training(Collection<D> c) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

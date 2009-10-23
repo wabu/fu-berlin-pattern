@@ -4,7 +4,7 @@ package de.berlin.fu.inf.pattern.data.kdtree;
  * 
  * @author alex
  */
-public interface Dimensionable {
+public interface Dimensionable<D> {
 
 	
 	/**
@@ -13,7 +13,7 @@ public interface Dimensionable {
 	 * @return a value smaller zero, zero or greater then zero if dimObject is in
 	 * specified dimension smaller, equal or greater then this object 
 	 */
-	public int compareInDimension(Dimensionable dimObject, int dimension);
+	public int compareInDimension(D dimObject, int dimension);
 	
 	/**
 	 * 
@@ -21,13 +21,13 @@ public interface Dimensionable {
 	 * @param dimension
 	 * @return 
 	 */
-	public double getDistanceInDimension(Dimensionable dimObject, int dimension);
+	public double getDistanceInDimension(D dimObject, int dimension);
 	
 	/**
 	 * 
 	 * @param o another dimensionable object o
 	 * @return the euklid distance to another dimensionable object o
 	 */
-	public double getDistance(Dimensionable o);
+	public double getDistance(D o);
 	
 }
