@@ -2,14 +2,22 @@ package de.berlin.fu.inf.pattern.data.kdtree;
 
 import javax.annotation.CheckForNull;
 
-class Context<V extends Dimensionable<V>> extends DimensionComparator<V> {
+/**
+ * Helper class to navigate inside the tree
+ * @author wabu
+ *
+ * @param <V>
+ */
+class DistValueContext<V extends Dimensionable<V>> extends DimensionComparator<V> {
 	final V value;
 	
 	Node<V> node;
 	Node<V> best;
 	double dist;
 	
-	public Context(Node<V> root, V value, int dimensions) {
+	int depth = 0;
+	
+	public DistValueContext(Node<V> root, V value, int dimensions) {
 		super(dimensions);
 		dist = Double.POSITIVE_INFINITY;
 		node = root;
@@ -34,8 +42,9 @@ class Context<V extends Dimensionable<V>> extends DimensionComparator<V> {
 		return node.getParentNode() != null;
 	}
 	
-	Context<V> traverseUp() {
+	DistValueContext<V> traverseUp() {
 		super.previousDimension();
+		depth--;
 		Node<V> parent = node.getParentNode();
 		assert parent != null;
 		node = parent;
@@ -61,7 +70,7 @@ class Context<V extends Dimensionable<V>> extends DimensionComparator<V> {
 		}
 	}
 	
-	Context<V> traverseTo(int dir) {
+	DistValueContext<V> traverseTo(int dir) {
 		Node<V> child;
 		if(dir == 0) {
 			return this;
@@ -72,8 +81,9 @@ class Context<V extends Dimensionable<V>> extends DimensionComparator<V> {
 		return traverseTo(child);
 	}
 	
-	Context<V> traverseTo(Node<V> child){
+	DistValueContext<V> traverseTo(Node<V> child){
 		super.nextDimension();
+		depth++;
 		node = child;
 		updateBest();
 		return this;
@@ -104,8 +114,23 @@ class Context<V extends Dimensionable<V>> extends DimensionComparator<V> {
 		return value;
 	}
 	
+	public boolean isSamePlaneAsValue(Node<V> other) {
+		return getContent().compareInDimension(other.getContent(), getCurrentDimension()) ==
+				getContent().compareInDimension(getValue(), getCurrentDimension());
+	}
+	
 	@Override
 	public String toString() {
 		return getValue()+": "+getNode()+"|"+getCurrentDimension() + " ("+dist+")";
+	}
+
+	public double getDistenceInCurrentDimension() {
+		return getContent().getDistanceInDimension(value, getCurrentDimension());
+	}
+
+	public String indent() {
+		if(depth == 0)
+			return "";
+		return String.format("%"+(2*depth)+"s", "");
 	}
 }

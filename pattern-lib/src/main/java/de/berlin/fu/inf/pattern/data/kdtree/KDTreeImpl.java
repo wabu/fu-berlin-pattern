@@ -117,24 +117,23 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	
 
 	public V findNearestValues(V value) {
-		Context<V> context = new Context<V>(root, value, dimensions);
+		DistValueContext<V> context = new DistValueContext<V>(root, value, dimensions);
 		return findnearest(context).getContent();
 	}
 	
-	private Node<V> findnearest(Context<V> context) {
-		logger.trace("find nearest"+context);
+	private Node<V> findnearest(DistValueContext<V> context) {
+		logger.trace(context.indent()+"find nearest"+context);
 		
-		Node<V> leaf = findLeafNode(context);
-		Node<V> nearest = unwind(context);
-		logger.trace("< "+nearest.getContent());
-		return nearest;
+		findLeafNode(context);
+		unwind(context);
+		logger.trace(context.indent()+"< "+context.getBestNode());
+		return context.getBestNode();
 	}
 	
-	private Node<V> unwind(Context<V> context) {
-		logger.trace("unwind("+context+")");
+	private Node<V> unwind(DistValueContext<V> context) {
+		logger.trace(context.indent() + "unwind("+context+")");
 		
-		double dimDist = context.getContent().getDistanceInDimension(context.value, context.getCurrentDimension());
-		if(dimDist <= context.getBestDistance()) {
+		if(context.getDistenceInCurrentDimension() <= context.getBestDistance()) {
 			if(context.hasParent()) {
 				return unwind(context.traverseUp());
 			} else {
@@ -143,9 +142,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		}
 	
 		Node<V> other = context.selectChild(context.selectReverse());
-		if(other == null ||
-				context.getContent().compareInDimension(other.getContent(), context.getCurrentDimension()) ==
-				context.getContent().compareInDimension(context.getValue(), context.getCurrentDimension()) ) {
+		if(other == null || context.isSamePlaneAsValue(other)) {
 			if(context.hasParent()) {
 				return unwind(context.traverseUp());
 			} else {
@@ -157,10 +154,10 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	}
 	
 	public V findLeaf(V value){
-		return findLeafNode(new Context<V>(root, value, dimensions)).getContent();
+		return findLeafNode(new DistValueContext<V>(root, value, dimensions)).getContent();
 	}
 	
-	private Node<V> findLeafNode(Context<V> context) {
+	private Node<V> findLeafNode(DistValueContext<V> context) {
 		Node<V> next;
 		next = context.selectChild(context.selectDir());
 		while(next != null) {
