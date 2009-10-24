@@ -89,6 +89,8 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		logger.debug("medianIndex="+medianIndex + " -> " + tmpValues[medianIndex]);
 		
 		Node<V> newNode = new Node<V>(tmpValues[medianIndex]);
+		newNode.setContent(tmpValues[medianIndex]);
+		
 		if( indexFrom < medianIndex ) {
 			newNode.setLeftNode(
 				determineMedianNode(indexFrom, medianIndex-1, (currentDimension+1)%this.dimensions));
