@@ -1,11 +1,8 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
-import java.util.Comparator;
-
 import javax.annotation.Nullable;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.MDC;
 
 import de.berlin.fu.inf.algorithm.SelectionSort;
 

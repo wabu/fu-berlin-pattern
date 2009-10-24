@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
+import javax.annotation.CheckForNull;
 
 /**
  * 
