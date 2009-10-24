@@ -58,7 +58,7 @@ public class SelectionSort<E> {
 	 */
 	private int divideAndSelect(int indexFrom, int indexTo, int k ) {
 		if( logger.isTraceEnabled() )
-			logger.trace("divideAndSelct " + indexFrom + "," + indexTo + ", " + k);
+			logger.trace("divideAndSelct " + indexFrom + "," + indexTo + "," + k);
 		// avoid IndexOutOfBoundException
 		if( indexFrom > indexTo ) {
 			throw new IllegalArgumentException("bounding indices passed each other: from="+indexFrom + " -> to="+indexTo );

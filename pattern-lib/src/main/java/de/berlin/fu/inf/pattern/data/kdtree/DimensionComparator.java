@@ -4,11 +4,11 @@ import java.util.Comparator;
 
 
 
-public class DimensionComparator implements Comparator<Dimensionable> {
+public class DimensionComparator<D extends Dimensionable<D>> implements Comparator<D> {
 
 	private int currentDimension;
 
-	public int compare(Dimensionable o1, Dimensionable o2) {
+	public int compare(D o1, D o2) {
 		return o1.compareInDimension(o2, currentDimension);
 	}
 
