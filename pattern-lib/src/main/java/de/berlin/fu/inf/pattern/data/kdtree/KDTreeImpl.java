@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.apache.log4j.Logger;
@@ -20,9 +21,9 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	private Node<V> root;
 	private V[] tmpValues;
 	
-	// sort 
+	// FIXME: shoud be used locally ... 
 	private final SelectionSort<V> selectionSort = new SelectionSort<V>();
-	private final DimensionComparator<V> dimComp = new DimensionComparator<V>();
+	private final DimensionComparator<V> dimComp;
 
 	/**
 	 * creates an new KDTree with <code>DEFAULT_DIMENSIONS</code>
@@ -36,6 +37,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	 */
 	public KDTreeImpl(int dimensions) {
 		this.dimensions = dimensions;
+		this.dimComp = new DimensionComparator<V>(dimensions);
 	}
 	
 	
@@ -112,10 +114,37 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 
 		return Math.round((from+to)/2.0f);
 	}
+	
 
 	public V findKnearestValues(V value) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public V findLeaf(V value){
+		return findLeafNode(value, root, new DimensionComparator<V>(dimensions)).getContent();
+	}
+	
+	private Node<V> findLeafNode(V value, Node<V> root, DimensionComparator<V> dim) {
+		Node<V> next=root, node;
+		do {
+			node = next;
+			next = selectChild(value, node, dim);
+			dim.nextDimension();
+		} while(next != null);
+		
+		return node;
+	}
+	
+	@CheckForNull
+	private Node<V> selectChild(V value, Node<V> node, DimensionComparator<V> dim){
+		int c = dim.compare(value, node.getContent());
+		if(c==0){
+			return null;
+		} else if (c<0){
+			return node.getLeftNode();
+		} else {
+			return node.getRightNode();
+		}
 	}
 	
 	Node<V> getRootNode() {

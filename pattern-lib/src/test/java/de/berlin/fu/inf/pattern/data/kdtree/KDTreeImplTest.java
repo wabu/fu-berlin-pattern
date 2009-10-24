@@ -54,6 +54,15 @@ public class KDTreeImplTest {
 		assertTrue(root.getRightNode().getContent() == values.get(3));
 		
 	}
+	
+	@Test
+	public void findLeaf() {
+		kdTree.buildTree(values.toArray(new DimensionableImpl[0]));
+		
+		for(DimensionableImpl v : values){
+			assertEquals(v, kdTree.findLeaf(v));
+		}
+	}
 	 
 	@Test
 	public void findNeighbour() {
