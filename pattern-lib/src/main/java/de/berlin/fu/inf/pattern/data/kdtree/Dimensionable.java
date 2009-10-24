@@ -6,11 +6,10 @@ package de.berlin.fu.inf.pattern.data.kdtree;
  */
 public interface Dimensionable<D> {
 
-	
 	/**
 	 * @param dimObject 
-	 * @param dimension
-	 * @return a value smaller zero, zero or greater then zero if dimObject is in
+	 * @param dimension from zero up to number of dimensions-1
+	 * @return a value smaller then zero, zero or greater then zero if dimObject is in
 	 * specified dimension smaller, equal or greater then this object 
 	 */
 	public int compareInDimension(D dimObject, int dimension);
@@ -18,16 +17,16 @@ public interface Dimensionable<D> {
 	/**
 	 * 
 	 * @param dimObject
-	 * @param dimension
+	 * @param dimension from zero up to number of dimensions-1
 	 * @return 
 	 */
 	public double getDistanceInDimension(D dimObject, int dimension);
 	
 	/**
 	 * 
-	 * @param o another dimensionable object o
+	 * @param object another dimensionable object
 	 * @return the euklid distance to another dimensionable object o
 	 */
-	public double getDistance(D o);
+	public double getDistance(D object);
 	
 }
