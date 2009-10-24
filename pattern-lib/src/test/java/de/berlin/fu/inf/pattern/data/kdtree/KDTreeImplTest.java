@@ -69,22 +69,22 @@ public class KDTreeImplTest {
 		kdTree.buildTree(values.toArray(new DimensionableImpl[0]));
 		
 		for(DimensionableImpl v : values){
-			assertEquals(v, kdTree.findKnearestValues(v));
+			assertEquals(v, kdTree.findNearestValues(v));
 		}
 		assertEquals(
 				new DimensionableImpl(new int[]{5,1,5}),
-				kdTree.findKnearestValues(new DimensionableImpl(new int[]{6,1,5})));
+				kdTree.findNearestValues(new DimensionableImpl(new int[]{6,1,5})));
 		assertEquals(
 				new DimensionableImpl(new int[]{3,3,3}),
-				kdTree.findKnearestValues(new DimensionableImpl(new int[]{4,4,4})));
+				kdTree.findNearestValues(new DimensionableImpl(new int[]{4,4,4})));
 		assertEquals(
 				new DimensionableImpl(new int[]{3,3,3}),
-				kdTree.findKnearestValues(new DimensionableImpl(new int[]{3,4,3})));
+				kdTree.findNearestValues(new DimensionableImpl(new int[]{3,4,3})));
 		assertEquals(
 				new DimensionableImpl(new int[]{1,2,2}),
-				kdTree.findKnearestValues(new DimensionableImpl(new int[]{2,2,2})));
+				kdTree.findNearestValues(new DimensionableImpl(new int[]{2,2,2})));
 		assertEquals(
 				new DimensionableImpl(new int[]{3,3,3}),
-				kdTree.findKnearestValues(new DimensionableImpl(new int[]{3,2,2})));
+				kdTree.findNearestValues(new DimensionableImpl(new int[]{3,2,2})));
 	}
 }

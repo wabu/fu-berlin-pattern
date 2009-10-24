@@ -32,7 +32,7 @@ public class KDClassificator<D extends Dimensionable<D>, C> implements Classifie
 	}
 
 	public C classify(D data) {
-		return kdTree.findKnearestValues(new DimensionableEntry<D, C>(data, null)).getClassification();
+		return kdTree.findNearestValues(new DimensionableEntry<D, C>(data, null)).getClassification();
 	}
 
 

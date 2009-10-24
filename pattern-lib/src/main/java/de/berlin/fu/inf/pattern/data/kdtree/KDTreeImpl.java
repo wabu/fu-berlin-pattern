@@ -116,92 +116,58 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	}
 	
 
-	public V findKnearestValues(V value) {
-		DimensionComparator<V> dim = new DimensionComparator<V>(dimensions);
-		return findnearest(root,dim, value, Double.POSITIVE_INFINITY, null).getContent();
+	public V findNearestValues(V value) {
+		Context<V> context = new Context<V>(root, value, dimensions);
+		return findnearest(context).getContent();
 	}
 	
-	private Node<V> findnearest(Node<V> node, DimensionComparator<V> dim, V value, double best, Node<V> b) {
-		logger.debug("findnearest("+value+", "+node.getContent()+")");
-		Node<V> leaf = findLeafNode(value, node, dim);
-		Node<V> nearest = unwind(leaf, dim, value, best, b);
-		logger.debug("< "+nearest.getContent());
+	private Node<V> findnearest(Context<V> context) {
+		logger.trace("find nearest"+context);
+		
+		Node<V> leaf = findLeafNode(context);
+		Node<V> nearest = unwind(context);
+		logger.trace("< "+nearest.getContent());
 		return nearest;
 	}
 	
-	private Node<V> unwind(Node<V> node, DimensionComparator<V> dim, V value, double bestDist, Node<V> b) {
-		Node<V> parent = node.getParentNode();
-		V content = node.getContent();
+	private Node<V> unwind(Context<V> context) {
+		logger.trace("unwind("+context+")");
 		
-		logger.debug("unwind("+content+")");
-		
-		double dist = content.getDistance(value);
-		if(dist < bestDist){
-			b = node;
-			bestDist = dist;
-		}
-		
-		double dimDist = content.getDistanceInDimension(value, dim.getCurrentDimension());
-		if(dimDist <= bestDist) {
-			if(parent == null) {
-				return b;
+		double dimDist = context.getContent().getDistanceInDimension(context.value, context.getCurrentDimension());
+		if(dimDist <= context.getBestDistance()) {
+			if(context.hasParent()) {
+				return unwind(context.traverseUp());
 			} else {
-				return unwind(parent, dim.previousDimension(), value, bestDist, b);
+				return context.getBestNode();
 			}
 		}
-		
-		Node<V> other = selectOtherChild(value, node, dim);
+	
+		Node<V> other = context.selectChild(context.selectReverse());
 		if(other == null ||
-				content.compareInDimension(other.getContent(), dim.getCurrentDimension()) ==
-				content.compareInDimension(value, dim.getCurrentDimension()) ) {
-			if(parent == null) {
-				return b;
+				context.getContent().compareInDimension(other.getContent(), context.getCurrentDimension()) ==
+				context.getContent().compareInDimension(context.getValue(), context.getCurrentDimension()) ) {
+			if(context.hasParent()) {
+				return unwind(context.traverseUp());
 			} else {
-				return unwind(parent, dim.previousDimension(), value, bestDist, b);
+				return context.getBestNode();
 			}
 		}
 		
-		return findnearest(other, dim.nextDimension(), value, bestDist, b);
+		return findnearest(context.traverseTo(other));
 	}
 	
 	public V findLeaf(V value){
-		return findLeafNode(value, root, new DimensionComparator<V>(dimensions)).getContent();
+		return findLeafNode(new Context<V>(root, value, dimensions)).getContent();
 	}
 	
-	private Node<V> findLeafNode(V value, Node<V> root, DimensionComparator<V> dim) {
-		Node<V> next=root, node;
-		do {
-			node = next;
-			next = selectChild(value, node, dim);
-			if(next != null){
-				dim.nextDimension();
-			}
-		} while(next != null);
-		
-		return node;
-	}
-	
-	@CheckForNull
-	private Node<V> selectChild(V value, Node<V> node, DimensionComparator<V> dim){
-		int c = dim.compare(value, node.getContent());
-		if(c==0){
-			return null;
-		} else if (c<0){
-			return node.getLeftNode();
-		} else {
-			return node.getRightNode();
+	private Node<V> findLeafNode(Context<V> context) {
+		Node<V> next;
+		next = context.selectChild(context.selectDir());
+		while(next != null) {
+			context.traverseTo(next);
+			next = context.selectChild(context.selectDir());
 		}
-	}
-	
-	@CheckForNull
-	private Node<V> selectOtherChild(V value, Node<V> node, DimensionComparator<V> dim){
-		int c = dim.compare(value, node.getContent());
-		assert c != 0;
-		if (c>0){
-			return node.getLeftNode();
-		} else {
-			return node.getRightNode();
-		}
+		return context.getNode();
 	}
 	
 	Node<V> getRootNode() {
