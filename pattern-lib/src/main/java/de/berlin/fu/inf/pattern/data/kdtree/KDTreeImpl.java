@@ -117,7 +117,51 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	
 
 	public V findKnearestValues(V value) {
-		return null;
+		DimensionComparator<V> dim = new DimensionComparator<V>(dimensions);
+		return findnearest(root,dim, value, Double.POSITIVE_INFINITY, null).getContent();
+	}
+	
+	private Node<V> findnearest(Node<V> node, DimensionComparator<V> dim, V value, double best, Node<V> b) {
+		logger.debug("findnearest("+value+", "+node.getContent()+")");
+		Node<V> leaf = findLeafNode(value, node, dim);
+		Node<V> nearest = unwind(leaf, dim, value, best, b);
+		logger.debug("< "+nearest.getContent());
+		return nearest;
+	}
+	
+	private Node<V> unwind(Node<V> node, DimensionComparator<V> dim, V value, double bestDist, Node<V> b) {
+		Node<V> parent = node.getParentNode();
+		V content = node.getContent();
+		
+		logger.debug("unwind("+content+")");
+		
+		double dist = content.getDistance(value);
+		if(dist < bestDist){
+			b = node;
+			bestDist = dist;
+		}
+		
+		double dimDist = content.getDistanceInDimension(value, dim.getCurrentDimension());
+		if(dimDist <= bestDist) {
+			if(parent == null) {
+				return b;
+			} else {
+				return unwind(parent, dim.previousDimension(), value, bestDist, b);
+			}
+		}
+		
+		Node<V> other = selectOtherChild(value, node, dim);
+		if(other == null ||
+				content.compareInDimension(other.getContent(), dim.getCurrentDimension()) ==
+				content.compareInDimension(value, dim.getCurrentDimension()) ) {
+			if(parent == null) {
+				return b;
+			} else {
+				return unwind(parent, dim.previousDimension(), value, bestDist, b);
+			}
+		}
+		
+		return findnearest(other, dim.nextDimension(), value, bestDist, b);
 	}
 	
 	public V findLeaf(V value){
@@ -129,7 +173,9 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		do {
 			node = next;
 			next = selectChild(value, node, dim);
-			dim.nextDimension();
+			if(next != null){
+				dim.nextDimension();
+			}
 		} while(next != null);
 		
 		return node;
@@ -141,6 +187,17 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		if(c==0){
 			return null;
 		} else if (c<0){
+			return node.getLeftNode();
+		} else {
+			return node.getRightNode();
+		}
+	}
+	
+	@CheckForNull
+	private Node<V> selectOtherChild(V value, Node<V> node, DimensionComparator<V> dim){
+		int c = dim.compare(value, node.getContent());
+		assert c != 0;
+		if (c>0){
 			return node.getLeftNode();
 		} else {
 			return node.getRightNode();
