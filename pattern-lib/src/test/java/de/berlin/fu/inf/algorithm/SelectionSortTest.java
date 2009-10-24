@@ -27,8 +27,8 @@ public class SelectionSortTest {
 	@Before
 	public void setUp() throws Exception {
 		selSort = new SelectionSort<Integer>();
-		// 10 elements correct order: 1,1,2,3,3,5,5,7,7,9
-		numbers = new Integer[]{1,5,3,5,2,7,1,3,7,9};
+		// 10 elements correct order: 0,1,2,3,4,5,6,7,8,9
+		numbers = new Integer[]{0,2,3,1,5,4,6,8,7,9};
 
 	}
 
