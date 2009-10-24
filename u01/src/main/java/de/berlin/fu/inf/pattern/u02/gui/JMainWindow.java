@@ -14,6 +14,7 @@ import javax.swing.JFrame;
  * @author alex
  */
 public class JMainWindow extends JFrame {
+	private static final long serialVersionUID = 1L;
 
     private DigitOutputPanel digitTablePanel;
 

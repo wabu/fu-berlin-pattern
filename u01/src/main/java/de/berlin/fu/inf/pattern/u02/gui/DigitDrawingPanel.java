@@ -5,17 +5,16 @@
 
 package de.berlin.fu.inf.pattern.u02.gui;
 
-import de.berlin.fu.inf.pattern.u02.data.Digit;
-import de.berlin.fu.inf.pattern.u02.data.DigitPoint;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+
+import de.berlin.fu.inf.pattern.u02.data.Digit;
+import de.berlin.fu.inf.pattern.u02.data.DigitPoint;
 
 /**
  * Draws an Digit
@@ -23,6 +22,8 @@ import org.apache.log4j.Logger;
  * @author alex
  */
 class DigitDrawingPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
+	
 	private final Logger logger = Logger.getLogger(DigitDrawingPanel.class);
     private Digit digit;
 
@@ -46,8 +47,6 @@ class DigitDrawingPanel extends JPanel {
     	
     	List<DigitPoint> points = digit.getPoints();
     	DigitPoint lastPoint = null;
-    	
-    	Graphics2D g2d;
     	
     	for( DigitPoint currenPoint : points) {
     		if( lastPoint != null ) {

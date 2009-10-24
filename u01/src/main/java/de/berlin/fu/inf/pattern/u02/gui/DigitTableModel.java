@@ -5,8 +5,6 @@
 
 package de.berlin.fu.inf.pattern.u02.gui;
 
-import de.berlin.fu.inf.pattern.u02.data.Digit;
-import de.berlin.fu.inf.pattern.u02.data.DigitPoint;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,15 +12,18 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
+
+import de.berlin.fu.inf.pattern.u02.data.Digit;
 
 /**
  *
  * @author alex
  */
 public class DigitTableModel extends AbstractTableModel {
+	private static final long serialVersionUID = 1L;
+	
 	private final Logger logger = Logger.getLogger(DigitTableModel.class);
 
     private List<Digit> digitList = null;
@@ -49,7 +50,7 @@ public class DigitTableModel extends AbstractTableModel {
         if( col < Digit.POINT_NUMBER)
             return digit.getPoint(col);
         else
-            return new Integer(digit.getGroup());
+            return Integer.valueOf(digit.getGroup());
     }
 
 

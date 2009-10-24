@@ -1,6 +1,5 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.apache.log4j.Logger;
