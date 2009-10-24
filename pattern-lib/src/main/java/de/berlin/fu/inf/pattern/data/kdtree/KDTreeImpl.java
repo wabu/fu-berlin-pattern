@@ -42,12 +42,13 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	
 	
 	public void buildTree(V[] values) {
-		logger.info("build new KD-Tree of " + values.length + " objects");
+		logger.debug("build new KD-Tree of " + values.length + " objects");
 		
 		tmpValues = values;
 		
 		this.root = determineMedianNode(0, values.length-1, 0);
 		
+		logger.debug("build finished");
 	}
 	
 	/**
@@ -61,8 +62,8 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	 */
 	@Nullable
 	protected Node<V> determineMedianNode(int indexFrom, int indexTo, int currentDimension){
-		if( logger.isDebugEnabled() )
-			logger.debug("determineMedianNode("+indexFrom+","+indexTo+","+currentDimension +")");
+		if( logger.isTraceEnabled() )
+			logger.trace("determineMedianNode("+indexFrom+","+indexTo+","+currentDimension +")");
 		
 		// if range size is one, there is no median element to be searched for
 		if( indexFrom == indexTo ) {
@@ -85,7 +86,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 			logger.warn("retrieved index is out of range, return NULL");
 			return null;
 		}
-		logger.debug("medianIndex="+medianIndex + " -> " + tmpValues[medianIndex]);
+		logger.trace("medianIndex="+medianIndex + " -> " + tmpValues[medianIndex]);
 		
 		Node<V> newNode = new Node<V>(tmpValues[medianIndex]);
 		newNode.setContent(tmpValues[medianIndex]);

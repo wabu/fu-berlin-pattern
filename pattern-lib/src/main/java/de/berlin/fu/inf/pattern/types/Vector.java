@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import de.berlin.fu.inf.pattern.data.kdtree.Dimensionable;
 
-public class Vector implements Dimensionable<Vector> {
+public class Vector implements Dimensionable<Vector>, Messurable<Vector> {
 	private final int[] vector;
 	private final int dimension;
 	
@@ -99,6 +99,4 @@ public class Vector implements Dimensionable<Vector> {
 		return builder.toString();
 		
 	}
-	
-
 }
