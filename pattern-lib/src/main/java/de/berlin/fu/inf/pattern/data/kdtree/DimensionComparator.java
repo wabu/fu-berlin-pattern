@@ -5,7 +5,6 @@ import java.util.Comparator;
 
 
 public class DimensionComparator<D extends Dimensionable<D>> implements Comparator<D> {
-
 	private int currentDimension;
 
 	public int compare(D o1, D o2) {
@@ -20,8 +19,4 @@ public class DimensionComparator<D extends Dimensionable<D>> implements Comparat
 	public void setCurrentDimension(int currentDimension) {
 		this.currentDimension = currentDimension;
 	}
-	
-	
-	
-	
 }

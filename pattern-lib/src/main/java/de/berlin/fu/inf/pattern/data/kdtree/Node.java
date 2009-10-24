@@ -1,5 +1,7 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+
 /**
  * 
  * @author alex
@@ -8,10 +10,11 @@ package de.berlin.fu.inf.pattern.data.kdtree;
  */
 public class Node<E extends Dimensionable<E>> {
 	private E content;
+	@CheckForNull
 	private Node<E> leftNode, rightNode, parentNode;
 	
-	public Node() {
-		this.content = null;
+	public Node(E content) {
+		this.content = content;
 		leftNode = null;
 		rightNode = null;
 		parentNode = null;
@@ -23,6 +26,8 @@ public class Node<E extends Dimensionable<E>> {
 	public void setContent(E content) {
 		this.content = content;
 	}
+	
+	@CheckForNull
 	public Node<E> getLeftNode() {
 		return leftNode;
 	}
@@ -34,6 +39,8 @@ public class Node<E extends Dimensionable<E>> {
 	public void setLeftNode(Node<E> leftNode) {
 		this.leftNode = leftNode;
 	}
+	
+	@CheckForNull
 	public Node<E> getRightNode() {
 		return rightNode;
 	}
@@ -48,15 +55,12 @@ public class Node<E extends Dimensionable<E>> {
 		
 		rightNode.setParentNode(this);
 	}
+	@CheckForNull
 	public Node<E> getParentNode() {
 		return parentNode;
 	}
+	
 	public void setParentNode(Node<E> parentNode) {
 		this.parentNode = parentNode;
 	}
-	
-	
-	
-	
-	
 }

@@ -2,7 +2,10 @@ package de.berlin.fu.inf.pattern.data.kdtree;
 
 import java.util.Comparator;
 
+import javax.annotation.Nullable;
+
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 
 import de.berlin.fu.inf.algorithm.SelectionSort;
 
@@ -17,8 +20,8 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 
 	private final int dimensions;
 	
-	private Node<V> root = null;
-	private V[] tmpValues = null;
+	private Node<V> root;
+	private V[] tmpValues;
 	
 	// sort 
 	private final SelectionSort<V> selectionSort = new SelectionSort<V>();
@@ -57,16 +60,14 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	 * @param currentDimension
 	 * @return Node or null if there is an error in specified index range 
 	 */
+	@Nullable
 	protected Node<V> determineMedianNode(int indexFrom, int indexTo, int currentDimension){
 		if( logger.isDebugEnabled() )
 			logger.debug("determineMedianNode("+indexFrom+","+indexTo+","+currentDimension +")");
 		
-		Node<V> newNode = new Node<V>();
-		
 		// if range size is one, there is no median element to be searched for
 		if( indexFrom == indexTo ) {
-			newNode.setContent(tmpValues[indexFrom]);
-			return newNode;
+			return new Node<V>(tmpValues[indexFrom]);
 		}
 		
 		dimComp.setCurrentDimension(currentDimension);
@@ -87,13 +88,11 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		}
 		logger.debug("medianIndex="+medianIndex + " -> " + tmpValues[medianIndex]);
 		
-		newNode.setContent(tmpValues[medianIndex]);
-		
+		Node<V> newNode = new Node<V>(tmpValues[medianIndex]);
 		if( indexFrom < medianIndex ) {
 			newNode.setLeftNode(
 				determineMedianNode(indexFrom, medianIndex-1, (currentDimension+1)%this.dimensions));
 		}
-		
 		if( indexTo > medianIndex ) {
 			newNode.setRightNode(
 				determineMedianNode(medianIndex+1, indexTo, (currentDimension+1)%this.dimensions));
@@ -123,8 +122,4 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	Node<V> getRootNode() {
 		return this.root;
 	}
-
-	
-	
-	
 }
