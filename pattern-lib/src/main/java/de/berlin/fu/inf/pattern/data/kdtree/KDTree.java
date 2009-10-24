@@ -9,6 +9,6 @@ public interface KDTree<V extends Dimensionable<V>> {
 	 * @param value
 	 * @return an array of size k with most nearest values in this tree
 	 */
-	public V findKnearestValues(V value);
-	
+
+	public V findNearestValues(V value);
 }

@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.apache.log4j.Logger;
@@ -20,9 +21,9 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	private Node<V> root;
 	private V[] tmpValues;
 	
-	// sort 
+	// FIXME: shoud be used locally ... 
 	private final SelectionSort<V> selectionSort = new SelectionSort<V>();
-	private final DimensionComparator<V> dimComp = new DimensionComparator<V>();
+	private final DimensionComparator<V> dimComp;
 
 	/**
 	 * creates an new KDTree with <code>DEFAULT_DIMENSIONS</code>
@@ -36,6 +37,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	 */
 	public KDTreeImpl(int dimensions) {
 		this.dimensions = dimensions;
+		this.dimComp = new DimensionComparator<V>(dimensions);
 	}
 	
 	
@@ -112,10 +114,58 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 
 		return Math.round((from+to)/2.0f);
 	}
+	
 
-	public V findKnearestValues(V value) {
-		// TODO Auto-generated method stub
-		return null;
+	public V findNearestValues(V value) {
+		DistValueContext<V> context = new DistValueContext<V>(root, value, dimensions);
+		return findnearest(context).getContent();
+	}
+	
+	private Node<V> findnearest(DistValueContext<V> context) {
+		logger.trace(context.indent()+"find nearest"+context);
+		
+		findLeafNode(context);
+		unwind(context);
+		logger.trace(context.indent()+"< "+context.getBestNode());
+		return context.getBestNode();
+	}
+	
+	private Node<V> unwind(DistValueContext<V> context) {
+		logger.trace(context.indent() + "unwind("+context+")");
+		
+		if(context.getDistenceInCurrentDimension() <= context.getBestDistance()) {
+			if(context.hasParent()) {
+				return unwind(context.traverseUp());
+			} else {
+				return context.getBestNode();
+			}
+		}
+	
+		Node<V> other = context.selectChild(context.selectReverse());
+		if(other == null || context.isSamePlaneAsValue(other)) {
+			if(context.hasParent()) {
+				return unwind(context.traverseUp());
+			} else {
+				return context.getBestNode();
+			}
+		}
+		
+		return findnearest(context.traverseTo(other));
+	}
+	
+	public V findLeaf(V value){
+		return findLeafNode(new DistValueContext<V>(root, value, dimensions)).getContent();
+	}
+	
+	private Node<V> findLeafNode(DistValueContext<V> context) {
+		Node<V> next;
+		next = context.selectChild(context.selectDir());
+		while(next != null) {
+			context.traverseTo(next);
+			next = context.selectChild(context.selectDir());
+		}
+		return context.getNode();
+>>>>>>> 52197752c5f8891dc68b098486637762b9d6caba:pattern-lib/src/main/java/de/berlin/fu/inf/pattern/data/kdtree/KDTreeImpl.java
 	}
 	
 	Node<V> getRootNode() {
