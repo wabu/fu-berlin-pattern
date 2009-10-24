@@ -10,6 +10,7 @@ import javax.annotation.CheckForNull;
  */
 public class Node<E extends Dimensionable<E>> {
 	private E content;
+	
 	@CheckForNull
 	private Node<E> leftNode, rightNode, parentNode;
 	
