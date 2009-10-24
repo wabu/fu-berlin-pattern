@@ -1,5 +1,7 @@
 package de.berlin.fu.inf.pattern.data.kdtree;
 
+import java.util.Arrays;
+
 public class DimensionableImpl implements Dimensionable<DimensionableImpl> {
 	public static int DIMENSIONS = 3;
 	
@@ -65,6 +67,21 @@ public class DimensionableImpl implements Dimensionable<DimensionableImpl> {
 		return this.vector[dimension];
 	}
 	
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof DimensionableImpl){
+			DimensionableImpl other = (DimensionableImpl) obj;
+			return Arrays.equals(vector, other.vector);
+		}
+		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(vector);
+	}
+	
 	/**
 	 * @return the vector in format of (x1,x2,...,xn)
 	 */
@@ -80,5 +97,6 @@ public class DimensionableImpl implements Dimensionable<DimensionableImpl> {
 		return builder.toString();
 		
 	}
+	
 
 }
