@@ -113,7 +113,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 		return Math.round((from+to)/2.0f);
 	}
 
-	public V[] findKnearestValues(int k, V value) {
+	public V findKnearestValues(V value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
