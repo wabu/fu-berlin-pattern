@@ -82,17 +82,19 @@ public class RGBClassificationProcessor {
 			vector.setVector(rgbAsArray(image[i]));
 			int klass = kdClassifier.classify(vector);
 			if( klass == backgroundClass) {
+				bg++;
+				output[i] = newBackgroundColor;
+				
 				if(mask[i] == foregroundColor) {
 					output[i] = 0xffff0000;
 				}
-				bg++;
-				image[i] = newBackgroundColor;
 			} else {
+				fg++;
+				output[i] = image[i];
+				
 				if(mask[i] == backgroundColor) {
 					output[i] = 0xff00ff00;
 				}
-				fg++;
-				output[i] = image[i];
 			}
 			
 		}

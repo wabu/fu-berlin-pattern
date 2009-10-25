@@ -50,11 +50,9 @@ public class Start {
 			RGBClassificationProcessor rgbProcessor = new RGBClassificationProcessor();			
 			
 			
-			// TODO include rgbProcessor
-			//int[] modifiedPixel = imagePixel;
 			int[] modifiedPixel = rgbProcessor.colorBackground(imagePixel, maskPixel, 0xffffffff, 0xff000000, 0xffffffff);
 			
-			logger.info("wirte output to ");
+			logger.info("writing output to "+outputFile);
 			// create and init new buffered Image for storing data
 			BufferedImage outputImg = new BufferedImage(
 					img.getWidth(), 
@@ -68,16 +66,9 @@ public class Start {
 
 			ImageIO.write(outputImg, "jpeg", new FileOutputStream(outputFile));
 			
+			logger.info("done");
 		} catch (IOException e) {
-			
-			
 			logger.error(e);
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		
-		
-
 	}
-
 }
