@@ -18,12 +18,12 @@ import de.berlin.fu.inf.pattern.types.Vector;
 public class RGBClassificationProcessor {
 	public final Logger logger = Logger.getLogger(RGBClassificationProcessor.class);
 	
-	private final Integer backgroundClass = new Integer(1);
-	private final Integer foregroundClass = new Integer(2);
+	private final int backgroundClass = 1;
+	private final int foregroundClass = 2;
 	
-	private final int redRange   = 0x0F00;
-	private final int greenRange = 0x00F0;
-	private final int blueRange  = 0x000F; 
+	private final int redRange   = 0x00ff0000;
+	private final int greenRange = 0x0000ff00;
+	private final int blueRange  = 0x000000ff; 
 	
 	
 	/**
@@ -38,10 +38,11 @@ public class RGBClassificationProcessor {
 	public int[] colorBackground(int[] image, int[] mask, int foregroundColor, int backgroundColor, int newBackgroundColor) {
 		
 		if( image.length != mask.length ) {
-			
 			logger.error("source image and layer definition image are no identical in size");
 			return null;
 		}
+		
+		logger.debug("prozessing image of size "+image.length);
 		
 		// classify color pixel as an vector 
 		KDClassificator<Vector, Integer> kdClassifier = new KDClassificator<Vector, Integer>();
@@ -51,13 +52,18 @@ public class RGBClassificationProcessor {
 		
 		// build training set
 		for(int i=0; i<mask.length; i++) {
-			if( logger.isTraceEnabled())
-				logger.trace("pixel "+i+ " color: " + mask[i]);			
 			// black color is background
 			if( mask[i] == backgroundColor) {
+				if( logger.isTraceEnabled())
+					logger.trace(String.format("pixel %6d has background mask %8x", i, mask[i]));
 				classifiedPixel.add(buildEntry(image[i],this.backgroundClass));
 			} else if( mask[i] == foregroundColor ) {
+				if( logger.isTraceEnabled())
+					logger.trace(String.format("pixel %6d has forground mask %8x", i, mask[i]));
 				classifiedPixel.add(buildEntry(image[i],this.foregroundClass));
+			} else {
+				if( logger.isTraceEnabled())
+					logger.trace(String.format("pixel %6d has unknown mask %8x", i, mask[i]));
 			}
 		}
 		
@@ -67,31 +73,39 @@ public class RGBClassificationProcessor {
 		// all background pixel become white
 		Vector vector = new Vector(3);
 		
+		int fg=0, bg=0;
 		for( int i=0; i<mask.length; i++) {
-			
-			// do not modify foreground pixel
-			if( mask[i] == foregroundColor ) {
-				output[i] = image[i];
+			if(i%50000 == 0) {
+				logger.debug("processed "+i+"/"+mask.length+": "+fg+"fg, "+bg+"bg");
 			}
-			if( mask[i] == backgroundColor ) {
+			
+			vector.setVector(rgbAsArray(image[i]));
+			int klass = kdClassifier.classify(vector);
+			if( klass == backgroundClass) {
+				if(mask[i] == foregroundColor) {
+					output[i] = 0xffff0000;
+				}
+				bg++;
 				image[i] = newBackgroundColor;
 			} else {
-				vector.setVector(rgbAsArray(image[i]));
-				
-				if( kdClassifier.classify(vector).equals(backgroundClass)) {
-					image[i] = newBackgroundColor;
-				} else {
-					output[i] = image[i];
+				if(mask[i] == backgroundColor) {
+					output[i] = 0xff00ff00;
 				}
+				fg++;
+				output[i] = image[i];
 			}
+			
 		}
 		
 		return output;
 	}
 	
-	private Entry<Vector,Integer> buildEntry(int rgbColor, Integer pixelClass ) {
+	private Entry<Vector,Integer> buildEntry(int rgbColor, int pixelClass ) {
 		
 		Vector vector = new Vector(rgbAsArray(rgbColor));
+		
+		if( logger.isTraceEnabled())
+			logger.trace("adding "+vector+ " to class " + pixelClass);			
 		Entry<Vector,Integer> entry = new Entry<Vector, Integer>(vector, pixelClass);		
 		
 		return entry;

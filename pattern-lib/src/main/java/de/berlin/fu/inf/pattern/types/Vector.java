@@ -48,7 +48,6 @@ public class Vector implements Dimensionable<Vector>, Messurable<Vector> {
 	}
 
 	public double getDistanceInDimension(Vector dimObject, int dimension) {
-		
 		return Math.abs(getValueInDimension(dimension) - dimObject.getValueInDimension(dimension));
 	}
 	

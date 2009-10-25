@@ -54,7 +54,12 @@ public class Entry<D,C> {
 	
 	@Override
 	public String toString() {
-		return data.toString() +":" + classification.toString();
+		String cs;
+		if(classification == null){
+			cs = "??";
+		} else {
+			cs = classification.toString();
+		}
+		return data.toString() +":" + cs;
 	}
-	
 }

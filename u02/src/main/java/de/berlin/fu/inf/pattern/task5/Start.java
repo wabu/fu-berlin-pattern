@@ -20,13 +20,12 @@ public class Start {
 		String dir = "pics/";
 		String imageFile = dir+"flowers.jpg";
 		String maskFile = dir+"flowers-train.png";
-		String outputFile = dir+"output.jpg";
+		String outputFile = "flower-output.jpg";
 		
 		ClassLoader cl = ClassLoader.getSystemClassLoader();
 		BufferedImage img, mask;
 		
 		try {
-		
 			URL imgURL = cl.getResource(imageFile); 
 			URL maskURL = cl.getResource(maskFile);
 			
@@ -50,9 +49,10 @@ public class Start {
 			logger.info("process images");
 			RGBClassificationProcessor rgbProcessor = new RGBClassificationProcessor();			
 			
+			
 			// TODO include rgbProcessor
-			int[] modifiedPixel = imagePixel;
-			// int[] modifiedPixel = rgbProcessor.colorBackground(imagePixel, maskPixel, 0x0FFF, 0x000, 0x0FFF);
+			//int[] modifiedPixel = imagePixel;
+			int[] modifiedPixel = rgbProcessor.colorBackground(imagePixel, maskPixel, 0xffffffff, 0xff000000, 0xffffffff);
 			
 			logger.info("wirte output to ");
 			// create and init new buffered Image for storing data
@@ -66,7 +66,7 @@ public class Start {
 					outputImg.getWidth(), outputImg.getHeight(), 
 					modifiedPixel, 0, outputImg.getWidth());
 
-			ImageIO.write(outputImg, "jpeg", new FileOutputStream("/home/alex/pic.jpeg"));
+			ImageIO.write(outputImg, "jpeg", new FileOutputStream(outputFile));
 			
 		} catch (IOException e) {
 			
