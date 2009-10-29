@@ -21,7 +21,7 @@
           <transformers>
             <transformer 
               implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-              <mainClass>de.berlin.fu.inf.pattern.Main01</mainClass>
+              <mainClass>de.berlin.fu.inf.pattern.task5.Start</mainClass>
             </transformer>
           </transformers>
         </configuration>
