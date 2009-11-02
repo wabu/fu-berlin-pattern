@@ -5,28 +5,36 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import Jama.Matrix;
 
 import de.berlin.fu.inf.pattern.classificators.kmeans.Vectorable;
+import de.berlin.fu.inf.util.jama.Vec;
 
 /**
  * 
  * 
  * @author alex
  */
-public class KMeanCluster<V extends Vectorable<V>> {
-	private Matrix midPointMatrix, covMatrix;
+public class KMeanCluster<V extends Vectorable> {
+	private final Logger log = Logger.getLogger(KMeanCluster.class);
+	
+	private final int dimension;
+	
 	private static int ROWS = 1;
+	
+	private Vec median;
+	private Matrix covariance;
+	/** should contain: 1/det(2*Pi*covMatrix) */
+	private double coeff;
 	
 	/**
 	 * List of Vectorable objects, which are currently associated to
 	 * this cluster
 	 */
 	private List<V> entries;
-	private final int vectorSpace;
 	
-	// should contain: 1/det(2*Pi*covMatrix)
-	private double coeff;
 	
 	/**
 	 * creates a default cluster with expected vector space of three
@@ -38,10 +46,10 @@ public class KMeanCluster<V extends Vectorable<V>> {
 	/**
 	 * creates a cluster with given expected vector space
 	 * 
-	 * @param vectorSpace
+	 * @param dimension
 	 */
-	public KMeanCluster(int vectorSpace) {
-		this.vectorSpace=vectorSpace;
+	public KMeanCluster(int dimension) {
+		this.dimension=dimension;
 		
 		this.resetEntries();
 		this.refreshCovMatrix();
@@ -54,38 +62,50 @@ public class KMeanCluster<V extends Vectorable<V>> {
 	public KMeanCluster(double[] midPoint) {
 		this(midPoint.length);
 		
-		this.midPointMatrix = new Matrix(midPoint, vectorSpace);
+		this.median = new Vec(midPoint);
 	}
 	
 	/**
-	 * 
+	 * p(x) = 1/(sqrt(det(2 pi S)) * exp(-1/2 * x' * conv * x)
 	 * @param point
 	 * @return 0.0 - 1.0
 	 */
 	public double probability(V entry) {
-		double prob = Math.E;
+		if(log.isTraceEnabled()){
+			log.trace("calculating prop for "+entry);
+		}
+		Vec x = new Vec(entry).minus(median);
+		Matrix exp = x.transpose().times(covariance.transpose()).times(x);
 		
-		Matrix entryMatrix = new Matrix(entry.getVectorData(), vectorSpace);
-		entryMatrix.minus(midPointMatrix);
+		if(log.isTraceEnabled()){
+			log.trace("exponent is "+exp);
+		}
+		assert exp.getColumnDimension() == 1;
+		assert exp.getRowDimension() == 1;
 		
-		Math.pow(prob, entryMatrix.transpose().times(covMatrix.det()).times(entryMatrix).times(0.5d));
-		
-		
-		return 0.0d;
+		double prop = coeff * Math.exp(-0.5*exp.get(0, 0));
+		if(log.isTraceEnabled()){
+			log.trace("returning "+prop);
+		}
+		return prop;
 	}
 	
 	
 	public void refreshCenter() {
-		if( entries.size() == 0 ) return;
+		if(entries.size() == 0) 
+			return;
 		
-		Matrix newMidPoint = new Matrix(this.vectorSpace, ROWS);
+		Matrix summed = new Matrix(this.dimension, ROWS);
 		
-		for(Vectorable<V> vec : entries) {
-			newMidPoint.plus(new Matrix(vec.getVectorData(),this.vectorSpace));
+		for(Vectorable vec : entries) {
+			summed.plus(new Vec(vec));
 		}
 		
-		newMidPoint.times(1.0d/entries.size());
+		median = new Vec(summed.times(1d/entries.size()));
 		
+		if(log.isTraceEnabled()){
+			log.trace("new median is "+median);
+		}
 	}
 	
 	/**
@@ -93,31 +113,25 @@ public class KMeanCluster<V extends Vectorable<V>> {
 	 * out of all associated vectorable objects
 	 */
 	public void refreshCovMatrix() {
-		
-		covMatrix = new Matrix(this.vectorSpace, ROWS);
-		if( entries.size() == 0 ) {
-			// fill covMatrix upto E
-			// TODO default covMatrix	
+		if(entries.size() == 0){
+			covariance = Matrix.identity(dimension, dimension);
 			return;
 		}
 		
-		
-		for(Vectorable<V> item : entries) {
-			Matrix matrix = new Matrix(item.getVectorData(), this.vectorSpace);
-			
-			// center vector to midpoint
-			matrix = matrix.minus(midPointMatrix);
-			
-			covMatrix.plus(matrix.times(matrix.transpose()));
+		Matrix summed = new Matrix(this.dimension, ROWS);
+		for(Vectorable item : entries) {
+			Vec x = new Vec(item).minus(median);
+			summed = summed.plus(x.times(x.transpose()));
 		}
 		
-		
-		covMatrix.times(1.0d/entries.size());
-		
-		// also refresh often used coeff (due to probability calculation)
-		coeff = 1.0d/covMatrix.times(2*Math.PI).det();
-		
-		
+		covariance = summed.times(1d/entries.size());
+		if(log.isTraceEnabled()){
+			log.trace("new covmatrix is "+covariance);
+		}
+		coeff = 1.0d/covariance.times(2*Math.PI).det();
+		if(log.isTraceEnabled()){
+			log.trace("new coeff is "+coeff);
+		}
 	}
 	
 	/**
@@ -127,9 +141,6 @@ public class KMeanCluster<V extends Vectorable<V>> {
 	 * @return true, if vectorable was successful added
 	 */
 	public boolean add(V vectorable) {
-		if( vectorable ==  null ) 
-			throw new IllegalArgumentException("vectorable null is not allowed");
-		
 		return this.entries.add(vectorable);
 	}
 	

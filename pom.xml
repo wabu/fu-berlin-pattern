@@ -145,11 +145,6 @@
     	<artifactId>jama</artifactId>
     	<version>1.0.2</version>
     </dependency>
-    <dependency>
-    	<groupId>org.ujmp</groupId>
-    	<artifactId>ujmp-core</artifactId>
-        <version>0.2.4</version>
-    </dependency>
   </dependencies>
 
   <build>

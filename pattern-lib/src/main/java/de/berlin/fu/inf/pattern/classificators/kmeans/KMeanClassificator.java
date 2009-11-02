@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import Jama.Matrix;
-
 import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
 
 /**
@@ -16,7 +14,7 @@ import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
  *
  * @param <V>
  */
-public class KMeanClassificator<V extends Vectorable<V>> {
+public class KMeanClassificator<V extends Vectorable> {
 	public static final int DEFAULT_ITERATIONS = 10;
 	public static final int TERMINATE_BY_ITERATION = 1;
 	public static final int TERMINATE_BY_APPROXIMATION = 2;

@@ -1,5 +1,5 @@
 package de.berlin.fu.inf.pattern.classificators.kmeans;
 
-public interface Vectorable<D> {
+public interface Vectorable {
 	double[] getVectorData();
 }
