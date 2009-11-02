@@ -53,14 +53,7 @@ public class KMeanCluster<V extends Vectorable> {
 	 */
 	public KMeanCluster(int dimension) {
 		this.dimension=dimension;
-		
-		Random rnd = new Random();
-		double[] r = new double[dimension];
-		for(int i = 0; i<dimension; i++){
-			r[i] = rnd.nextDouble();
-		}
-		
-		this.median = new Vec(r);
+		this.median = new Vec(Matrix.random(dimension, 1));
 		
 		this.resetEntries();
 		this.refreshCovMatrix();
