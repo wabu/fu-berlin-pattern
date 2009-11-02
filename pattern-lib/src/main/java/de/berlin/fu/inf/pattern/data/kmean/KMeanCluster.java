@@ -101,7 +101,7 @@ public class KMeanCluster<V extends Vectorable> {
 		Matrix summed = new Matrix(this.dimension, ROWS);
 		
 		for(Vectorable vec : entries) {
-			summed.plus(new Vec(vec));
+			summed = summed.plus(new Vec(vec));
 		}
 		
 		median = new Vec(summed.times(1d/entries.size()));
