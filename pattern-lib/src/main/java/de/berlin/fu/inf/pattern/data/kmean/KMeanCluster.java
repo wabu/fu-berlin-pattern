@@ -50,11 +50,7 @@ public class KMeanCluster<V extends Vectorable> {
 	 * @param dimension
 	 */
 	public KMeanCluster(int dimension) {
-		this.dimension=dimension;
-		this.median = new Vec(Matrix.random(dimension, 1));
-		this.covariance = Matrix.identity(dimension, dimension);
-		
-		this.entries = new ArrayList<V>();
+		this(Matrix.random(dimension, 1).getArray()[0]);
 	}
 	
 	public KMeanCluster(V vec ) {
@@ -62,9 +58,11 @@ public class KMeanCluster<V extends Vectorable> {
 	}
 	
 	public KMeanCluster(double[] midPoint) {
-		this(midPoint.length);
-		
+		this.dimension=midPoint.length;
 		this.median = new Vec(midPoint);
+		this.covariance = Matrix.identity(dimension, dimension);
+		this.entries = new ArrayList<V>();
+		this.coeff = 1.0d/Math.sqrt(covariance.times(2*Math.PI).det());
 	}
 	
 	/**
@@ -79,7 +77,7 @@ public class KMeanCluster<V extends Vectorable> {
 			log.trace("median is "+ms(median));
 		}
 		Vec x = new Vec(entry).minus(median);
-		Matrix exp = x.transpose().times(covariance.transpose()).times(x);
+		Matrix exp = x.transpose().times(covariance.inverse()).times(x);
 		
 		if(log.isTraceEnabled()){
 			log.trace("exponent is "+ms(exp));
@@ -132,7 +130,7 @@ public class KMeanCluster<V extends Vectorable> {
 		if(log.isTraceEnabled()){
 			log.trace("new covmatrix is "+ms(covariance));
 		}
-		coeff = 1.0d/covariance.times(2*Math.PI).det();
+		coeff = 1.0d/Math.sqrt(covariance.times(2*Math.PI).det());
 		if(log.isTraceEnabled()){
 			log.trace("new coeff is "+coeff);
 		}

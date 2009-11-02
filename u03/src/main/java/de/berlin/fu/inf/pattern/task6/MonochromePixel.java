@@ -8,7 +8,7 @@ public class MonochromePixel implements Vectorable {
 	private final int y;
 	
 	private int color;
-	
+	private double[] val;
 	
 	
 	public MonochromePixel(int x, int y, int color) {
@@ -16,11 +16,12 @@ public class MonochromePixel implements Vectorable {
 		this.x = x;
 		this.y = y;
 		this.color = color;
+		this.val = new double[]{(double)color/255d};
 	}
 
 	
 	public double[] getVectorData() {
-		return new double[]{color};
+		return val;
 	}
 		
 	public int getColor() {

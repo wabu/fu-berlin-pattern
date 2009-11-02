@@ -87,8 +87,12 @@ public class KMeanClassificator<V extends Vectorable> {
 	
 	// TODO abstraction
 	private void runEM(Collection<V> data) {
+		int i=0;
+		for(KMeanCluster<V> cluster : clusters){
+			log.debug(" starting with "+i+++" "+cluster);
+		}
 		for(int k=0; k<iterations; k++){
-			int i=0;
+			i=0;
 			for(KMeanCluster<V> cluster : clusters){
 				log.debug(" new size of "+i+++" is "+cluster.size());
 			}
