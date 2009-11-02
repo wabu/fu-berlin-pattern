@@ -1,15 +1,17 @@
 package de.berlin.fu.inf.pattern.data.kmean;
 
+import static de.berlin.fu.inf.util.jama.MatrixString.ms;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
 import Jama.Matrix;
-
 import de.berlin.fu.inf.pattern.classificators.kmeans.Vectorable;
 import de.berlin.fu.inf.util.jama.Vec;
 
@@ -52,6 +54,14 @@ public class KMeanCluster<V extends Vectorable> {
 	public KMeanCluster(int dimension) {
 		this.dimension=dimension;
 		
+		Random rnd = new Random();
+		double[] r = new double[dimension];
+		for(int i = 0; i<dimension; i++){
+			r[i] = rnd.nextDouble();
+		}
+		
+		this.median = new Vec(r);
+		
 		this.resetEntries();
 		this.refreshCovMatrix();
 	}
@@ -74,12 +84,14 @@ public class KMeanCluster<V extends Vectorable> {
 	public double probability(V entry) {
 		if(log.isTraceEnabled()){
 			log.trace("calculating prop for "+entry);
+			log.trace("covmatrix is "+ms(covariance));
+			log.trace("median is "+ms(median));
 		}
 		Vec x = new Vec(entry).minus(median);
 		Matrix exp = x.transpose().times(covariance.transpose()).times(x);
 		
 		if(log.isTraceEnabled()){
-			log.trace("exponent is "+Arrays.toString(exp.getArray()));
+			log.trace("exponent is "+ms(exp));
 		}
 		assert exp.getColumnDimension() == 1;
 		assert exp.getRowDimension() == 1;
@@ -93,8 +105,9 @@ public class KMeanCluster<V extends Vectorable> {
 	
 	
 	public void refreshCenter() {
-		if(entries.size() == 0) 
+		if(entries.size() == 0) {
 			return;
+		}
 		
 		Matrix summed = new Matrix(this.dimension, ROWS);
 		
@@ -105,7 +118,7 @@ public class KMeanCluster<V extends Vectorable> {
 		median = new Vec(summed.times(1d/entries.size()));
 		
 		if(log.isTraceEnabled()){
-			log.trace("new median is "+Arrays.toString(median.getArray()));
+			log.trace("new median is "+ms(median));
 		}
 	}
 	
@@ -127,7 +140,7 @@ public class KMeanCluster<V extends Vectorable> {
 		
 		covariance = summed.times(1d/entries.size());
 		if(log.isTraceEnabled()){
-			log.trace("new covmatrix is "+Arrays.toString(covariance.getArray()));
+			log.trace("new covmatrix is "+ms(covariance));
 		}
 		coeff = 1.0d/covariance.times(2*Math.PI).det();
 		if(log.isTraceEnabled()){
