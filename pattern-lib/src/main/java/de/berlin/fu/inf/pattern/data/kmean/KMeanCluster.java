@@ -1,6 +1,7 @@
 package de.berlin.fu.inf.pattern.data.kmean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -78,7 +79,7 @@ public class KMeanCluster<V extends Vectorable> {
 		Matrix exp = x.transpose().times(covariance.transpose()).times(x);
 		
 		if(log.isTraceEnabled()){
-			log.trace("exponent is "+exp);
+			log.trace("exponent is "+Arrays.toString(exp.getArray()));
 		}
 		assert exp.getColumnDimension() == 1;
 		assert exp.getRowDimension() == 1;
@@ -104,7 +105,7 @@ public class KMeanCluster<V extends Vectorable> {
 		median = new Vec(summed.times(1d/entries.size()));
 		
 		if(log.isTraceEnabled()){
-			log.trace("new median is "+median);
+			log.trace("new median is "+Arrays.toString(median.getArray()));
 		}
 	}
 	
@@ -126,7 +127,7 @@ public class KMeanCluster<V extends Vectorable> {
 		
 		covariance = summed.times(1d/entries.size());
 		if(log.isTraceEnabled()){
-			log.trace("new covmatrix is "+covariance);
+			log.trace("new covmatrix is "+Arrays.toString(covariance.getArray()));
 		}
 		coeff = 1.0d/covariance.times(2*Math.PI).det();
 		if(log.isTraceEnabled()){

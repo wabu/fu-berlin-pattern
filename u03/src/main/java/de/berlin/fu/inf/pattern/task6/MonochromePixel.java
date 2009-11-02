@@ -2,7 +2,7 @@ package de.berlin.fu.inf.pattern.task6;
 
 import de.berlin.fu.inf.pattern.classificators.kmeans.Vectorable;
 
-public class MonochromePixel implements Vectorable<MonochromePixel> {
+public class MonochromePixel implements Vectorable {
 
 	private final int x;
 	private final int y;
@@ -76,10 +76,4 @@ public class MonochromePixel implements Vectorable<MonochromePixel> {
 	public String toString() {
 		return "MonochromPixel [color=" + color + ", x=" + x + ", y=" + y + "]";
 	}
-
-	
-	
-
-	
-
 }

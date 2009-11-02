@@ -28,13 +28,16 @@ public class KMeanClassificator<V extends Vectorable> {
 	private int iterations = DEFAULT_ITERATIONS;
 	private int terminationBehavior = TERMINATE_BY_ITERATION;
 	
-	public KMeanClassificator() {
-		this(2);
+	public KMeanClassificator(int dimension) {
+		this(2, dimension);
 	}
 	
-	public KMeanClassificator(int classes) {
+	public KMeanClassificator(int classes, int dimension) {
 		this.classes = classes;
 		clusters = new ArrayList<KMeanCluster<V>>(classes);
+		for(int i=0; i<classes; i++){
+			clusters.add(new KMeanCluster<V>(dimension));
+		}
 	}
 	
 	/**
@@ -75,7 +78,7 @@ public class KMeanClassificator<V extends Vectorable> {
 	}
 	
 	private KMeanCluster<V> bestCluster(V vec) {
-		double bestProb = 0.0d;
+		double bestProb = Double.NEGATIVE_INFINITY;
 		double prob;
 		KMeanCluster<V> bestCluster = null;
 		
@@ -89,6 +92,7 @@ public class KMeanClassificator<V extends Vectorable> {
 			}
 		}
 		
+		assert bestCluster != null;
 		return bestCluster;
 	}
 	
