@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+
 import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
 
 /**
@@ -62,21 +65,36 @@ public class KMeanClassificator<V extends Vectorable> {
 	 * @param c
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<V>[] classify(Collection<V> c) {
-		
-		V tmpVec = null;
-		
-		for (Iterator<V> iter = c.iterator(); iter.hasNext(); ) {
-			tmpVec = iter.next();
-			
-			KMeanCluster<V> cluster = this.bestCluster(tmpVec);
-			
-			cluster.add(tmpVec);
+		for (V v : c) {
+			KMeanCluster<V> cluster = this.bestCluster(v);
+			cluster.add(v);
 		}
 		
-		return null;
+		runEM(c);
+		
+		return (Collection<V>[]) Collections2.transform(clusters, new Function<KMeanCluster<V>, Collection<V>>() {
+			public Collection<V> apply(KMeanCluster<V> cluster) {
+				return cluster.getEntries();
+			}
+		}).toArray(new Collection<?>[clusters.size()]);
 	}
 	
+	// TODO abstraction
+	private void runEM(Collection<V> data) {
+		for(int k=0; k<iterations; k++){
+			for(KMeanCluster<V> cluster : clusters){
+				cluster.refreshCenter();
+				cluster.refreshCovMatrix();
+				cluster.clear();
+			}
+			for(V v : data){
+				bestCluster(v).add(v);
+			}
+		}
+	}
+
 	private KMeanCluster<V> bestCluster(V vec) {
 		double bestProb = Double.NEGATIVE_INFINITY;
 		double prob;
