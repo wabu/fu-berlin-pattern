@@ -3,11 +3,9 @@ package de.berlin.fu.inf.pattern.data.kmean;
 import static de.berlin.fu.inf.util.jama.MatrixString.ms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +34,7 @@ public class KMeanCluster<V extends Vectorable> {
 	 * List of Vectorable objects, which are currently associated to
 	 * this cluster
 	 */
-	private List<V> entries;
+	private final List<V> entries;
 	
 	
 	/**
@@ -54,9 +52,9 @@ public class KMeanCluster<V extends Vectorable> {
 	public KMeanCluster(int dimension) {
 		this.dimension=dimension;
 		this.median = new Vec(Matrix.random(dimension, 1));
+		this.covariance = Matrix.identity(dimension, dimension);
 		
-		this.resetEntries();
-		this.refreshCovMatrix();
+		this.entries = new ArrayList<V>();
 	}
 	
 	public KMeanCluster(V vec ) {
@@ -121,7 +119,6 @@ public class KMeanCluster<V extends Vectorable> {
 	 */
 	public void refreshCovMatrix() {
 		if(entries.size() == 0){
-			covariance = Matrix.identity(dimension, dimension);
 			return;
 		}
 		
@@ -159,17 +156,8 @@ public class KMeanCluster<V extends Vectorable> {
 		return Collections.unmodifiableList(this.entries);
 	}
 	
-	
-	/**
-	 * resets the internal entry list cluster to a new empty list 
-	 * 
-	 * @return the former list of entries 
-	 */
-	public Collection<V> resetEntries() {
-		List<V> formerEntries = this.entries;
-		
-		this.entries = new ArrayList<V>();
-		return formerEntries;
+	public void clear() {
+		this.entries.clear();
 	}
 	
 }
