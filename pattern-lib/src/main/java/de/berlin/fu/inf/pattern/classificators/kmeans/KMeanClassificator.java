@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
@@ -18,6 +20,8 @@ import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
  * @param <V>
  */
 public class KMeanClassificator<V extends Vectorable> {
+	private final Logger log = Logger.getLogger(KMeanClassificator.class); 
+	
 	public static final int DEFAULT_ITERATIONS = 10;
 	public static final int TERMINATE_BY_ITERATION = 1;
 	public static final int TERMINATE_BY_APPROXIMATION = 2;
@@ -83,10 +87,22 @@ public class KMeanClassificator<V extends Vectorable> {
 	
 	// TODO abstraction
 	private void runEM(Collection<V> data) {
+		int i=0;
+		for(KMeanCluster<V> cluster : clusters){
+			log.debug(" starting with "+i+++" "+cluster);
+		}
 		for(int k=0; k<iterations; k++){
+			i=0;
+			for(KMeanCluster<V> cluster : clusters){
+				log.debug(" new size of "+i+++" is "+cluster.size());
+			}
+			log.debug("iteration "+k+" ...");
+			
+			i=0;
 			for(KMeanCluster<V> cluster : clusters){
 				cluster.refreshCenter();
 				cluster.refreshCovMatrix();
+				log.debug(" refreshed "+i+++" to "+cluster);
 				cluster.clear();
 			}
 			for(V v : data){
