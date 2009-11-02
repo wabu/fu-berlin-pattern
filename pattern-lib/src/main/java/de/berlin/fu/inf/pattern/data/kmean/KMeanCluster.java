@@ -160,4 +160,13 @@ public class KMeanCluster<V extends Vectorable> {
 		this.entries.clear();
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "cluster arround "+ms(median) + " with covariance "+ms(covariance);
+	}
+
+	public int size() {
+		return entries.size();
+	}
 }

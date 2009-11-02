@@ -76,4 +76,5 @@ public class MonochromePixel implements Vectorable {
 	public String toString() {
 		return "MonochromPixel [color=" + color + ", x=" + x + ", y=" + y + "]";
 	}
+
 }
