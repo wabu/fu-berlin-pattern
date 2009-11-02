@@ -56,8 +56,8 @@ public class Main6 {
 			logger.info("process " + imagePixel.length + " pixel");
 			
 			MonochromePixel blacPixel, whitePixel;
-			blacPixel = new MonochromePixel(0, 0, black);
-			whitePixel = new MonochromePixel(0, 0, white);
+			blacPixel = new MonochromePixel(0, 0, 0x00);
+			whitePixel = new MonochromePixel(0, 0, 0xFF);
 			
 			/** init classifier of two classes */
 			KMeanClassificator<MonochromePixel> classifier = 
