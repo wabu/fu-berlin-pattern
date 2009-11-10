@@ -60,8 +60,7 @@ public class Main6 {
 			whitePixel = new MonochromePixel(0, 0, 0xFF);
 			
 			/** init classifier of two classes */
-			KMeanClassificator<MonochromePixel> classifier = 
-				new KMeanClassificator<MonochromePixel>(blacPixel, whitePixel);
+			KMeanClassificator<MonochromePixel> classifier = new KMeanClassificator<MonochromePixel>(blacPixel, whitePixel);
 			/** do classification */
 			Collection<MonochromePixel>[] pixelSets = classifier.classify(pixels);
 			

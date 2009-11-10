@@ -115,8 +115,9 @@ class DistValueContext<V extends Dimensionable<V>> extends DimensionComparator<V
 	}
 	
 	public boolean isSamePlaneAsValue(Node<V> other) {
-		return getContent().compareInDimension(other.getContent(), getCurrentDimension()) ==
-				getContent().compareInDimension(getValue(), getCurrentDimension());
+		int a = getContent().compareInDimension(other.getContent(), getCurrentDimension());
+		int b = getContent().compareInDimension(other.getContent(), getCurrentDimension());
+		return (a<0 && b<0) || (a>0 && b>0);
 	}
 	
 	@Override
