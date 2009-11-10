@@ -2,7 +2,6 @@ package de.berlin.fu.inf.pattern.classificators.kmeans;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,7 +21,7 @@ import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
 public class KMeanClassificator<V extends Vectorable> {
 	private final Logger log = Logger.getLogger(KMeanClassificator.class); 
 	
-	public static final int DEFAULT_ITERATIONS = 10;
+	public static final int DEFAULT_ITERATIONS = 5;
 	public static final int TERMINATE_BY_ITERATION = 1;
 	public static final int TERMINATE_BY_APPROXIMATION = 2;
 	
@@ -31,6 +30,7 @@ public class KMeanClassificator<V extends Vectorable> {
 	 */
 	private final int classes;
 	private final List<KMeanCluster<V>> clusters;
+	private final List<Double> scales;
 	
 	private int iterations = DEFAULT_ITERATIONS;
 	private int terminationBehavior = TERMINATE_BY_ITERATION;
@@ -42,8 +42,10 @@ public class KMeanClassificator<V extends Vectorable> {
 	public KMeanClassificator(int classes, int dimension) {
 		this.classes = classes;
 		clusters = new ArrayList<KMeanCluster<V>>(classes);
+		scales = new ArrayList<Double>();
 		for(int i=0; i<classes; i++){
 			clusters.add(new KMeanCluster<V>(dimension));
+			scales.add(0.5);
 		}
 	}
 	
@@ -57,10 +59,12 @@ public class KMeanClassificator<V extends Vectorable> {
 	public KMeanClassificator(V...vs) {
 		
 		this.classes = vs.length;
+		scales = new ArrayList<Double>();
 		clusters = new ArrayList<KMeanCluster<V>>(classes);
 		
 		for(V vec : vs) {
 			clusters.add(new KMeanCluster<V>(vec));
+			scales.add(0.5);
 		}
 	}
 	
@@ -71,6 +75,7 @@ public class KMeanClassificator<V extends Vectorable> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<V>[] classify(Collection<V> c) {
+		log.debug("anaylsing data");
 		for (V v : c) {
 			KMeanCluster<V> cluster = this.bestCluster(v);
 			cluster.add(v);
@@ -100,11 +105,16 @@ public class KMeanClassificator<V extends Vectorable> {
 			
 			i=0;
 			for(KMeanCluster<V> cluster : clusters){
+				log.debug(" remaximising "+i);
+				scales.set(i, (double)cluster.size()/(double)data.size());
 				cluster.refreshCenter();
 				cluster.refreshCovMatrix();
-				log.debug(" refreshed "+i+++" to "+cluster);
 				cluster.clear();
+				log.debug(" got "+cluster);
+				log.debug(" scaled with "+scales.get(i));
+				i++;
 			}
+			log.debug(" recalculating expectation");
 			for(V v : data){
 				bestCluster(v).add(v);
 			}
@@ -119,8 +129,15 @@ public class KMeanClassificator<V extends Vectorable> {
 		/**
 		 * calculate probability for any cluster
 		 */
+		int all = 0;
 		for( KMeanCluster<V> cluster : clusters ) {
-			if( ( prob = cluster.probability(vec)) > bestProb ) {
+			all += cluster.size();
+		}
+		int i = 0;
+		for( KMeanCluster<V> cluster : clusters ) {
+			double scale = scales.get(i++);
+			
+			if( ( prob = cluster.probability(vec)*scale) > bestProb ) {
 				bestProb = prob;
 				bestCluster = cluster;
 			}

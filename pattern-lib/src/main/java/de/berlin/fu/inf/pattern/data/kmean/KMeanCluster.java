@@ -27,7 +27,8 @@ public class KMeanCluster<V extends Vectorable> {
 	
 	private Vec median;
 	private Matrix covariance;
-	/** should contain: 1/det(2*Pi*covMatrix) */
+	private Matrix inverseCovariance;
+	/** contains 1/sqrt(det(2*Pi*covMatrix)) */
 	private double coeff;
 	
 	/**
@@ -35,6 +36,7 @@ public class KMeanCluster<V extends Vectorable> {
 	 * this cluster
 	 */
 	private final List<V> entries;
+
 	
 	
 	/**
@@ -60,9 +62,9 @@ public class KMeanCluster<V extends Vectorable> {
 	public KMeanCluster(double[] midPoint) {
 		this.dimension=midPoint.length;
 		this.median = new Vec(midPoint);
-		this.covariance = Matrix.identity(dimension, dimension);
+		this.covariance = this.inverseCovariance = Matrix.identity(dimension, dimension);
 		this.entries = new ArrayList<V>();
-		this.coeff = 1.0d/Math.sqrt(covariance.times(2*Math.PI).det());
+		this.coeff = 1.0d/Math.sqrt(inverseCovariance.times(2*Math.PI).det());
 	}
 	
 	/**
@@ -77,7 +79,7 @@ public class KMeanCluster<V extends Vectorable> {
 			log.trace("median is "+ms(median));
 		}
 		Vec x = new Vec(entry).minus(median);
-		Matrix exp = x.transpose().times(covariance.inverse()).times(x);
+		Matrix exp = x.transpose().times(inverseCovariance).times(x);
 		
 		if(log.isTraceEnabled()){
 			log.trace("exponent is "+ms(exp));
@@ -134,6 +136,7 @@ public class KMeanCluster<V extends Vectorable> {
 		if(log.isTraceEnabled()){
 			log.trace("new coeff is "+coeff);
 		}
+		inverseCovariance = covariance.inverse();
 	}
 	
 	/**
