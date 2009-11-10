@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.util.jama;
 
-import de.berlin.fu.inf.pattern.classificators.kmeans.Vectorable;
+import de.berlin.fu.inf.pattern.types.Vectorable;
 import Jama.Matrix;
 
 public class Vec extends Matrix {
