@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import Jama.Matrix;
-import de.berlin.fu.inf.pattern.classificators.kmeans.Vectorable;
+import de.berlin.fu.inf.pattern.types.Vectorable;
 import de.berlin.fu.inf.util.jama.Vec;
 
 /**

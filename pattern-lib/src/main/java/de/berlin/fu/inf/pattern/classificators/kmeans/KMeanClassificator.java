@@ -11,6 +11,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
 import de.berlin.fu.inf.pattern.data.kmean.KMeanCluster;
+import de.berlin.fu.inf.pattern.types.Vectorable;
 
 /**
  * 
