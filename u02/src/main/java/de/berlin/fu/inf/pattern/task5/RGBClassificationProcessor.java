@@ -21,10 +21,10 @@ public class RGBClassificationProcessor {
 	private final int backgroundClass = 1;
 	private final int foregroundClass = 2;
 	
-	private final int redRange   = 0x00ff0000;
-	private final int greenRange = 0x0000ff00;
-	private final int blueRange  = 0x000000ff; 
-	
+	private final int colorMask = 0xff;
+	private final int redShift = 16;
+	private final int greenShift = 8;
+	private final int blueShift = 0;
 	
 	/**
 	 * 
@@ -120,11 +120,11 @@ public class RGBClassificationProcessor {
 	 * @return index 0 = red, 1 = green, 2 = blue
 	 */
 	private int[] rgbAsArray(int rgbColor) {
-		
 		return new int[]{
-				rgbColor & this.redRange,
-				rgbColor & this.greenRange,
-				rgbColor & this.blueRange};
+				(rgbColor >> redShift) & colorMask,
+				(rgbColor >> greenShift) & colorMask,
+				(rgbColor >> blueShift) & colorMask,
+		};
 	}
 
 }
