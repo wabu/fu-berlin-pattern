@@ -163,4 +163,8 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
 		return cov;
 	}
+	
+	public String toString() {	
+		return "FLD with [omege=" + ms(this.omega) +"]";
+	}
 }
