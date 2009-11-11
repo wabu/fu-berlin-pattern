@@ -3,7 +3,6 @@ package de.berlin.fu.inf.pattern.data;
 import java.util.Collection;
 import java.util.List;
 
-import de.berlin.fu.inf.pattern.classificators.Entry;
 
 /**
  * hold some enties

@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.pattern.u03;
 
-import de.berlin.fu.inf.pattern.types.Messurable;
+import de.berlin.fu.inf.pattern.util.types.Messurable;
 
 public class DoublePoint implements Messurable<DoublePoint> {
 	private final double value;

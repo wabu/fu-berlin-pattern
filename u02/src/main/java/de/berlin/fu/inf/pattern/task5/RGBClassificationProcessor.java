@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.berlin.fu.inf.pattern.classificators.Entry;
-import de.berlin.fu.inf.pattern.classificators.kd.KDClassificator;
-import de.berlin.fu.inf.pattern.types.Vector;
+import de.berlin.fu.inf.pattern.data.Entry;
+import de.berlin.fu.inf.pattern.impl.kdtree.KDClassificator;
+import de.berlin.fu.inf.pattern.util.data.IntVector;
 
 
 /**
@@ -45,9 +45,9 @@ public class RGBClassificationProcessor {
 		logger.debug("prozessing image of size "+image.length);
 		
 		// classify color pixel as an vector 
-		KDClassificator<Vector, Integer> kdClassifier = new KDClassificator<Vector, Integer>();
+		KDClassificator<IntVector, Integer> kdClassifier = new KDClassificator<IntVector, Integer>();
 		// training list for classifier
-		List<Entry<Vector,Integer>> classifiedPixel = new ArrayList<Entry<Vector,Integer>>();
+		List<Entry<IntVector,Integer>> classifiedPixel = new ArrayList<Entry<IntVector,Integer>>();
 		
 		
 		// build training set
@@ -71,7 +71,7 @@ public class RGBClassificationProcessor {
 		
 		int[] output = new int[image.length];
 		// all background pixel become white
-		Vector vector = new Vector(3);
+		IntVector vector = new IntVector(3);
 		
 		int fg=0, bg=0;
 		for( int i=0; i<mask.length; i++) {
@@ -102,13 +102,13 @@ public class RGBClassificationProcessor {
 		return output;
 	}
 	
-	private Entry<Vector,Integer> buildEntry(int rgbColor, int pixelClass ) {
+	private Entry<IntVector,Integer> buildEntry(int rgbColor, int pixelClass ) {
 		
-		Vector vector = new Vector(rgbAsArray(rgbColor));
+		IntVector vector = new IntVector(rgbAsArray(rgbColor));
 		
 		if( logger.isTraceEnabled())
 			logger.trace("adding "+vector+ " to class " + pixelClass);			
-		Entry<Vector,Integer> entry = new Entry<Vector, Integer>(vector, pixelClass);		
+		Entry<IntVector,Integer> entry = new Entry<IntVector, Integer>(vector, pixelClass);		
 		
 		return entry;
 	}

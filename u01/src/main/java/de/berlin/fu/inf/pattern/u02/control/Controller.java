@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.berlin.fu.inf.pattern.classificators.Classifier;
-import de.berlin.fu.inf.pattern.classificators.Entry;
-import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
+import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
+import de.berlin.fu.inf.pattern.iface.Classifier;
+import de.berlin.fu.inf.pattern.impl.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.u02.data.Digit;
 import de.berlin.fu.inf.pattern.u02.data.DigitReader;
 

@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import de.berlin.fu.inf.pattern.classificators.Classifier;
-import de.berlin.fu.inf.pattern.classificators.knn.SimpleKNNClassifier;
 import de.berlin.fu.inf.pattern.data.Database;
 import de.berlin.fu.inf.pattern.data.SimpleDatabase;
+import de.berlin.fu.inf.pattern.iface.Classifier;
+import de.berlin.fu.inf.pattern.impl.knn.SimpleKNNClassifier;
 
 public class RunTest {
 	private final int n;

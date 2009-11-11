@@ -5,14 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
-import de.berlin.fu.inf.pattern.classificators.kmeans.KMeanClassificator;
+import de.berlin.fu.inf.pattern.impl.kmean.KMeanClassifier;
 
 
 public class Main6 {
@@ -60,18 +61,27 @@ public class Main6 {
 			whitePixel = new MonochromePixel(0, 0, 0xFF);
 			
 			/** init classifier of two classes */
-			KMeanClassificator<MonochromePixel> classifier = new KMeanClassificator<MonochromePixel>(blacPixel, whitePixel);
-			/** do classification */
-			Collection<MonochromePixel>[] pixelSets = classifier.classify(pixels);
+			KMeanClassifier<MonochromePixel> classifier = new KMeanClassifier<MonochromePixel>(blacPixel, whitePixel);
 			
-			if( pixelSets.length != 2 || pixelSets[0] == null || pixelSets[1] == null ) {
+			HashMap<Integer, LinkedList<MonochromePixel>> pixelSets = new HashMap<Integer, LinkedList<MonochromePixel>>(2);
+			pixelSets.put(0, new LinkedList<MonochromePixel>());
+			pixelSets.put(1, new LinkedList<MonochromePixel>());
+			
+			/** do classification */
+			classifier.train(pixels);
+			for(MonochromePixel p : pixels) {
+				pixelSets.get(classifier.classify(p)).add(p);
+			}
+			
+			
+			if(pixelSets.isEmpty()) {
 				logger.fatal("error in processing, no results retrieved");
 				return;
 			}
 			
-			logger.info("process results to output ("+pixelSets[0].size() + " classified black pixel)");
+			logger.info("process results to output ("+pixelSets.get(0).size() + " classified black pixel)");
 			// now we just need to place classified black pixel cause array is already white
-			for(MonochromePixel pixel : pixelSets[0]) {
+			for(MonochromePixel pixel : pixelSets.get(0)) {
 				imagePixel[pixel.getY()*width+pixel.getX()] = black;
 			}
 

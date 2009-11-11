@@ -1,5 +1,5 @@
 package de.berlin.fu.inf.pattern.task6;
-import de.berlin.fu.inf.pattern.types.Vectorable;
+import de.berlin.fu.inf.pattern.util.types.Vectorable;
 
 public class MonochromePixel implements Vectorable {
 	private final int x;

@@ -5,7 +5,7 @@
 
 package de.berlin.fu.inf.pattern.u02.data;
 
-import de.berlin.fu.inf.pattern.types.Messurable;
+import de.berlin.fu.inf.pattern.util.types.Messurable;
 
 /**
  *
