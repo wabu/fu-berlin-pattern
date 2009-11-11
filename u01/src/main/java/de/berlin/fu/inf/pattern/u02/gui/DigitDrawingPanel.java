@@ -50,8 +50,8 @@ class DigitDrawingPanel extends JPanel {
     	
     	for( DigitPoint currenPoint : points) {
     		if( lastPoint != null ) {
-    			g.drawLine(lastPoint.x, DigitPoint.MAX_Y - lastPoint.y, 
-    					currenPoint.x, DigitPoint.MAX_Y - currenPoint.y);
+    			g.drawLine(lastPoint.getX(), DigitPoint.MAX_Y - lastPoint.getY(), 
+    					currenPoint.getX(), DigitPoint.MAX_Y - currenPoint.getY());
     		}
     		lastPoint = currenPoint;
     	}   	
