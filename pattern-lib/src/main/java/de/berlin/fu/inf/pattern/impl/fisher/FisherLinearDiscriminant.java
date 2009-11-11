@@ -23,7 +23,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	private Matrix sigma1, sigma2;
 
 	/** real fisher discriminant ^^ */
-	private Vec omega;
+	private Matrix omega;
 	private Matrix sigmaB, sigmaW;
 	
 	// "_" marks projection to fisher's linear discriminant
@@ -70,14 +70,14 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
 		EigenvalueDecomposition dec = sigma.eig();
 		Matrix d = dec.getD();
-		Matrix v = dec.getD();
+		Matrix v = dec.getV();
 		logger.trace("eigenvalues are "+ms(d));
 		logger.trace("eigenvectors are "+ms(v));
 		
 		for(int i=0; i<v.getRowDimension(); i++){
 			if(d.get(i, i) != 0) {
 				// TODO das so richtig? spalten zeilen sonstwas vector?
-				this.omega = new Vec(v.getArray()[i]);
+				this.omega = new Vec(v.getArray()[i]).transpose();
 			}
 		}
 		logger.trace("using omega "+ms(omega));
@@ -99,6 +99,9 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		_sigma1 = _s1.get(0, 0);
 		_sigma2 = _s2.get(0, 0);
 		
+		logger.trace("linear class 1 around "+_mPoint1+" with sigma^2 "+_sigma1);
+		logger.trace("linear class 2 around "+_mPoint2+" with sigma^2 "+_sigma2);
+		
 		// we are done...
 	}
 	
@@ -116,7 +119,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	
 	private double getPropability(double val, double m, double s) {
 		// only need to compare, so exponent is enough
-		return s*(m-val);
+		return -(m-val)*(m-val)/s;
 	}
 
 	/**
@@ -147,7 +150,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	 * @return covariance matrix
 	 */
 	private Matrix calcCovariance(Collection<V> c, Vec mPoint) {
-		Matrix summed = new Matrix(this.dimension, ONE_COLUMN);
+		Matrix summed = new Matrix(this.dimension, this.dimension);
 		for(Vectorable item : c) {
 			Vec x = new Vec(item).minus(mPoint);
 			summed = summed.plus(x.times(x.transpose()));

@@ -20,9 +20,14 @@ public class Vec extends Matrix {
 	
 	@Override
 	public Vec minus(Matrix arg0) {
-		if(arg0.getRowDimension() != 1){
+		if(arg0.getColumnDimension() != 1){
 			throw new IllegalArgumentException("vecor has to be an 1xn matrix");
 		}
 		return new Vec(super.minus(arg0));
+	}
+	
+	@Override
+	public String toString() {
+		return MatrixString.ms(this);
 	}
 }
