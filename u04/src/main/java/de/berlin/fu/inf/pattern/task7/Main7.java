@@ -36,6 +36,7 @@ public class Main7 {
 			List<DigitPoint> inClass = new ArrayList<DigitPoint>(c.size()*Digit.POINT_NUMBER/classes.length);
 			List<DigitPoint> beyondClass = new ArrayList<DigitPoint>(c.size()*Digit.POINT_NUMBER);
 			
+			// FIXME we have to put all the digit data into *one* vector, so we have a 16D space
 			for(Digit digit : c) {
 				if( digit.getGroup() == group ) {
 					inClass.addAll(digit.getPoints());
