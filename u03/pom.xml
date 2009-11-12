@@ -10,51 +10,25 @@
   <version>1.0-SNAPSHOT</version>
   <name>Uebung 3</name>
   
-    <build>
+  <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <configuration>
-          <shadedArtifactAttached>true</shadedArtifactAttached>
-          <shadedClassifierName>shaded</shadedClassifierName>
-          <transformers>
-            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-              <mainClass>de.berlin.fu.inf.pattern.task6.Main6</mainClass>
-            </transformer>
-          </transformers>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
-    <dependencies>
-    	<dependency>
-    		<groupId>de.berlin.fu.inf.pattern</groupId>
-    		<artifactId>pattern-lib</artifactId>
-    		<version>1.0-SNAPSHOT</version>
-    		<type>jar</type>
-    		<scope>compile</scope>
-    	</dependency>
-    </dependencies>
+  <dependencies>
+      <dependency>
+              <groupId>de.berlin.fu.inf.pattern</groupId>
+              <artifactId>pattern-lib</artifactId>
+              <version>1.0-SNAPSHOT</version>
+              <type>jar</type>
+              <scope>compile</scope>
+      </dependency>
+  </dependencies>
 </project>

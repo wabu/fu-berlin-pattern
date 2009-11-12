@@ -16,5 +16,24 @@
   	  <artifactId>u01</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+    	<groupId>de.berlin.fu.inf.pattern</groupId>
+    	<artifactId>pattern-lib</artifactId>
+    	<version>1.0-SNAPSHOT</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 </project>

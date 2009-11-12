@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.berlin.fu.inf.pattern.u03.RunTest;
+import de.berlin.fu.inf.pattern.tasks.u03.RunTest;
 
 public class SimpleKNNTest {
 	

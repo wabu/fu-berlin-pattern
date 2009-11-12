@@ -142,10 +142,11 @@ public class KMeanClassifier<V extends Vectorable> implements SelflearningClassi
 		}
 		int i = 0;
 		for( KMeanCluster<V> cluster : clusters ) {
-			double scale = scales.get(i++);
+			double scale = scales.get(i);
 			if( ( prob = cluster.probability(vec)*scale) > bestProb ) {
 				bestProb = prob;
 				best = i;
+				i++;
 			}
 		}
 		assert (best == -1) == (clusters.isEmpty());

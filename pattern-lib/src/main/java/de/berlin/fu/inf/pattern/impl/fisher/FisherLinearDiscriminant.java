@@ -33,6 +33,9 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	private final int dimension;
 	private Matrix sigma;
 	
+	private double _scale1 = 0;
+	private double _scale2 = 0;
+	
 	/**
 	 * 
 	 * @param dimension the dimension of vector wie expect
@@ -45,6 +48,12 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 
 	public void train(Collection<V> c1, Collection<V> c2) {
 		Matrix m;
+		
+		float size1 = c1.size();
+		float size2 = c2.size();
+		float sizeAll = size1+size2;
+		_scale1 = (float) Math.log(size1/sizeAll);
+		_scale2 = (float) Math.log(size2/sizeAll);
 		
 		// determine middlePoint for each set of vectorable
 		this.mPoint1 = this.calcMiddlePoint(c1);
@@ -99,8 +108,8 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		_sigma1 = _s1.get(0, 0);
 		_sigma2 = _s2.get(0, 0);
 		
-		logger.trace("linear class 1 around "+_mPoint1+" with sigma^2 "+_sigma1);
-		logger.trace("linear class 2 around "+_mPoint2+" with sigma^2 "+_sigma2);
+		logger.trace("linear class 1 around "+_mPoint1+" with sigma^2 "+_sigma1+", scaled with "+size1);
+		logger.trace("linear class 2 around "+_mPoint2+" with sigma^2 "+_sigma2+", scaled with "+size2);
 		
 		// we are done...
 	}
@@ -111,8 +120,8 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
 		//TODO scale?
 		
-		double p1 = getPropability(val, _mPoint1, _sigma1);
-		double p2 = getPropability(val, _mPoint2, _sigma2);
+		double p1 = _scale1+getPropability(val, _mPoint1, _sigma1);
+		double p2 = _scale2+getPropability(val, _mPoint2, _sigma2);
 		
 		return (p1>p2) ? 0 : 1;
 	};
