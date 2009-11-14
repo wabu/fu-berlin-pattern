@@ -54,6 +54,4 @@ public class Vec extends Matrix implements Vectorable {
 	public double[] getVectorData() {
 		return super.getColumnPackedCopy();
 	}
-	
-	
 }

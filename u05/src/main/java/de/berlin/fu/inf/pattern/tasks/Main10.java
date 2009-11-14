@@ -5,16 +5,17 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-
 import Jama.Matrix;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+
 import de.berlin.fu.inf.pattern.data.Entry;
-import de.berlin.fu.inf.pattern.impl.fisher.FisherLinearDiscriminant;
 import de.berlin.fu.inf.pattern.impl.kdtree.KDClassificator;
 import de.berlin.fu.inf.pattern.util.data.DistributionGenerator;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
+import de.berlin.fu.inf.pattern.util.jama.MatrixString;
 import de.berlin.fu.inf.pattern.util.jama.Vec;
 
 /**
@@ -73,10 +74,18 @@ public class Main10 {
 			Vec middlePoint1 = gen.randomVector(dim);
 			Vec middlePoint2 = gen.randomVector(dim);
 			
-			Collection<Vec> data1 = gen.createVectors(cov1, middlePoint1, elements);
-			Collection<Vec> data2 = gen.createVectors(cov2, middlePoint2, elements);
+			logger.trace("cov1: "+MatrixString.ms(cov1));
+			logger.trace("cov2: "+MatrixString.ms(cov2));
+			logger.trace("mid1: "+MatrixString.ms(middlePoint1));
+			logger.trace("mid2: "+MatrixString.ms(middlePoint2));
+			
+			Collection<Vec> train1 = gen.createVectors(cov1, middlePoint1, elements);
+			Collection<Vec> train2 = gen.createVectors(cov2, middlePoint2, elements);
+			
+			Collection<Vec> test1 = gen.createVectors(cov1, middlePoint1, elements);
+			Collection<Vec> test2 = gen.createVectors(cov2, middlePoint2, elements);
 		
-			rate = runKNN(data1, data2);
+			rate = runKNN(train1, train2, test1, test2);
 			logger.info("KNN classified " + rate);
 			classificationRateKNN += rate;
 			
@@ -98,39 +107,29 @@ public class Main10 {
 	/**
 	 * @param data1 - data representing class1
 	 * @param data2 - data representing class2
+	 * @param test1 - testing data for class 2
+	 * @param test2 - testing data for class 1
 	 * @return classification (success) rate
 	 */
-	private double runKNN(Collection<Vec> data1, Collection<Vec> data2 ) {
+	private double runKNN(Collection<Vec> data1, Collection<Vec> data2, Collection<Vec> test1, Collection<Vec> test2 ) {
 		
 		/// init KD-Classifier 
 		KDClassificator<DoubleVector, Integer> kdClassifier = new KDClassificator<DoubleVector, Integer>();
 		
 		// We need to transform our data to entry-sets
 		Collection<Entry<DoubleVector, Integer>> classes = new ArrayList<Entry<DoubleVector,Integer>>(data1.size() + data2.size());
-		
-		classes.addAll(
-			Collections2.transform(data1, new Function<Vec, Entry<DoubleVector, Integer>>() {
-				public Entry<DoubleVector, Integer> apply(Vec arg0) {
-					return new Entry<DoubleVector, Integer>(new DoubleVector(arg0.getVectorData()), 1);
-				}})
-			);
-		
-		classes.addAll(
-			Collections2.transform(data1, new Function<Vec, Entry<DoubleVector, Integer>>() {
-				public Entry<DoubleVector, Integer> apply(Vec arg0) {
-					return new Entry<DoubleVector, Integer>(new DoubleVector(arg0.getVectorData()), 2);
-			}}));
-		
+		classes.addAll(mapToVectorEntry(data1, 1));
+		classes.addAll(mapToVectorEntry(data2, 2));
 		// now train
 		kdClassifier.train(classes);
+		
 		// classify
 		int correctClassified = 0;
 		
 		logger.debug("elements: " + classes.size());
-		for( Entry<DoubleVector, Integer> e : classes) {
-			
+		for( Entry<DoubleVector, Integer> e : Iterables.concat(mapToVectorEntry(test1, 1), mapToVectorEntry(test2, 2))) {
 			Integer klass = kdClassifier.classify(e.getData());
-			logger.debug("found " + klass + " Vec is " + e.getClassification());
+			logger.trace("found " + klass + " Vec is " + e.getClassification());
 			
 			if( klass.equals(e.getClassification()) ) {
 				correctClassified++;
@@ -142,6 +141,14 @@ public class Main10 {
 	
 	
 	
+	private Collection<Entry<DoubleVector, Integer>> mapToVectorEntry(Collection<Vec> data, final int i) {
+		return Collections2.transform(data, new Function<Vec, Entry<DoubleVector, Integer>>() {
+			public Entry<DoubleVector, Integer> apply(Vec arg0) {
+				return new Entry<DoubleVector, Integer>(new DoubleVector(arg0.getVectorData()), i);
+		}});
+	}
+
+
 	public double runFisher(Collection<Vec> data1, Collection<Vec> data2) {
 		
 		return 0;

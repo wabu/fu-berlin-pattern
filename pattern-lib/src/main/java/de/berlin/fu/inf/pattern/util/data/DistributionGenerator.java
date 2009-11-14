@@ -52,7 +52,8 @@ public class DistributionGenerator {
 					value = this.range*rand.nextDouble();
 					covMatrix.set(row, col, value);
 					// mirror
-					if( row != col) covMatrix.set(col, row, value);
+					if( row != col) 
+						covMatrix.set(col, row, value);
 				}
 			}
 		} while( !testCovarianceMatrix(covMatrix) );
@@ -86,7 +87,7 @@ public class DistributionGenerator {
 		
 		// generate [size] random multivariat normal distributed vectors
 		for( int i = 0; i<size; i++ ) {
-			Matrix m = lower.times(this.randomVector(dim));
+			Matrix m = lower.times(this.randomGaussVector(dim));
 			// expecting just a vector
 			assert m.getColumnDimension() == 1;
 			
@@ -101,6 +102,18 @@ public class DistributionGenerator {
 		return this.createVectors(covarianceMatrix,				// covMatrix
 				new Vec(covarianceMatrix.getRowDimension()),	// zero Vector
 				size);											// number of generated vectors
+	}
+	/**
+	 * @param dimension of new vector
+	 * @return a random normal distributed vector
+	 */
+	public Vec randomGaussVector(int dim) {
+		
+		double[] data = new double[dim];
+		for( int i = 0; i < data.length; i++ ) {
+			data[i] = rand.nextGaussian();
+		}
+		return new Vec(data);
 	}
 	
 	/**
