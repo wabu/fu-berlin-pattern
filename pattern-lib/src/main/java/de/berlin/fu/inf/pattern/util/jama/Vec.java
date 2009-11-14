@@ -18,6 +18,15 @@ public class Vec extends Matrix {
 		super(m.getArray());
 	}
 	
+	/**
+	 * creates zero vector of dimension n 
+	 * @param n - rows
+	 */
+	public Vec(int n) {
+		// n rows and one column filled with zero
+		super(n,1);
+	}
+	
 	@Override
 	public Vec minus(Matrix arg0) {
 		if(arg0.getColumnDimension() != 1){
@@ -25,6 +34,15 @@ public class Vec extends Matrix {
 		}
 		return new Vec(super.minus(arg0));
 	}
+	
+	@Override
+	public Vec plus(Matrix arg0) {
+		if(arg0.getColumnDimension() != 1){
+			throw new IllegalArgumentException("vecor has to be an 1xn matrix");
+		}
+		return new Vec(super.minus(arg0));
+	}
+	
 	
 	@Override
 	public String toString() {
