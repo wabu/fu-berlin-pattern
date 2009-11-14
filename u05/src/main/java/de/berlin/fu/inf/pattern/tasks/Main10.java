@@ -7,12 +7,12 @@ import org.apache.log4j.Logger;
 
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.iface.Classifier;
+import de.berlin.fu.inf.pattern.impl.fisher.FisherLinearDiscriminant;
 import de.berlin.fu.inf.pattern.impl.kdtree.KDClassificator;
 import de.berlin.fu.inf.pattern.util.data.DistributionGenerator;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.gen.Generator;
 import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
 
 /**
  * K-NN vs. Fishers Discriminant
@@ -25,7 +25,7 @@ import de.berlin.fu.inf.pattern.util.jama.Vec;
 public class Main10 {
 	private Logger logger = Logger.getLogger(Main10.class);
 	
-	private final int[] N = {1,2,5,10,20,30,40,50,100,250,500,1000,2000,3000,4000,5000,7500,10000};
+	private final int[] N = {3,5,10,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
 	
 	private final DistributionGenerator gen = new DistributionGenerator();
 	private final int maxDimension = 10;
@@ -74,17 +74,12 @@ public class Main10 {
 			
 			classificationRateKNN += rate;
 			
-			
-			// TODO extend KDClassigier for more then one 'k's
-			//FisherLinearDiscriminant<Vec> fisher = new FisherLinearDiscriminant<Vec>(dim);
-			//fisher.train(data1, data2);
-			//fisher.classify(data)
-			// test classification
-			
-			// fisher.classify(vec);
-		
+			Classifier<DoubleVector, Integer> fisher = trainFisher(elements, dim, gen1, gen2);
+			rate = runTest(tests, fisher, gen1, gen2);
+			classificationRateFisher += rate;
 		} // end for(run)
 		logger.info("======= KNN-rate = "+classificationRateKNN/runs+"\t for "+elements+" in "+dim+"d");
+		logger.info("======= Fishrate = "+classificationRateFisher/runs+"\t for "+elements+" in "+dim+"d");
 		
 		// TODO write rates to file
 	}
@@ -96,15 +91,17 @@ public class Main10 {
 		
 		// We need to transform our data to entry-sets
 		Collection<Entry<DoubleVector, Integer>> classes = new ArrayList<Entry<DoubleVector,Integer>>(2*size);
-		classes.addAll(gen1.generateEntries(1, size));
-		classes.addAll(gen2.generateEntries(2, size));
+		classes.addAll(gen1.generateEntries(0, size));
+		classes.addAll(gen2.generateEntries(1, size));
 		// now train
 		kdClassifier.train(classes);
 		return kdClassifier;
 	}
 	
-	private Classifier<DoubleVector, Integer> trainFisher(int size, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
-		return null;
+	private Classifier<DoubleVector, Integer> trainFisher(int size, int dim, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
+		FisherLinearDiscriminant<DoubleVector> fisher = new FisherLinearDiscriminant<DoubleVector>(dim);
+		fisher.train(gen1.generate(size), gen2.generate(size));
+		return fisher;
 	}
 	
 	public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector> ... gens) {
@@ -113,7 +110,7 @@ public class Main10 {
 		
 		logger.debug("running "+num+" tests");
 		for(int i=0; i<num; i++) {
-			int k=1;
+			int k=0;
 			for(Generator<DoubleVector> g : gens){
 				if(k == c.classify(g.generate())){
 					correct++;
