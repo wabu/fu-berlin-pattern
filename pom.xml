@@ -117,6 +117,7 @@
     <module>u02</module>
     <module>u03</module>
     <module>u04</module>
+    <module>u05</module>
   </modules>
 
   <dependencies>

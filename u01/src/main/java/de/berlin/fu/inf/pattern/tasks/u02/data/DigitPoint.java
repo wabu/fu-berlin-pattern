@@ -12,7 +12,7 @@ import de.berlin.fu.inf.pattern.util.types.Messurable;
  *
  * @author alex
  */
-public class DigitPoint extends DoubleVector implements Messurable<DigitPoint> {
+public class DigitPoint extends DoubleVector {
 	private static final long serialVersionUID = 1L;
 	
 	public static int MAX_Y = 100;

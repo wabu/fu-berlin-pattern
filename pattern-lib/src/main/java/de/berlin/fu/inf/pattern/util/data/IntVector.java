@@ -97,6 +97,5 @@ public class IntVector implements Dimensionable<IntVector>, Messurable<IntVector
 		}
 		builder.append(")");
 		return builder.toString();
-		
 	}
 }

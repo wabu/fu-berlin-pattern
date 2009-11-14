@@ -86,7 +86,7 @@ public class DistributionGenerator {
 		
 		// generate [size] random multivariat normal distributed vectors
 		for( int i = 0; i<size; i++ ) {
-			Matrix m = lower.times(this.randomNormalDistributedVector(dim));
+			Matrix m = lower.times(this.randomVector(dim));
 			// expecting just a vector
 			assert m.getColumnDimension() == 1;
 			
@@ -107,7 +107,7 @@ public class DistributionGenerator {
 	 * @param dimension of new vector
 	 * @return a random normal distributed vector
 	 */
-	private Vec randomNormalDistributedVector(int dim) {
+	public Vec randomVector(int dim) {
 		
 		double[] data = new double[dim];
 		for( int i = 0; i < data.length; i++ ) {

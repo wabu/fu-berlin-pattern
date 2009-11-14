@@ -1,9 +1,10 @@
 package de.berlin.fu.inf.pattern.util.jama;
 
+import net.jcip.annotations.Immutable;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import Jama.Matrix;
 
-public class Vec extends Matrix {
+public class Vec extends Matrix implements Vectorable {
 	private static final long serialVersionUID = -2349032575947575606L;
 
 	public Vec(double[] data) {
@@ -48,4 +49,11 @@ public class Vec extends Matrix {
 	public String toString() {
 		return MatrixString.ms(this);
 	}
+
+	// interface vectorable 
+	public double[] getVectorData() {
+		return super.getColumnPackedCopy();
+	}
+	
+	
 }
