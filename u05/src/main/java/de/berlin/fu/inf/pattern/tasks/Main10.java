@@ -13,6 +13,7 @@ import de.berlin.fu.inf.pattern.util.data.DistributionGenerator;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.gen.Generator;
 import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
+import de.berlin.fu.inf.pattern.util.jama.Vec;
 
 /**
  * K-NN vs. Fishers Discriminant
@@ -25,7 +26,7 @@ import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
 public class Main10 {
 	private Logger logger = Logger.getLogger(Main10.class);
 	
-	private final int[] N = {3,5,10,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
+	private final int[] N = {2,3,5,10,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
 	
 	private final DistributionGenerator gen = new DistributionGenerator();
 	private final int maxDimension = 10;
@@ -46,7 +47,9 @@ public class Main10 {
 		
 		for(int dimension = 2; dimension <= maxDimension; dimension++) {
 			for( int number : N) {
-				this.run(dimension, number);
+				if(number >= dimension) { // avoid fisher sigularity
+					this.run(dimension, number);
+				}
 			}
 		}
 	}
