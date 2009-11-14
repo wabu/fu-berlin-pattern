@@ -5,17 +5,13 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import Jama.Matrix;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-
 import de.berlin.fu.inf.pattern.data.Entry;
+import de.berlin.fu.inf.pattern.iface.Classifier;
 import de.berlin.fu.inf.pattern.impl.kdtree.KDClassificator;
 import de.berlin.fu.inf.pattern.util.data.DistributionGenerator;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
-import de.berlin.fu.inf.pattern.util.jama.MatrixString;
+import de.berlin.fu.inf.pattern.util.gen.Generator;
+import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
 import de.berlin.fu.inf.pattern.util.jama.Vec;
 
 /**
@@ -33,7 +29,8 @@ public class Main10 {
 	
 	private final DistributionGenerator gen = new DistributionGenerator();
 	private final int maxDimension = 10;
-	private final int runs = 7; 
+	private final int runs = 50; 
+	private final int tests = 500; 
 	
 	
 	private String knnFile = "knnData.gp";
@@ -66,27 +63,15 @@ public class Main10 {
 		logger.info("======= DIM="+dim+ " ELEMTENTS=" + elements );
 		
 		for( int run = 1; run < this.runs; run++ ) {
-			logger.info("run: " + run);
+			logger.debug("run: " + run);
 			// generate random distribution
-			Matrix cov1 = gen.createCovariance(dim);
-			Matrix cov2 = gen.createCovariance(dim);
+			Generator<DoubleVector> gen1 = new MultiNormalGenerator(dim);
+			Generator<DoubleVector> gen2 = new MultiNormalGenerator(dim);
 			
-			Vec middlePoint1 = gen.randomVector(dim);
-			Vec middlePoint2 = gen.randomVector(dim);
+			Classifier<DoubleVector, Integer> knn = trainKNN(elements, gen1, gen2);
+			rate = runTest(tests, knn, gen1, gen2);
+			logger.debug("KNN classified " + rate);
 			
-			logger.trace("cov1: "+MatrixString.ms(cov1));
-			logger.trace("cov2: "+MatrixString.ms(cov2));
-			logger.trace("mid1: "+MatrixString.ms(middlePoint1));
-			logger.trace("mid2: "+MatrixString.ms(middlePoint2));
-			
-			Collection<Vec> train1 = gen.createVectors(cov1, middlePoint1, elements);
-			Collection<Vec> train2 = gen.createVectors(cov2, middlePoint2, elements);
-			
-			Collection<Vec> test1 = gen.createVectors(cov1, middlePoint1, elements);
-			Collection<Vec> test2 = gen.createVectors(cov2, middlePoint2, elements);
-		
-			rate = runKNN(train1, train2, test1, test2);
-			logger.info("KNN classified " + rate);
 			classificationRateKNN += rate;
 			
 			
@@ -99,59 +84,44 @@ public class Main10 {
 			// fisher.classify(vec);
 		
 		} // end for(run)
+		logger.info("======= KNN-rate = "+classificationRateKNN/runs+"\t for "+elements+" in "+dim+"d");
 		
 		// TODO write rates to file
 	}
 	
 	
-	/**
-	 * @param data1 - data representing class1
-	 * @param data2 - data representing class2
-	 * @param test1 - testing data for class 2
-	 * @param test2 - testing data for class 1
-	 * @return classification (success) rate
-	 */
-	private double runKNN(Collection<Vec> data1, Collection<Vec> data2, Collection<Vec> test1, Collection<Vec> test2 ) {
-		
+	private Classifier<DoubleVector, Integer> trainKNN(int size, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
 		/// init KD-Classifier 
 		KDClassificator<DoubleVector, Integer> kdClassifier = new KDClassificator<DoubleVector, Integer>();
 		
 		// We need to transform our data to entry-sets
-		Collection<Entry<DoubleVector, Integer>> classes = new ArrayList<Entry<DoubleVector,Integer>>(data1.size() + data2.size());
-		classes.addAll(mapToVectorEntry(data1, 1));
-		classes.addAll(mapToVectorEntry(data2, 2));
+		Collection<Entry<DoubleVector, Integer>> classes = new ArrayList<Entry<DoubleVector,Integer>>(2*size);
+		classes.addAll(gen1.generateEntries(1, size));
+		classes.addAll(gen2.generateEntries(2, size));
 		// now train
 		kdClassifier.train(classes);
+		return kdClassifier;
+	}
+	
+	private Classifier<DoubleVector, Integer> trainFisher(int size, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
+		return null;
+	}
+	
+	public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector> ... gens) {
+		int correct=0; 
+		double total = num*gens.length;
 		
-		// classify
-		int correctClassified = 0;
-		
-		logger.debug("elements: " + classes.size());
-		for( Entry<DoubleVector, Integer> e : Iterables.concat(mapToVectorEntry(test1, 1), mapToVectorEntry(test2, 2))) {
-			Integer klass = kdClassifier.classify(e.getData());
-			logger.trace("found " + klass + " Vec is " + e.getClassification());
-			
-			if( klass.equals(e.getClassification()) ) {
-				correctClassified++;
+		logger.debug("running "+num+" tests");
+		for(int i=0; i<num; i++) {
+			int k=1;
+			for(Generator<DoubleVector> g : gens){
+				if(k == c.classify(g.generate())){
+					correct++;
+				}
+				k++;
 			}
 		}
-		logger.debug("classified: " + correctClassified);
-		return correctClassified/(double) classes.size();
-	}
-	
-	
-	
-	private Collection<Entry<DoubleVector, Integer>> mapToVectorEntry(Collection<Vec> data, final int i) {
-		return Collections2.transform(data, new Function<Vec, Entry<DoubleVector, Integer>>() {
-			public Entry<DoubleVector, Integer> apply(Vec arg0) {
-				return new Entry<DoubleVector, Integer>(new DoubleVector(arg0.getVectorData()), i);
-		}});
-	}
-
-
-	public double runFisher(Collection<Vec> data1, Collection<Vec> data2) {
-		
-		return 0;
+		return correct/total;
 	}
 	
 	public static void main(String[] argv) {

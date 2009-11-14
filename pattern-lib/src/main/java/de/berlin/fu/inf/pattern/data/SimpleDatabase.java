@@ -1,7 +1,6 @@
 package de.berlin.fu.inf.pattern.data;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,12 +14,14 @@ public class SimpleDatabase<D, C> implements Iterable<Entry<D,C>>, Database<D, C
 		enties = new ArrayList<Entry<D,C>>();
 	}
 	
-	public boolean add(Entry<D, C> e) {
-		return enties.add(e);
+	public void add(Entry<D, C> e) {
+		enties.add(e);
 	}
 
-	public boolean addAll(Collection<? extends Entry<D, C>> c) {
-		return enties.addAll(c);
+	public void addAll(Iterable<Entry<D, C>> c) {
+		for(Entry<D, C> e : c){
+			enties.add(e);
+		}
 	}
 
 	public boolean contains(Entry<D,C> o) {

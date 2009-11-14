@@ -1,6 +1,5 @@
 package de.berlin.fu.inf.pattern.data;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -14,9 +13,9 @@ import java.util.List;
  */
 public interface Database<D, C> extends Iterable<Entry<D, C>>{
 
-	public abstract boolean add(Entry<D, C> e);
+	public abstract void add(Entry<D, C> e);
 
-	public abstract boolean addAll(Collection<? extends Entry<D, C>> c);
+	public abstract void addAll(Iterable<Entry<D, C>> trainingData);
 
 	public abstract boolean contains(Entry<D, C> o);
 
