@@ -25,113 +25,117 @@ import java.io.PrintStream;
  * @author covin, wabu
  */
 public class Main10 {
-	private Logger logger = Logger.getLogger(Main10.class);
-	
-	// begin at N 10 to avoid sigularities
-	private final int[] N = {10,15,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
-	
-	private final DistributionGenerator gen = new DistributionGenerator();
-	private final int maxDimension = 10;
-	private final int runs = 50; 
-	private final int tests = 500; 
-	
-	
-	private String knnFile = "knnData.gp";
-	private String fisherFile = "fisherData.gp";
-	private PrintStream knnOutput = null;
-	private PrintStream fisherOutput = null;
-	
-	public void run() throws FileNotFoundException {
-		knnOutput = new PrintStream(knnFile);
-		fisherOutput = new PrintStream(fisherFile);
 
-		for(int dimension = 2; dimension <= maxDimension; dimension++) {
-			for( int number : N) {
-				if(number >= dimension) { // avoid fisher sigularity
-					this.run(dimension, number);
-				}
-			}
-			knnOutput.println();
-			fisherOutput.println();
-		}
-		knnOutput.close();
-		fisherOutput.close();
-	}
-	
-	/**
-	 * concrete run for specified size/parameters
-	 * @param dim
-	 * @param elements
-	 */
-	@SuppressWarnings("unchecked")
-	private void run(int dim, int elements) {
-		double classificationRateKNN = 0.0d;
-		double classificationRateFisher = 0.0d;
-		double rate;
-		logger.info("======= DIM="+dim+ " ELEMTENTS=" + elements );
-		
-		for( int run = 1; run < this.runs; run++ ) {
-			logger.debug("run: " + run);
-			// generate random distribution
-			Generator<DoubleVector> gen1 = new MultiNormalGenerator(dim);
-			Generator<DoubleVector> gen2 = new MultiNormalGenerator(dim);
-			
-			Classifier<DoubleVector, Integer> knn = trainKNN(elements, gen1, gen2);
-			rate = runTest(tests, knn, gen1, gen2);
-			logger.debug("KNN classified " + rate);
-			
-			classificationRateKNN += rate;
-			
-			Classifier<DoubleVector, Integer> fisher = trainFisher(elements, dim, gen1, gen2);
-			rate = runTest(tests, fisher, gen1, gen2);
-			classificationRateFisher += rate;
-		} // end for(run)
-		logger.info("======= KNN-rate = "+classificationRateKNN/runs+"\t for "+elements+" in "+dim+"d");
-		logger.info("======= Fishrate = "+classificationRateFisher/runs+"\t for "+elements+" in "+dim+"d");
-		
-		knnOutput.println(dim+" "+elements+" "+classificationRateKNN/runs);
-		fisherOutput.println(dim+" "+elements+" "+classificationRateFisher/runs);
-	}
-	
-	
-	private Classifier<DoubleVector, Integer> trainKNN(int size, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
-		/// init KD-Classifier 
-		KDClassificator<DoubleVector, Integer> kdClassifier = new KDClassificator<DoubleVector, Integer>();
-		
-		// We need to transform our data to entry-sets
-		Collection<Entry<DoubleVector, Integer>> classes = new ArrayList<Entry<DoubleVector,Integer>>(2*size);
-		classes.addAll(gen1.generateEntries(0, size));
-		classes.addAll(gen2.generateEntries(1, size));
-		// now train
-		kdClassifier.train(classes);
-		return kdClassifier;
-	}
-	
-	private Classifier<DoubleVector, Integer> trainFisher(int size, int dim, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
-		FisherLinearDiscriminant<DoubleVector> fisher = new FisherLinearDiscriminant<DoubleVector>(dim);
-		fisher.train(gen1.generate(size), gen2.generate(size));
-		return fisher;
-	}
-	
-	public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector> ... gens) {
-		int correct=0; 
-		double total = num*gens.length;
-		
-		logger.debug("running "+num+" tests");
-		for(int i=0; i<num; i++) {
-			int k=0;
-			for(Generator<DoubleVector> g : gens){
-				if(k == c.classify(g.generate())){
-					correct++;
-				}
-				k++;
-			}
-		}
-		return correct/total;
-	}
-	
-	public static void main(String[] argv) throws FileNotFoundException {
-		new Main10().run();
-	}
-	
+    private Logger logger = Logger.getLogger(Main10.class);
+    // begin at N 10 to avoid sigularities
+    private final int[] N = {10, 15, 20, 30, 40, 50, 100, 250, 500, 1000, 2000, 3000, 5000, 7500, 10000};
+    private final DistributionGenerator gen = new DistributionGenerator();
+    private final int maxDimension = 10;
+    private final int runs = 50;
+    private final int tests = 500;
+    private String knnFile = "knnData.gp";
+    private String fisherFile = "fisherData.gp";
+    private PrintStream knnOutput = null;
+    private PrintStream fisherOutput = null;
+
+    public void run() throws FileNotFoundException {
+        knnOutput = new PrintStream(knnFile);
+        fisherOutput = new PrintStream(fisherFile);
+
+        for (int dimension = 2; dimension <= maxDimension; dimension++) {
+            for (int number : N) {
+                if (number >= dimension) { // avoid fisher sigularity
+                    this.run(dimension, number);
+                }
+            }
+            knnOutput.println();
+            fisherOutput.println();
+        }
+        knnOutput.close();
+        fisherOutput.close();
+    }
+
+    /**
+     * concrete run for specified size/parameters
+     * @param dim
+     * @param elements
+     */
+    @SuppressWarnings("unchecked")
+    private void run(int dim, int elements) {
+        double classificationRateKNN = 0.0d;
+        double classificationRateFisher = 0.0d;
+        double rate;
+        logger.info("======= DIM=" + dim + " ELEMTENTS=" + elements);
+
+        for (int run = 1; run < this.runs; run++) {
+            logger.debug("run: " + run);
+            // generate random distribution
+            Generator<DoubleVector> gen1 = new MultiNormalGenerator(dim);
+            Generator<DoubleVector> gen2 = new MultiNormalGenerator(dim);
+
+            Classifier<DoubleVector, Integer> knn =
+                    trainKNN(elements, gen1, gen2);
+            rate = runTest(tests, knn, gen1, gen2);
+            logger.debug("KNN classified " + rate);
+
+            classificationRateKNN += rate;
+
+            Classifier<DoubleVector, Integer> fisher =
+                    trainFisher(elements, dim, gen1, gen2);
+            rate = runTest(tests, fisher, gen1, gen2);
+            classificationRateFisher += rate;
+        } // end for(run)
+        logger.info("======= KNN-rate = " + classificationRateKNN / runs
+                + "\t for " + elements + " in " + dim + "d");
+        logger.info("======= Fishrate = " + classificationRateFisher / runs
+                + "\t for " + elements + " in " + dim + "d");
+
+        knnOutput.println(dim + " " + elements + " " + classificationRateKNN
+                / runs);
+        fisherOutput.println(dim + " " + elements + " "
+                + classificationRateFisher / runs);
+    }
+
+    private Classifier<DoubleVector, Integer> trainKNN(int size, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
+        /// init KD-Classifier
+        KDClassificator<DoubleVector, Integer> kdClassifier =
+                new KDClassificator<DoubleVector, Integer>();
+
+        // We need to transform our data to entry-sets
+        Collection<Entry<DoubleVector, Integer>> classes =
+                new ArrayList<Entry<DoubleVector, Integer>>(2 * size);
+        classes.addAll(gen1.generateEntries(0, size));
+        classes.addAll(gen2.generateEntries(1, size));
+        // now train
+        kdClassifier.train(classes);
+        return kdClassifier;
+    }
+
+    private Classifier<DoubleVector, Integer> trainFisher(int size, int dim, Generator<DoubleVector> gen1, Generator<DoubleVector> gen2) {
+        FisherLinearDiscriminant<DoubleVector> fisher =
+                new FisherLinearDiscriminant<DoubleVector>(dim);
+        fisher.train(gen1.generate(size), gen2.generate(size));
+        return fisher;
+    }
+
+    public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector>... gens) {
+        int correct = 0;
+        double total = num * gens.length;
+
+        logger.debug("running " + num + " tests");
+        for (int i = 0; i < num; i++) {
+            int k = 0;
+            for (Generator<DoubleVector> g : gens) {
+                if (k == c.classify(g.generate())) {
+                    correct++;
+                }
+                k++;
+            }
+        }
+        return correct / total;
+    }
+
+    public static void main(String[] argv) throws FileNotFoundException {
+        new Main10().run();
+    }
 }
