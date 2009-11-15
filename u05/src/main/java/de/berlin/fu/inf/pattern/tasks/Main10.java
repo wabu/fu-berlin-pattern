@@ -27,7 +27,8 @@ import java.io.PrintStream;
 public class Main10 {
 	private Logger logger = Logger.getLogger(Main10.class);
 	
-	private final int[] N = {2,3,5,10,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
+	// begin at N 10 to avoid sigularities
+	private final int[] N = {10,15,20,30,40,50,100,250,500,1000,2000,3000,5000,7500,10000};
 	
 	private final DistributionGenerator gen = new DistributionGenerator();
 	private final int maxDimension = 10;

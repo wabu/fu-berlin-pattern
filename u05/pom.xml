@@ -9,7 +9,7 @@
   </parent>
   <artifactId>u05</artifactId>
   <packaging>jar</packaging>
-  <name>u05</name>
+  <name>Uebung 5</name>
 
   <url>http://maven.apache.org</url>
   <dependencies>
