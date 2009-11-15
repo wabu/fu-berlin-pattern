@@ -21,7 +21,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	private Node<V> root;
 	private V[] tmpValues;
 	
-	// FIXME: shoud be used locally ... 
+	// XXX: shoud be used locally ...
 	private final SelectionSort<V> selectionSort = new SelectionSort<V>();
 	private final DimensionComparator<V> dimComp;
 

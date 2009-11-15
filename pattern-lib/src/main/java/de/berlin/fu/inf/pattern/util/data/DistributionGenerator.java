@@ -73,8 +73,9 @@ public class DistributionGenerator {
 		CholeskyDecomposition cDecomp = covarianceMatrix.chol();
 		
 		
-		if( !cDecomp.isSPD() ) 
+		if( !cDecomp.isSPD() ) {
 			throw new IllegalArgumentException("matrix is not symmetric and positiv definite");
+		}
 		
 		Matrix lower = cDecomp.getL();
 		if( logger.isTraceEnabled() ) {

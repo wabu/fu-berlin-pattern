@@ -85,7 +85,6 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
 		for(int i=0; i<v.getRowDimension(); i++){
 			if(d.get(i, i) != 0) {
-				// TODO das so richtig? spalten zeilen sonstwas vector?
 				this.omega = new Vec(v.getArray()[i]).transpose();
 			}
 		}
@@ -117,8 +116,6 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	public Integer classify(V data) {
 		Vec vec = new Vec(data.getVectorData());
 		double val = omega.times(vec).get(0, 0);
-		
-		//TODO scale?
 		
 		double p1 = _scale1+getPropability(val, _mPoint1, _sigma1);
 		double p2 = _scale2+getPropability(val, _mPoint2, _sigma2);
