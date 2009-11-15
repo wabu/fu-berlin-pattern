@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.tasks;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ import de.berlin.fu.inf.pattern.util.data.DistributionGenerator;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.gen.Generator;
 import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import java.io.PrintStream;
 
 /**
  * K-NN vs. Fishers Discriminant
@@ -36,22 +37,24 @@ public class Main10 {
 	
 	private String knnFile = "knnData.gp";
 	private String fisherFile = "fisherData.gp";
+	private PrintStream knnOutput = null;
+	private PrintStream fisherOutput = null;
 	
-	public Main10() {	
-	}
-	
-	
-	public void run() {
-		
-		// TODO open files
-		
+	public void run() throws FileNotFoundException {
+		knnOutput = new PrintStream(knnFile);
+		fisherOutput = new PrintStream(fisherFile);
+
 		for(int dimension = 2; dimension <= maxDimension; dimension++) {
 			for( int number : N) {
 				if(number >= dimension) { // avoid fisher sigularity
 					this.run(dimension, number);
 				}
 			}
+			knnOutput.println();
+			fisherOutput.println();
 		}
+		knnOutput.close();
+		fisherOutput.close();
 	}
 	
 	/**
@@ -59,6 +62,7 @@ public class Main10 {
 	 * @param dim
 	 * @param elements
 	 */
+	@SuppressWarnings("unchecked")
 	private void run(int dim, int elements) {
 		double classificationRateKNN = 0.0d;
 		double classificationRateFisher = 0.0d;
@@ -84,7 +88,8 @@ public class Main10 {
 		logger.info("======= KNN-rate = "+classificationRateKNN/runs+"\t for "+elements+" in "+dim+"d");
 		logger.info("======= Fishrate = "+classificationRateFisher/runs+"\t for "+elements+" in "+dim+"d");
 		
-		// TODO write rates to file
+		knnOutput.println(dim+" "+elements+" "+classificationRateKNN/runs);
+		fisherOutput.println(dim+" "+elements+" "+classificationRateFisher/runs);
 	}
 	
 	
@@ -124,7 +129,7 @@ public class Main10 {
 		return correct/total;
 	}
 	
-	public static void main(String[] argv) {
+	public static void main(String[] argv) throws FileNotFoundException {
 		new Main10().run();
 	}
 	
