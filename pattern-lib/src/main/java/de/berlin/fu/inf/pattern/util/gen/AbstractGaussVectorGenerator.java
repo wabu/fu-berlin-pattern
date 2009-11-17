@@ -4,8 +4,7 @@ import java.util.Random;
 
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 
-public class AbstractGaussVectorGenerator extends
-		AbstractGenerator<DoubleVector> {
+public class AbstractGaussVectorGenerator extends AbstractGenerator<DoubleVector> {
 	protected final int dim;
 	protected final Random rnd = new Random();
 
