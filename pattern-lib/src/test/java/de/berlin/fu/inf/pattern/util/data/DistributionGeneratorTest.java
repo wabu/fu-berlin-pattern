@@ -55,7 +55,7 @@ public class DistributionGeneratorTest {
 		Matrix realCov = new Matrix(dimension, dimension);
 		for(Vec vec : cllctn) {
 			realCov = realCov.plus(vec.times(vec.transpose()));
-			logger.debug(ms(vec));
+			logger.trace(ms(vec));
 		}
 		realCov = realCov.times( 1.0/size);
 		// compare random cov with real of cov of generated data
