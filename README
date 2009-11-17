@@ -1,0 +1,5 @@
+We use maven 2 to manage the build process, so to build the poject, execute
+  mvn install
+inside the root folder to run an assignment, go into its folder and execute 
+  mvn exec:java
+
