@@ -8,32 +8,43 @@ public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
 	private Matrix mapping;
 	private Vec transformation;
 
-	public MultiNormalGenerator(int dim) {
+    private final double dist;
+
+	public MultiNormalGenerator(int dim, double dist) {
 		super(dim);
 		
+        this.dist = dist;
 		this.transformation = genRandomVec();
 		this.mapping = genRandomMatix();
 	}
 
+    public MultiNormalGenerator(int dim) {
+        this(dim, 1d);
+    }
+
 	private Vec genRandomVec() {
 		double entries[] = new double[dim];
 		for(int i=0; i<dim; i++){
-			entries[i] = rnd.nextDouble();
+			entries[i] = rnd.nextDouble()*dist;
 		}
 		return new Vec(entries);
 	}
 
 	private Matrix genRandomMatix() {
-		Matrix map = new Matrix(dim, dim);
+		Matrix scale = new Matrix(dim, dim);
 		for(int xy=0; xy<dim; xy++){
-			map.set(xy, xy, rnd.nextDouble()+Double.MIN_VALUE);
+			scale.set(xy, xy, rnd.nextDouble()+Double.MIN_VALUE);
+		}
+		Matrix rot = new Matrix(dim, dim);
+		for(int xy=0; xy<dim; xy++){
+			rot.set(xy, xy, 1d);
 		}
 		for(int x=0; x<dim; x++){
 			for(int y=x+1; y<dim; y++){
-				map = map.times(genRandomRot(x,y));
+				rot = rot.times(genRandomRot(x,y));
 			}
 		}
-		return map;
+		return rot.times(scale);
 	}
 
 	/**
@@ -60,6 +71,7 @@ public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
 	}
 
 
+    @Override
 	public DoubleVector generate() {
 		Matrix vec = transformation.plus(mapping.times(new Vec(super.generate().getVectorData())));
 		return new DoubleVector(vec.getRowPackedCopy());
