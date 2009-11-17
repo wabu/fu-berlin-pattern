@@ -46,9 +46,12 @@ public class Main10 {
     private PrintStream knnOutput = null;
     private PrintStream fisherOutput = null;
 
-    public void run() throws FileNotFoundException {
+    public void run() throws FileNotFoundException, InterruptedException {
+        logger.info("======= creating output file "+knnFile);
         knnOutput = new PrintStream(knnFile);
+        logger.info("======= creating output file "+fisherFile);
         fisherOutput = new PrintStream(fisherFile);
+        Thread.sleep(5000);
 
         for (int dimension = 2; dimension <= maxDimension; dimension++) {
             for (int number : N) {
@@ -136,7 +139,7 @@ public class Main10 {
         return test.runTest(num, gens);
     }
 
-    public static void main(String[] argv) throws FileNotFoundException {
+    public static void main(String[] argv) throws FileNotFoundException, InterruptedException {
         new Main10().run();
     }
 }
