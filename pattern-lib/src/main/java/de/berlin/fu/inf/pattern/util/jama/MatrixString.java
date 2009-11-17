@@ -1,14 +1,14 @@
 package de.berlin.fu.inf.pattern.util.jama;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import Jama.Matrix;
+import java.util.Arrays;
 
 public class MatrixString {
 	public static String ms(Matrix m){
-		StringWriter sw = new StringWriter();
-		m.print(new PrintWriter(sw), 8, 6);
-		return sw.toString();
+        if(m == null) {
+            return "nil matrix";
+        }
+        return Arrays.toString(m.getRowPackedCopy());
 	}
 }

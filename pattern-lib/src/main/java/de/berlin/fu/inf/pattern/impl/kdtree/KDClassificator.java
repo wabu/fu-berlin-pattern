@@ -32,5 +32,9 @@ public class KDClassificator<D extends Dimensionable<D>, C> implements Supervise
 		return kdTree.findNearestValues(new DimensionableEntry<D, C>(data, null)).getClassification();
 	}
 
+    @Override
+    public String toString() {
+        return "kNN-classifier";
+    }
 
 }

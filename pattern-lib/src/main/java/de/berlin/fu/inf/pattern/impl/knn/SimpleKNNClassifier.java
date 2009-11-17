@@ -6,6 +6,7 @@ import java.util.Map;
 
 import de.berlin.fu.inf.pattern.data.Database;
 import de.berlin.fu.inf.pattern.data.Entry;
+import de.berlin.fu.inf.pattern.data.SimpleDatabase;
 import de.berlin.fu.inf.pattern.iface.SupervisedClassifier;
 import de.berlin.fu.inf.pattern.util.types.Messurable;
 
@@ -24,6 +25,10 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Supervis
 		this.database = database;
 		this.k = k;
 	}
+
+    public SimpleKNNClassifier() {
+        this(1, new SimpleDatabase<D,C>());
+    }
 	
 	public void train(Collection<Entry<D, C>> trainingData) {
 		this.database.addAll(trainingData);
