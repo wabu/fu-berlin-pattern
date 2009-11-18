@@ -2,6 +2,7 @@ package de.berlin.fu.inf.pattern.util.gen;
 
 import Jama.Matrix;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
+import de.berlin.fu.inf.pattern.util.jama.MatrixString;
 import de.berlin.fu.inf.pattern.util.jama.Vec;
 
 public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
@@ -18,6 +19,12 @@ public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
 		this.mapping = genRandomMatix();
 	}
 
+    @Override
+    public String toString() {
+        return "dist[+"+transformation+" *"+MatrixString.ms(mapping)+"]";
+    }
+
+
     public MultiNormalGenerator(int dim) {
         this(dim, 1d);
     }
@@ -25,7 +32,7 @@ public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
 	private Vec genRandomVec() {
 		double entries[] = new double[dim];
 		for(int i=0; i<dim; i++){
-			entries[i] = rnd.nextDouble()*dist;
+			entries[i] = (1d-2d*rnd.nextDouble())*dist;
 		}
 		return new Vec(entries);
 	}
