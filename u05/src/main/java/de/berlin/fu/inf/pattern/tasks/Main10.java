@@ -36,7 +36,7 @@ public class Main10 {
     private final int maxDimension = 10;
     // we use more runs to avoid high error for "bad" or "good" distingushable distributions
     private final int runs = 7;
-    private final int tests = 500;
+    private final int tests = 5000;
 
     private String knnFile = "knnData.gp";
     private String fisherFile = "fisherData.gp";

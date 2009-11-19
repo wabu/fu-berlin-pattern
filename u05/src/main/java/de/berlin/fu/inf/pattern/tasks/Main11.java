@@ -33,10 +33,14 @@ public class Main11 {
     private final int maxDimension = 10;
 
     private final int dim = 2;
-    private final int elements = 500;
-    private final int runs = 10;
-    private final int tries = 5000;
-    private final int tests = 5000;
+    private final int runs = 17;
+    private final int elements = 10000;
+    private final int tries = 10000;
+
+    private final int tests = 100000;
+
+    private final int steps[] = {100, 1000, 10000, 100000};
+    private final double delta[] = {0.1, 0.0, -0.01, -0.005};
 
     @SuppressWarnings("unchecked")
     public void run() {
@@ -45,6 +49,7 @@ public class Main11 {
         RandomFish fish;
 
         for (int run = 1; run < this.runs; run++) {
+            int faild = 0;
             logger.debug("run: " + run);
             // generate random distribution
             Generator<DoubleVector> gen1 = new MultiNormalGenerator(dim, 2d);
@@ -57,20 +62,26 @@ public class Main11 {
             rate = runTest(tests, fisher, gen1, gen2);
             logger.debug("fisher classified " + rate);
 
+            outer:
             for(int i=0; i<tries; i++) {
-                fish = RandomFish.generate2dFish();
-                double r = runTest(tests/20, fish, gen1, gen2);
-                if(r > rate*1.01 ) {
-                    r = runTest(tests, fish, gen1, gen2);
-                }
-                if(r > rate*1.01 ) {
-                    logger.info(i+": found better projection as fisher ("+r+" vs "+rate+"):");
-                    logger.info("     fisher: "+fisher);
-                    logger.info("     random: "+fish);
-                    break;
-                }
                 if((i+1)%1000 == 0){
-                    logger.info("testet "+(i+1)+" random prjections");
+                    logger.info("tested "+(i+1)+" random prjections");
+                }
+                fish = RandomFish.generate2dFish();
+                double r=0;
+                for(int k=0; k<steps.length; k++){
+                    r = runTest(steps[k], fish, gen1, gen2);
+                    if(r+delta[k] < rate ) {
+                        continue outer;
+                    }
+                }
+                logger.info(i+": found better projection as fisher ("+r+" vs "+rate+"):");
+                logger.info("     fisher: "+fisher);
+                logger.info("     random: "+fish);
+                faild++;
+                if(faild>5){
+                    logger.warn("fisher "+fisher+" is very bad for this data");
+                    break;
                 }
             }
         }
