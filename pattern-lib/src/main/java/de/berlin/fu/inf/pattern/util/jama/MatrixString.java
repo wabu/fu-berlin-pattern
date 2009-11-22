@@ -2,9 +2,10 @@ package de.berlin.fu.inf.pattern.util.jama;
 
 
 import Jama.Matrix;
+import javax.annotation.Nullable;
 
 public class MatrixString {
-	public static String ms(Matrix m){
+	public static String ms(@Nullable Matrix m){
         if(m == null) {
             return "nil matrix";
         }

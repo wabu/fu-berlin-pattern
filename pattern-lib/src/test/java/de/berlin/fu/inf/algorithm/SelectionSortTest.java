@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.algorithm;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import static org.junit.Assert.*;
 
 import java.util.Comparator;
@@ -9,15 +10,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SelectionSortTest {
+    @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 	private SelectionSort<Integer> selSort;
 
+    @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 	private Integer[] numbers;
 	
-	private Comparator<Integer> comparator = new Comparator<Integer>() {
-		public int compare(Integer o1, Integer o2) {
-			return o1.compareTo(o2);
-		}
-	};
+	private Comparator<Integer> comparator = new IntComparator();
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -46,5 +45,11 @@ public class SelectionSortTest {
 		assertTrue(numbers[index]==9);
 		
 	}
+
+    private static class IntComparator implements Comparator<Integer> {
+        public int compare(Integer o1, Integer o2) {
+            return o1.compareTo(o2);
+        }
+    }
 
 }

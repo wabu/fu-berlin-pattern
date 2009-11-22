@@ -21,16 +21,18 @@ public class DistanceComperator<E> implements Comparator<E> {
 		
 		double d1 = ref.getDistance(o1);
 		double d2 = ref.getDistance(o2);
-		
-		if(d1 == d2){
+
+        int cmp = Double.compare(d1,d2);
+
+		if(cmp == 0){
 			int h1 = o1.hashCode();
 			int h2 = o2.hashCode();
 			if(h1 == h2){
 				return o1.toString().compareTo(o2.toString());
 			}
 			return h2 - h1;
-		}
-		
-		return Double.compare(d1, d2);
+		} else {
+            return cmp;
+        }
 	}
 }

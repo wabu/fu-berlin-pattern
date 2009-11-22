@@ -21,7 +21,7 @@ import Jama.Matrix;
  */
 public class DistributionGenerator {
 	/** range specifies the maximum space of matrix */
-	public static int DEFAULT_RANGE = 10;
+	public final static int DEFAULT_RANGE = 10;
 	
 	private Logger logger = Logger.getLogger(DistributionGenerator.class);
 	

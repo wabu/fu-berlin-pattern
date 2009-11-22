@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.algorithm;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -37,9 +38,12 @@ public class SelectionSort<E> {
 		return find(k, objects, 0, objects.length-1, comparator);
 	}
 	
+    @SuppressWarnings("EI_EXPOSE_REP2")
 	public int find(int k, E[] objects, int indexFrom, int indexTo, Comparator<? super E> comparator) {
-		if( logger.isTraceEnabled())
-			logger.trace("find(): k=" + k + " in array from " + indexFrom+"->"+ indexTo);
+		if( logger.isTraceEnabled()) {
+            logger.trace("find(): k=" + k + " in array from " + indexFrom + "->" +
+                    indexTo);
+        }
 		
 		this.objects = objects;		
 		this.sortBuffer = this.objects.clone();
@@ -56,7 +60,7 @@ public class SelectionSort<E> {
 	 * @param k
 	 * @return
 	 */
-	private int divideAndSelect(int indexFrom, int indexTo, int k ) {
+	private int divideAndSelect(final int indexFrom, final int indexTo, int k ) {
 		if( logger.isTraceEnabled() )
 			logger.trace("divideAndSelct " + indexFrom + "," + indexTo + "," + k);
 		// avoid IndexOutOfBoundException

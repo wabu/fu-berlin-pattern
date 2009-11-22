@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.impl.kdtree;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -8,12 +9,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.berlin.fu.inf.pattern.impl.kdtree.KDTreeImpl;
-import de.berlin.fu.inf.pattern.impl.kdtree.Node;
 import de.berlin.fu.inf.pattern.util.data.IntVector;
 
 public class KDTreeImplTest {
+    @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 	private KDTreeImpl<IntVector> kdTree;
+    @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 	private List<IntVector> values;
 	
 	@Before
@@ -49,7 +50,7 @@ public class KDTreeImplTest {
 	
 	@Test
 	public void buildTreeTest() {
-		kdTree.buildTree(values.toArray(new IntVector[0]));
+		kdTree.buildTree(values.toArray(new IntVector[values.size()]));
 		
 		Node<IntVector> root = kdTree.getRootNode();
 		
@@ -61,7 +62,7 @@ public class KDTreeImplTest {
 	
 	@Test
 	public void findLeaf() {
-		kdTree.buildTree(values.toArray(new IntVector[0]));
+		kdTree.buildTree(values.toArray(new IntVector[values.size()]));
 		
 		for(IntVector v : values){
 			assertEquals(v, kdTree.findLeaf(v));
@@ -70,7 +71,7 @@ public class KDTreeImplTest {
 	 
 	@Test
 	public void findNeighbour() {
-		kdTree.buildTree(values.toArray(new IntVector[0]));
+		kdTree.buildTree(values.toArray(new IntVector[values.size()]));
 		
 		for(IntVector v : values){
 			assertEquals(v, kdTree.findNearestValues(v));

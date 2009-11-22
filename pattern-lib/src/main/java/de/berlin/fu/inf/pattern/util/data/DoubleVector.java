@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.util.data;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import java.util.Arrays;
 
 import de.berlin.fu.inf.pattern.util.types.Dimensionable;
@@ -15,6 +16,7 @@ public class DoubleVector implements Dimensionable<DoubleVector>, Vectorable, Me
 		dimension = data.length;
 	}
 
+    @SuppressWarnings("EI_EXPOSE_REP")
 	public double[] getVectorData() {
 		return data;
 	}

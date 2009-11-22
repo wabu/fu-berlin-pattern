@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.util.gen;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import java.util.Iterator;
 
 import com.google.common.base.Function;
@@ -12,6 +13,7 @@ public abstract class AbstractGenerator<V> implements Generator<V> {
         public boolean hasNext() {
             return true;
         }
+        @SuppressWarnings("IT_NO_SUCH_ELEMENT")
         public V next() {
             return generate();
         }

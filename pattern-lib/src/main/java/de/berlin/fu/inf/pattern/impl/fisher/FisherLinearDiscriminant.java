@@ -85,24 +85,21 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
         double lambda = 0.0;
 		for(int i=0; i<v.getRowDimension(); i++){
-			if(Math.abs(d.get(i, i)) >= 0.001) {
+			if(Math.abs(d.get(i, i)) >= 0.000001) {
                 lambda = d.get(i, i);
 				this.omega = new Vec(v.transpose().getArray()[i]).transpose();
 			}
 		}
+        assert omega != null;
 		logger.trace("using omega "+ms(omega));
         assert ms(sigma.times(omega.transpose()).times(1d/lambda)).equals(ms(omega)) :
-            ms(sigma.times(omega.transpose()).times(1d/lambda)) +
-            " vs "+
-            ms(omega.transpose())+
-            " with "+
-            ms(v);
+            ms(sigma.times(omega.transpose()).times(1d/lambda)) + " vs "+ ms(omega.transpose())+ " with "+ ms(v);
 		
 		Matrix _m1 = omega.times(mPoint1);
 		Matrix _m2 = omega.times(mPoint2);
 		
-		Matrix _s1 = omega.times(sigma1.times(omega.transpose()));
-		Matrix _s2 = omega.times(sigma1.times(omega.transpose()));
+		Matrix _s1 = omega.times(sigma1).times(omega.transpose());
+		Matrix _s2 = omega.times(sigma2).times(omega.transpose());
 		
 		assert _m1.getRowDimension() == 1 && _m1.getColumnDimension() == 1;
 		assert _m2.getRowDimension() == 1 && _m2.getColumnDimension() == 1;

@@ -44,7 +44,7 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	public void buildTree(V[] values) {
 		logger.debug("build new KD-Tree of " + values.length + " objects");
 		
-		tmpValues = values;
+		tmpValues = values.clone();
 		
 		this.root = determineMedianNode(0, values.length-1, 0);
 		
@@ -62,8 +62,10 @@ public class KDTreeImpl<V extends Dimensionable<V>> implements KDTree<V>{
 	 */
 	@Nullable
 	protected Node<V> determineMedianNode(int indexFrom, int indexTo, int currentDimension){
-		if( logger.isTraceEnabled() )
-			logger.trace("determineMedianNode("+indexFrom+","+indexTo+","+currentDimension +")");
+		if( logger.isTraceEnabled() ) {
+            logger.trace("determineMedianNode(" + indexFrom + "," + indexTo + "," +
+                    currentDimension + ")");
+        }
 		
 		// if range size is one, there is no median element to be searched for
 		if( indexFrom == indexTo ) {
