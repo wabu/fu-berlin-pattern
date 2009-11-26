@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.fisher;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class FisherTest {
 	double[][] class0 = new double[][] {{0,2}, {0,3}, {1,2}, {1,3}};
 	double[][] class1 = new double[][] {{0,-1}, {0,-2}, {-1,-1}, {-1,-2}};
 	
+    @SuppressWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
 	FisherLinearDiscriminant<DoubleVector> fisher;
 
 	@Before

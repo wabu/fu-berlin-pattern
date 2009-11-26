@@ -1,12 +1,12 @@
 package de.berlin.fu.inf.algorithm;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import java.io.Serializable;
 import static org.junit.Assert.*;
 
 import java.util.Comparator;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SelectionSortTest {
@@ -18,11 +18,6 @@ public class SelectionSortTest {
 	
 	private Comparator<Integer> comparator = new IntComparator();
 	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		
-	}
-
 	@Before
 	public void setUp() throws Exception {
 		selSort = new SelectionSort<Integer>();
@@ -46,6 +41,7 @@ public class SelectionSortTest {
 		
 	}
 
+    @SuppressWarnings("SE_COMPARATOR_SHOULD_BE_SERIALIZABLE")
     private static class IntComparator implements Comparator<Integer> {
         public int compare(Integer o1, Integer o2) {
             return o1.compareTo(o2);
