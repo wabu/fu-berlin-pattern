@@ -49,15 +49,13 @@ public class SimplePerzeptronTest {
          Heaviside<Rational> s = new Heaviside<Rational>(Rational.ZERO, Rational.ONE);
 
          @SuppressWarnings("unchecked")
-         // add zeros, as we have an extended perzeptron
          Perzeptron<Rational> xoron = new Perzeptron<Rational>(s, Rational.ONE,
              DenseMatrix.valueOf(new Rational[][]{
-                 {ONE, ONE.opposite(), ZERO},
-                 {ONE.opposite(), ONE, ZERO},
-                 {half.opposite(), half.opposite(), ZERO}
+                 {ONE, ONE.opposite(), half.opposite()},
+                 {ONE.opposite(), ONE, half.opposite()},
              }),
              DenseMatrix.valueOf(new Rational[][]{
-                { ONE, ONE, half.opposite(), ZERO },
+                { ONE, ONE, half.opposite()},
              })
          );
 
