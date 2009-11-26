@@ -23,6 +23,10 @@
       <id>wwmm.ch.cam.ac.uk</id>
       <url>http://wwmm.ch.cam.ac.uk/maven2/</url>
     </repository>
+    <repository>
+      <id>jcurl-repository</id>
+      <url>http://jcurl.berlios.de/m2/repo</url>
+    </repository>
   </repositories>
   
   <distributionManagement>
@@ -100,7 +104,7 @@
             <findbugsXmlOutput>true</findbugsXmlOutput>
             <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
             <xmlOutput>true</xmlOutput>
-            <effort>Max</effort>
+            <!--effort>Max</effort-->
             <treshold>Low</treshold>
          </configuration>
       </plugin>
