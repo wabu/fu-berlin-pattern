@@ -39,7 +39,6 @@ public class Main14 {
     }
 
     /**
-     * 
      * @param sizeSpec contains inputSize, layerSize*, outputSize
      * @return
      */
