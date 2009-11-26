@@ -122,6 +122,7 @@
     <module>u03</module>
     <module>u04</module>
     <module>u05</module>
+    <module>u06</module>
   </modules>
 
   <dependencies>
