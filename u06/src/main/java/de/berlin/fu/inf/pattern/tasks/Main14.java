@@ -8,8 +8,13 @@ import de.berlin.fu.inf.pattern.impl.perzeptron.Perzeptron;
 import de.berlin.fu.inf.pattern.impl.perzeptron.PerzeptronSingleValueClassifier;
 import de.berlin.fu.inf.pattern.util.fun.Heaviside;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
+
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.Matrix;
@@ -25,17 +30,62 @@ import org.jscience.mathematics.vector.Matrix;
 public class Main14 {
     private Logger logger = Logger.getLogger(Main14.class);
     private Random rnd = new Random();
-
+    private int runs = 10000;
+    
+    private TruthTable truthTable = new TruthTable();
+    private Map<Integer, Integer> boolFuncCounter = new HashMap<Integer, Integer>();
+    
     public void run() throws FileNotFoundException, InterruptedException {
-        Perzeptron<Float64> tron = generatePerzeptron(2,3,1);
-        PerzeptronSingleValueClassifier<Float64> bool
-                = new PerzeptronSingleValueClassifier<Float64>(tron);
 
-        for(int i=0; i<2; i++){
-            for(int j=0; j<2; j++){
-                logger.info("tron("+i+","+j+")="+bool.classify(Float64.valueOf(i), Float64.valueOf(j)));
-            }
+        for(int run=1; run<=runs; run++) {
+	    	Perzeptron<Float64> tron = generatePerzeptron(2,3,1);
+	        PerzeptronSingleValueClassifier<Float64> bool
+	                = new PerzeptronSingleValueClassifier<Float64>(tron);
+	        
+	        int[] boolFunc = new int[4];
+	        int counter = 0;
+	        int tronResult, func;
+
+	        for(int x1=0; x1<2; x1++){
+	            for(int x2=0; x2<2; x2++){
+	            	// we expect a result from either one or zero
+	            	tronResult = bool.classify(Float64.valueOf(x1), Float64.valueOf(x2)).intValue();
+	                logger.trace("tron("+x1+","+x2+")="+tronResult);
+	                boolFunc[counter] = tronResult;
+	                counter++;
+	            }
+	        }
+	        // identify Boolean-Function
+	        int code = boolFunc.hashCode();
+	        func = this.truthTable.getBoolFuncType(boolFunc);
+	        logger.trace("boolFunc is " + this.truthTable.boolFuncTypeToString(func));
+	        this.updateStatistic(func);
         }
+        
+        
+        for( Entry<Integer, Integer> e : this.boolFuncCounter.entrySet() ) {
+        	float prob = e.getValue()/(float) runs;
+        	
+        	logger.info(e.getKey() + ": " +this.truthTable.boolFuncTypeToString(e.getKey()) + " = " + e.getValue() + "("+prob+")" );
+        }
+        
+        
+    }
+    
+    /**
+     * increments counter for specified Boolean-Function, if not exists, a new
+     * counter will be created
+     * 
+     * @param boolFuncType
+     */
+    private void updateStatistic(int boolFuncType) {
+    	if( this.boolFuncCounter.containsKey(boolFuncType)) {
+    		int counter = this.boolFuncCounter.get(boolFuncType);
+    		counter++;
+    		this.boolFuncCounter.put(boolFuncType, counter);
+    	} else {
+    		this.boolFuncCounter.put(boolFuncType, 1);	
+    	}
     }
 
     /**
