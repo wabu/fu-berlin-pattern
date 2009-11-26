@@ -9,6 +9,6 @@ package de.berlin.fu.inf.pattern.util.fun;
  *
  * @author wabu
  */
-public interface Derivable<X,Y> extends Function<X,Y> {
-    Function<X,Y> derive();
+public interface Derivable<X,Y> extends Funct<X,Y> {
+    Funct<X,Y> derive();
 }

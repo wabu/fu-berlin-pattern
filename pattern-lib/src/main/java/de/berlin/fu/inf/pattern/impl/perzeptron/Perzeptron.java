@@ -6,7 +6,7 @@
 package de.berlin.fu.inf.pattern.impl.perzeptron;
 
 import com.google.common.collect.Lists;
-import de.berlin.fu.inf.pattern.util.fun.Function;
+import de.berlin.fu.inf.pattern.util.fun.Funct;
 import de.berlin.fu.inf.pattern.util.fun.Functions;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ import org.jscience.mathematics.vector.Vector;
  *
  * @author wabu
  */
-public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vector<F>> {
-    private final Function<Vector<F>, Vector<F>> s;
-    private final List<Matrix<F>> layers;
-    private final F one;
+public class Perzeptron<F extends Field<F>> implements Funct<Vector<F>, Vector<F>> {
+    protected final Funct<Vector<F>, Vector<F>> s;
+    protected final List<Matrix<F>> layers;
+    protected final F one;
 
-    public Perzeptron(Function<F, F> s, F one, Matrix<F> ... layers) {
+    public Perzeptron(Funct<F, F> s, F one, Matrix<F> ... layers) {
         checkLayers(layers);
 
         this.s = Functions.vectorLift(s);
@@ -33,8 +33,8 @@ public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vecto
     }
 
     @SuppressWarnings("unchecked")
-    public Perzeptron(Function<F,F> heaviside, F one, List<Matrix<F>> layers) {
-        this(heaviside, one, layers.toArray(new Matrix[layers.size()]));
+    public Perzeptron(Funct<F,F> s, F one, List<Matrix<F>> layers) {
+        this(s, one, layers.toArray(new Matrix[layers.size()]));
     }
 
     protected void checkLayers(Matrix<F>[] layers) throws IllegalArgumentException {
@@ -63,10 +63,15 @@ public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vecto
         os.add(one);
         return DenseVector.valueOf(os);
     }
-
-    public Function<Vector<F>, Vector<F>> getFunction() {
-        return s;
+    protected Vector<F> intend(Vector<F> v) {
+        List<F> os = new ArrayList<F>(v.getDimension()-1);
+        for (int i = 0; i < v.getDimension()-1; i++) {
+            os.add(v.get(i));
+        }
+        return DenseVector.valueOf(os);
     }
+
+
     public int getOutputSize() {
         return getOutputSize(layers.get(layers.size()-1));
     }
@@ -82,5 +87,9 @@ public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vecto
         }
         assert input != null;
         return input;
+    }
+
+    public int getDepth() {
+        return layers.size();
     }
 }

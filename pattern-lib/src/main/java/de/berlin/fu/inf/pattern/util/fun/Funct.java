@@ -9,6 +9,6 @@ package de.berlin.fu.inf.pattern.util.fun;
  * f: X -> Y
  * @author wabu
  */
-public interface Function<X,Y> {
+public interface Funct<X,Y> {
     Y apply(X x);
 }

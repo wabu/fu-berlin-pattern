@@ -16,8 +16,8 @@ import org.jscience.mathematics.vector.Vector;
  * @author wabu
  */
 public class Functions {
-    public static <X,Y> Function<X[], Y[]> arrayLift(final Function<X,Y> f, final Y[] type) {
-        return new Function<X[],Y[]>() {
+    public static <X,Y> Funct<X[], Y[]> arrayLift(final Funct<X,Y> f, final Y[] type) {
+        return new Funct<X[],Y[]>() {
             public Y[] apply(X[] xs) {
                 List<Y> ys = new ArrayList<Y>(xs.length);
                 for(X x : xs) {
@@ -28,8 +28,8 @@ public class Functions {
         };
     }
 
-    public static <X,Y> Function<List<X>, List<Y>> listLift(final Function<X,Y> f) {
-        return new Function<List<X>,List<Y>>() {
+    public static <X,Y> Funct<List<X>, List<Y>> listLift(final Funct<X,Y> f) {
+        return new Funct<List<X>,List<Y>>() {
             public List<Y> apply(List<X> xs) {
                 List<Y> ys = new ArrayList<Y>(xs.size());
                 for(X x : xs) {
@@ -40,8 +40,8 @@ public class Functions {
         };
     }
 
-    public static <X,Y,Z> Function<X,Z> compose(final Function<X,Y> f, final Function<Y,Z> g){
-        return new Function<X, Z>() {
+    public static <X,Y,Z> Funct<X,Z> compose(final Funct<X,Y> f, final Funct<Y,Z> g){
+        return new Funct<X, Z>() {
             public Z apply(X x) {
                 return g.apply(f.apply(x));
             }
@@ -49,8 +49,8 @@ public class Functions {
     }
 
     public static <X extends Field<X>, Y extends Field<Y>> 
-            Function<Vector<X>, Vector<Y>> vectorLift(final Function<X,Y> f) {
-        return new Function<Vector<X>,Vector<Y>>() {
+            Funct<Vector<X>, Vector<Y>> vectorLift(final Funct<X,Y> f) {
+        return new Funct<Vector<X>,Vector<Y>>() {
             public Vector<Y> apply(Vector<X> xv) {
                 List<Y> ys = new ArrayList<Y>(xv.getDimension());
                 for(int i=0; i<xv.getDimension(); i++) {

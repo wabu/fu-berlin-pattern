@@ -62,4 +62,8 @@ public class Entry<D,C> {
 		}
 		return data.toString() +":" + cs;
 	}
+
+    public static <D,C> Entry<D,C> valueOf(D data, C klass) {
+        return new Entry<D, C>(data, klass);
+    }
 }

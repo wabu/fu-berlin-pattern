@@ -11,7 +11,7 @@ import org.jscience.mathematics.structure.Field;
  *
  * @author wabu
  */
-public class Heaviside<F extends Field<F> & Comparable<F>> implements Function<F,F>{
+public class Heaviside<F extends Field<F> & Comparable<F>> implements Funct<F,F>{
     private final F zero; 
     private final F one;
 
