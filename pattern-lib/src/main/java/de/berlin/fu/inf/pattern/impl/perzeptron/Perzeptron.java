@@ -32,6 +32,11 @@ public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vecto
         this.one = one;
     }
 
+    @SuppressWarnings("unchecked")
+    public Perzeptron(Function<F,F> heaviside, F one, List<Matrix<F>> layers) {
+        this(heaviside, one, layers.toArray(new Matrix[layers.size()]));
+    }
+
     protected void checkLayers(Matrix<F>[] layers) throws IllegalArgumentException {
         if(layers.length == 0) {
             throw new IllegalArgumentException("perzeptron needs at least one layer");
@@ -75,7 +80,7 @@ public class Perzeptron<F extends Field<F>> implements Function<Vector<F>, Vecto
             output = layer.times(extend(input));
             input = s.apply(output);
         }
-        assert output != null;
-        return output;
+        assert input != null;
+        return input;
     }
 }

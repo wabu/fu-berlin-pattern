@@ -5,7 +5,6 @@
 
 package de.berlin.fu.inf.pattern.impl.perzeptron;
 
-import de.berlin.fu.inf.pattern.iface.Classifier;
 import de.berlin.fu.inf.pattern.util.fun.Heaviside;
 import org.jscience.mathematics.number.Rational;
 import org.jscience.mathematics.vector.DenseMatrix;
@@ -16,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.jscience.mathematics.number.Rational.*;
 
 /**
  *
@@ -44,27 +44,25 @@ public class SimplePerzeptronTest {
 
      @Test
      public void testXoron() {
-         Rational zero = Rational.ZERO;
-         Rational one = Rational.ONE;
          Rational half = Rational.valueOf(1,2);
 
          Heaviside<Rational> s = new Heaviside<Rational>(Rational.ZERO, Rational.ONE);
 
          @SuppressWarnings("unchecked")
          // add zeros, as we have an extended perzeptron
-         Perzeptron<Rational> tron = new Perzeptron<Rational>(s, Rational.ONE,
+         Perzeptron<Rational> xoron = new Perzeptron<Rational>(s, Rational.ONE,
              DenseMatrix.valueOf(new Rational[][]{
-                 {one, one.opposite(), zero},
-                 {one.opposite(), one, zero},
-                 {half.opposite(), half.opposite(), zero}
+                 {ONE, ONE.opposite(), ZERO},
+                 {ONE.opposite(), ONE, ZERO},
+                 {half.opposite(), half.opposite(), ZERO}
              }),
              DenseMatrix.valueOf(new Rational[][]{
-                { one, one, half.opposite(), zero },
+                { ONE, ONE, half.opposite(), ZERO },
              })
          );
 
          PerzeptronSingleValueClassifier<Rational> xor
-                 = new PerzeptronSingleValueClassifier<Rational>(tron);
+                 = new PerzeptronSingleValueClassifier<Rational>(xoron);
 
          assertEquals("0 xor 1 = 1", Rational.ONE, xor.classify(Rational.ZERO,Rational.ONE));
          assertEquals("1 xor 0 = 1", Rational.ONE, xor.classify(Rational.ONE,Rational.ZERO));
