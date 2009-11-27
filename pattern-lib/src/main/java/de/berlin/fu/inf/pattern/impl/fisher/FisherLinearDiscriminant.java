@@ -147,9 +147,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		for(Vectorable vec : c) {
 			summed = summed.plus(new Vec(vec));
 		}
-		Vec vec = new Vec(summed.times(1d/c.size()));
-		// logger...?
-		return vec;
+		return new Vec(summed.times(1d/c.size()));
 	}
 	
 	

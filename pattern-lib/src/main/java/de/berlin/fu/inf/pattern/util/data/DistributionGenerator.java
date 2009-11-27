@@ -31,8 +31,8 @@ public class DistributionGenerator {
 	private final Random rand;
 	
 	public DistributionGenerator() {
-		this.setRange(DEFAULT_RANGE);
 		this.rand = new Random();
+        this.range = DEFAULT_RANGE;
 	}
 	
 	/**

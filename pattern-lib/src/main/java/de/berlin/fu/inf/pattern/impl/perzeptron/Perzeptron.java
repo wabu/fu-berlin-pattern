@@ -37,7 +37,7 @@ public class Perzeptron<F extends Field<F>> implements Funct<Vector<F>, Vector<F
         this(s, one, layers.toArray(new Matrix[layers.size()]));
     }
 
-    protected void checkLayers(Matrix<F>[] layers) throws IllegalArgumentException {
+    final protected void checkLayers(Matrix<F>[] layers) throws IllegalArgumentException {
         if(layers.length == 0) {
             throw new IllegalArgumentException("perzeptron needs at least one layer");
         }

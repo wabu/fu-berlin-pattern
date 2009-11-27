@@ -43,6 +43,7 @@ class KList<K,V> {
 	 * @param key
 	 * @param value
 	 */
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings("BAS")
 	public void add(final K key, V value){
 		// put data point into map
 		map.put(key,value);
