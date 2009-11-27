@@ -40,6 +40,6 @@ public class Perzeptrons {
             layers.add(DenseMatrix.valueOf(weights));
         }
         return new BackProptron<Float64>(
-                new Sigmoid(), Float64.valueOf(1d), Float64.ZERO, Float64.ONE, layers);
+                new Sigmoid(), Float64.valueOf(2d), Float64.ZERO, Float64.ONE, layers);
     }
 }

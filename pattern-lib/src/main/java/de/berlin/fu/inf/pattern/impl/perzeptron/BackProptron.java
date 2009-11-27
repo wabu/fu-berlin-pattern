@@ -31,7 +31,7 @@ import org.jscience.mathematics.vector.Vector;
 public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
     private final Logger logger = Logger.getLogger(BackProptron.class);
     protected final Funct<Vector<F>, Vector<F>> derive;
-    protected final F zero, gamma;
+    protected F zero, gamma;
 
 
     public BackProptron(Derivable<F, F> s, F gamma, F zero, F one, Matrix<F> ... layers) {
@@ -48,19 +48,39 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         this.gamma = gamma;
     }
 
-    public List<Matrix<F>> calcUpdate(Vector<F> input, Vector<F> expected) {
+    public void setGamma(F gamma) {
+        this.gamma = gamma;
+    }
+
+    public F getGamma() {
+        return gamma;
+    }
+
+
+    /**
+     * calculates gradient for all weights accroding to error (this.apply(x)-target)^2
+     * @param x input to the network
+     * @param target target result for input x
+     * @return gradient for weights, one matrix for each of the layers weights matrix
+     */
+    protected List<Matrix<F>> calcGradient(Vector<F> x, Vector<F> target) {
         // outputs = {o(0)=x, o(1), ... o(l)}
         List<Vector<F>> outputs = new ArrayList<Vector<F>>(super.getDepth());
         // derives = {o(1)', ..., o(n)'}
         List<Vector<F>> derives = new ArrayList<Vector<F>>(super.getDepth());
 
-        Vector<F> in = null, out = input;
+        // output of the input layer is just the input vector x
+        Vector<F> in = null, out = extend(x);
+        outputs.add(out);
 
-        outputs.add(extend(out));
         for (Matrix<F> layer : layers) {
-            in = layer.times(extend(out));
-            out = s.apply(in);
-            outputs.add(extend(out));
+            // in(i) = W(i) x out(i-1)
+            in = layer.times(out);
+            // out(i) = s(in(i))
+            out = extend(s.apply(in));
+
+            // set o(i) and o(i)'
+            outputs.add(out);
             derives.add(derive.apply(in));
         }
 
@@ -74,7 +94,7 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         // ds = { delta(l), delta(l-1), ... , delta(1) }
         List<Vector<F>> ds = new ArrayList<Vector<F>>(super.getDepth());
 
-        Vector<F> err = out.minus(expected);
+        Vector<F> err = intend(out).minus(target);
 
         Iterator<Matrix<F>> ls = Iterables.reverse(layers).iterator();
         for(Matrix<F> D : Iterables.reverse(Ds)) {
@@ -102,26 +122,47 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         }
         return ws;
     }
-    void train(Collection<Entry<? extends Vector<F>, ? extends Vector<F>>> data) {
-        // accumulated error
-        List<Matrix<F>> acc = null;
-        for(Entry<? extends Vector<F>, ? extends Vector<F>> e : data) {
-            List<Matrix<F>> dW = calcUpdate(e.getData(), e.getClassification());
-            if(acc == null) {
-                acc = dW;
-            } else {
-                for(int i=0; i<dW.size(); i++) {
-                    acc.set(i, acc.get(i).plus(dW.get(i)));
-                }
-            }
-        }
-        // W(i) = W - gamma * dW(i)
-        for(int i=0; i<layers.size(); i++) {
-            Matrix<F> W = layers.get(i);
-            Matrix<F> dW = acc.get(i);
 
+    /**
+     * apply an update to the weights of the network
+     * @param dWs gradient for weights, one matrix for each of the layers weights matrix
+     * @see calcUpdate
+     */
+    protected void applyUpdate(List<Matrix<F>> dWs) {
+        for (int i = 0; i < layers.size(); i++) {
+            Matrix<F> W = layers.get(i);
+            Matrix<F> dW = dWs.get(i);
             W = W.minus(dW.times(gamma));
             layers.set(i, W);
+        }
+    }
+
+
+    /**
+     * onlinetraining with the given data
+     * @param x input to the network
+     * @param target targeted output of the network
+     * @see getGamma, setGamma
+     */
+    public void trainOnline(Vector<F> x, Vector<F> target) {
+        List<Matrix<F>> dWs = calcGradient(x, target);
+        applyUpdate(dWs);
+    }
+
+    /**
+     * train the network with the given data once
+     * @param data collection of input/target pairs
+     * @see getGamma, setGamma
+     */
+    public void trainOffline(Collection<Entry<? extends Vector<F>, ? extends Vector<F>>> data) {
+        // accumulated error
+        List<List<Matrix<F>>> grads = new ArrayList<List<Matrix<F>>>(data.size());
+        for(Entry<? extends Vector<F>, ? extends Vector<F>> e : data) {
+            List<Matrix<F>> dW = calcGradient(e.getData(), e.getClassification());
+            grads.add(dW);
+        }
+        for (List<Matrix<F>> dWs : grads) {
+            applyUpdate(dWs);
         }
     }
 
