@@ -16,6 +16,7 @@ public class DigitPoint extends DoubleVector {
 	private static final long serialVersionUID = 1L;
 	
 	public static int MAX_Y = 100;
+	public static int MAX_X = 100;
 	
     public DigitPoint(int arg0, int arg1) {
         super(arg0, arg1);
