@@ -25,7 +25,7 @@ class DistValueContext<V extends Dimensionable<V>> extends DimensionComparator<V
 		dist = Double.POSITIVE_INFINITY;
 		node = root;
         best = root;
-        dist = value.getDistanceInDimension(value, dimensions);
+        dist = value.getDistance(root.getContent());
 		this.value = value;
 	}
 	
