@@ -48,7 +48,7 @@ public class Main10 {
         knnOutput = new PrintStream(knnFile);
         logger.info("======= creating output file "+fisherFile);
         fisherOutput = new PrintStream(fisherFile);
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         for (int dimension = 2; dimension <= maxDimension; dimension++) {
             for (int number : N) {

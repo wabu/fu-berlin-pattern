@@ -9,7 +9,6 @@ import de.berlin.fu.inf.pattern.impl.perzeptron.PerzeptronSingleValueClassifier;
 import de.berlin.fu.inf.pattern.util.fun.Heaviside;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -35,7 +34,7 @@ public class Main14 {
     private TruthTable truthTable = new TruthTable();
     private Map<Integer, Integer> boolFuncCounter = new HashMap<Integer, Integer>();
     
-    public void run() throws FileNotFoundException, InterruptedException {
+    public void run() {
 
         for(int run=1; run<=runs; run++) {
 	    	Perzeptron<Float64> tron = generatePerzeptron(2,3,1);
@@ -112,7 +111,7 @@ public class Main14 {
                 new Heaviside<Float64>(Float64.ZERO, Float64.ONE), Float64.ONE, layers);
     }
 
-    public static void main(String[] argv) throws FileNotFoundException, InterruptedException {
+    public static void main(String[] argv) {
         new Main14().run();
     }
 }
