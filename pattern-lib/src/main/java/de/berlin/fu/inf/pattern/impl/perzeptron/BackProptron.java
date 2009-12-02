@@ -164,6 +164,12 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         for (List<Matrix<F>> dWs : grads) {
             applyUpdate(dWs);
         }
+        if(logger.isTraceEnabled()) {
+            logger.trace("done weights update");
+            for(Matrix<F> W : layers) {
+                logger.trace("\n"+W);
+            }
+        }
     }
 
 }
