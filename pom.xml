@@ -37,13 +37,13 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>inf.fu-berlin.de</id>
-      <name>kifoo-m2-repo</name>
+      <name>fu-m2-repo</name>
       <url>scp://paste.imp.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/waeber/public_html/maven/</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
       <id>inf.fu-berlin.de</id>
-      <name>kifoo-m2-snaps</name>
+      <name>fu-m2-snaps</name>
       <url>scp://paste.mi.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/waeber/public_html/maven/</url>
     </snapshotRepository>
   </distributionManagement>
@@ -123,6 +123,7 @@
     <module>u04</module>
     <module>u05</module>
     <module>u06</module>
+    <module>u07</module>
   </modules>
 
   <dependencies>
