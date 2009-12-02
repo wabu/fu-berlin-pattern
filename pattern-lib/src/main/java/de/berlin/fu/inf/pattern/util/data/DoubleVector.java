@@ -75,5 +75,9 @@ public class DoubleVector implements Dimensionable<DoubleVector>, Vectorable, Me
 	private boolean checkDimension(int dimension) {
 		return dimension >= 0 && dimension < this.dimension;
 	}
+
+    public int getDimension() {
+        return data.length;
+    }
 	
 }

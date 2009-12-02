@@ -1,6 +1,5 @@
 package de.berlin.fu.inf.pattern.util.jama;
 
-import net.jcip.annotations.Immutable;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import Jama.Matrix;
 
@@ -54,4 +53,8 @@ public class Vec extends Matrix implements Vectorable {
 	public double[] getVectorData() {
 		return super.getColumnPackedCopy();
 	}
+
+    public int getDimension() {
+        return super.getRowDimension();
+    }
 }

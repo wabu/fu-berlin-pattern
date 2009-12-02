@@ -30,4 +30,9 @@ public class VecTest {
 		
 	}
 
+    @Test
+    public void testDimension() {
+        assertEquals("dim of the vector is "+data.length, data.length, vec.getDimension());
+    }
+
 }
