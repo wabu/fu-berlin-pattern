@@ -9,9 +9,7 @@ import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
 
 import de.berlin.fu.inf.pattern.data.Entry;
-import de.berlin.fu.inf.pattern.impl.fisher.FisherLinearDiscriminant;
 import de.berlin.fu.inf.pattern.impl.perzeptron.BackProptron;
-import de.berlin.fu.inf.pattern.impl.perzeptron.Perzeptron;
 import de.berlin.fu.inf.pattern.impl.perzeptron.PerzeptronHighestValueClassifier;
 import de.berlin.fu.inf.pattern.impl.perzeptron.Perzeptrons;
 import de.berlin.fu.inf.pattern.tasks.u02.data.Digit;
