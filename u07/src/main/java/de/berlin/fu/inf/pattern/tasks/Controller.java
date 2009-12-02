@@ -12,6 +12,7 @@ import de.berlin.fu.inf.pattern.tasks.u02.data.Digit;
 import de.berlin.fu.inf.pattern.tasks.u02.data.DigitPoint;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
+import java.util.ArrayList;
 
 public class Controller {
 	private final Logger logger = Logger.getLogger(Controller.class);
@@ -38,8 +39,7 @@ public class Controller {
 	
 	
 	public Collection<Entry<Vectorable, Integer>> transformDigits(Collection<Digit> c) {
-		
-		return Collections2.transform(c, func);		
+		return new ArrayList<Entry<Vectorable, Integer>>(Collections2.transform(c, func));
 	}
 	
 }
