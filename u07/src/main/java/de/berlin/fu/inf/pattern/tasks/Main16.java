@@ -19,7 +19,7 @@ import de.berlin.fu.inf.pattern.util.types.Vectorable;
 
 public class Main16 {
     private Logger log = Logger.getLogger(Main16.class);
-    private final int maxIterations = 3;
+    private final int maxIterations = 250;
     private final int minNeuros = 5;
     private final int maxNeuros = 25;
     private ClassifierTest<Vectorable, Integer> classifierTest;
@@ -57,16 +57,18 @@ public class Main16 {
 		for( int neuros=minNeuros; neuros <= maxNeuros; neuros++ ) {
 			
 			BackProptron<Float64> penTron = Perzeptrons.generatePerzeptron(16, neuros, 10);
+            penTron.setGamma(Float64.valueOf(10d/cTrain.size()));
+
 			PerzeptronHighestValueClassifier classifier = 
 				new PerzeptronHighestValueClassifier(penTron);
 			
-			for( int i=1; i<=maxIterations; i++ ) {
-				classifier.train(cTrain);
+			for( int i=0; i<=maxIterations; i++ ) {
+                classifier.train(cTrain);
 				
 				classifierTest = new ClassifierTest<Vectorable, Integer>(classifier);
 				
 				rate = classifierTest.runTest(cTest);
-				log.info("success rate: neuros="+neuros + " iteration=" +i + " rate="+rate );
+				log.info("success rate: neuros="+neuros + " iteration=" +i+ " rate="+rate );
 			}
 		}
     }
