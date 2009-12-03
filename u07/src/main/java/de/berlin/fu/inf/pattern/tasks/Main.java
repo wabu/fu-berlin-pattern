@@ -10,7 +10,7 @@ package de.berlin.fu.inf.pattern.tasks;
  * @author wabu
  */
 public class Main {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException {
         Main16.main(args);
     }
 }

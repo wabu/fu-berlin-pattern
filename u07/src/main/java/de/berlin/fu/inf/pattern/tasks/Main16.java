@@ -3,7 +3,6 @@ package de.berlin.fu.inf.pattern.tasks;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
@@ -19,12 +18,12 @@ import de.berlin.fu.inf.pattern.util.types.Vectorable;
 
 public class Main16 {
     private Logger log = Logger.getLogger(Main16.class);
-    private final int maxIterations = 250;
+    private final int maxIterations = 1000;
     private final int minNeuros = 5;
-    private final int maxNeuros = 25;
+    private final int maxNeuros = 100;
     private ClassifierTest<Vectorable, Integer> classifierTest;
     
-    public void run() {
+    public void run() throws InterruptedException {
 		log.info("16) Running classification of pendigits using Backprop-Perzeptron");
 		
 		String training = "pendigits-training.txt";
@@ -52,28 +51,37 @@ public class Main16 {
 		Collection<Entry<Vectorable, Integer>> cTrain = controller.transformDigits(digitsTrain);
 		Collection<Entry<Vectorable, Integer>> cTest  = controller.transformDigits(digitsTest);
 		
-		double rate;
+        double rate, lastErr = 0;
 		log.info("run tests");
-		for( int neuros=minNeuros; neuros <= maxNeuros; neuros++ ) {
-			
+		for( int neuros=minNeuros; neuros <= maxNeuros; neuros*=1.2 ) {
 			BackProptron<Float64> penTron = Perzeptrons.generatePerzeptron(16, neuros, 10);
-            penTron.setGamma(Float64.valueOf(10d/cTrain.size()));
+            penTron.setGamma(Float64.valueOf(0.003d));
 
 			PerzeptronHighestValueClassifier classifier = 
 				new PerzeptronHighestValueClassifier(penTron);
 			
 			for( int i=0; i<=maxIterations; i++ ) {
-                classifier.train(cTrain);
+                double error = classifier.train(cTrain);
+                if(error > lastErr) {
+                    penTron.incGamma(Float64.valueOf(0.8f));
+                } else {
+                    penTron.incGamma(Float64.valueOf(1.02f));
+                }
+                lastErr = error;
 				
 				classifierTest = new ClassifierTest<Vectorable, Integer>(classifier);
 				
 				rate = classifierTest.runTest(cTest);
-				log.info("success rate: neuros="+neuros + " iteration=" +i+ " rate="+rate );
+
+				log.info(
+                        String.format("neurons=%d i=%03d rate=%.6f err=%.6f, gamma=%.6f",
+                        neuros, i, rate, error, penTron.getGamma().doubleValue()));
+
 			}
 		}
     }
     
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws InterruptedException {
         new Main16().run();
     }
 }
