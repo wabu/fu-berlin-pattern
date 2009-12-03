@@ -26,7 +26,7 @@ public class IntClassifierTest<V> extends ClassifierTest<V, Integer> {
         super(classifier);
     }
 
-    public double runTest(final Iterable<V> ... colls){
+    public double runTest(final Iterable<V> ... colls) {
         return runTest(Iterables.concat(Iterables.transform(
             Lists.newArrayList(colls),
             new Function<Iterable<V>, Iterable<Entry<V,Integer>>>(){
@@ -42,7 +42,7 @@ public class IntClassifierTest<V> extends ClassifierTest<V, Integer> {
 
     }
 
-    public double runTest(int num, Generator<V> ... gens){
+    public double runTest(int num, Generator<V> ... gens) {
         log.debug("running "+num+" test with generated data");
 
         @SuppressWarnings("unchecked")

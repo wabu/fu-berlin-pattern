@@ -46,7 +46,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		this.dimension = dimension;
 	}
 
-	public void train(Collection<V> c1, Collection<V> c2) {
+	public double train(Collection<V> c1, Collection<V> c2) {
 		Matrix m;
 		
 		float size1 = c1.size();
@@ -85,7 +85,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		
         double lambda = 0.0;
 		for(int i=0; i<v.getRowDimension(); i++){
-			if(Math.abs(d.get(i, i)) >= 0.000001) {
+			if(d.get(i, i) >= lambda) {
                 lambda = d.get(i, i);
 				this.omega = new Vec(v.transpose().getArray()[i]).transpose();
 			}
@@ -116,6 +116,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		logger.trace("linear class 2 around "+_mPoint2+" with sigma^2 "+_sigma2+", scaled with "+size2);
 		
 		// we are done...
+        return 1d/lambda;
 	}
 	
 	public Integer classify(V data) {

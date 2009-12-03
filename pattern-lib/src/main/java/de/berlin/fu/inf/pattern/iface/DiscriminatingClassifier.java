@@ -11,7 +11,8 @@ import java.util.Collection;
  *
  * @param <D> type of data
  * @param <C> type of classes
+ * @return value describing estimated error of the classifier
  */
 public interface DiscriminatingClassifier<D> extends Classifier<D, Integer> {
-	void train(Collection<D> c1, Collection<D> c2);
+	double train(Collection<D> c1, Collection<D> c2);
 }

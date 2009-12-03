@@ -29,7 +29,7 @@ public class BackPropTest {
     private final Logger logger = Logger.getLogger(BackPropTest.class);
 
     @Test
-    public void testAndon() {
+    public void testAndon() throws InterruptedException {
         List<Entry<? extends Vector<Float64>, ? extends Vector<Float64>>> table =
                 new ArrayList<Entry<? extends Vector<Float64>, ? extends Vector<Float64>>>();
         table.add(Entry.valueOf(DenseVector.valueOf(ZERO,ONE), DenseVector.valueOf(ONE)));
@@ -57,7 +57,7 @@ public class BackPropTest {
      }
 
     @Test
-    public void testOron() {
+    public void testOron() throws InterruptedException {
         List<Entry<? extends Vector<Float64>, ? extends Vector<Float64>>> table =
                 new ArrayList<Entry<? extends Vector<Float64>, ? extends Vector<Float64>>>();
         table.add(Entry.valueOf(DenseVector.valueOf(ZERO,ONE), DenseVector.valueOf(ONE)));

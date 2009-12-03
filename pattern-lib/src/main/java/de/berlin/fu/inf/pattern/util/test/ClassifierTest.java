@@ -7,6 +7,9 @@ package de.berlin.fu.inf.pattern.util.test;
 
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.iface.Classifier;
+import de.berlin.fu.inf.pattern.util.Threads;
+import de.berlin.fu.inf.pattern.util.fun.Proc;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -22,16 +25,18 @@ public class ClassifierTest<V, C> {
         this.classifier = classifier;
     }
 
-    public double runTest(Iterable<Entry<V,C>> testData){
-        int total = 0;
-        int correct = 0;
+    public double runTest(Iterable<Entry<V,C>> testData) {
+        final AtomicInteger total = new AtomicInteger();
+        final AtomicInteger correct = new AtomicInteger();
 
-        for (Entry<V, C> t : testData) {
-            if(t.getClassification().equals(classifier.classify(t.getData()))) {
-                correct++;
+        Threads.doParralell(testData, new Proc<Entry<V,C>>() {
+            public void apply(Entry<V, C> t) {
+                if(t.getClassification().equals(classifier.classify(t.getData()))) {
+                    correct.incrementAndGet();
+                }
+                total.incrementAndGet();
             }
-            total++;
-        }
-        return correct/(double)total;
+        });
+        return correct.get()/(double)total.get();
     }
 }

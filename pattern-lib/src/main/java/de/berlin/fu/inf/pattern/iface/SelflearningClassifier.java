@@ -4,5 +4,5 @@ import java.util.Collection;
 
 
 public interface SelflearningClassifier<D, C> extends Classifier<D, C> {
-	void train(Collection<D> data);
+	double train(Collection<D> data);
 }

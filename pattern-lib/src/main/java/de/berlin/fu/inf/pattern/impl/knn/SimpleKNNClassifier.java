@@ -30,8 +30,9 @@ public class SimpleKNNClassifier<D extends Messurable<D>, C> implements Supervis
         this(1, new SimpleDatabase<D,C>());
     }
 	
-	public void train(Collection<Entry<D, C>> trainingData) {
+	public double train(Collection<Entry<D, C>> trainingData) {
 		this.database.addAll(trainingData);
+        return Double.NaN;
 	}
 
 	public C classify(D data){

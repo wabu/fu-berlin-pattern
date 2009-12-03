@@ -6,9 +6,9 @@
 package de.berlin.fu.inf.pattern.impl.perzeptron;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.iface.SupervisedClassifier;
+import de.berlin.fu.inf.pattern.util.Threads;
 import de.berlin.fu.inf.pattern.util.jama.Vectors;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import org.jscience.mathematics.vector.Vector;
  */
 public class PerzeptronHighestValueClassifier
         implements SupervisedClassifier<Vectorable, Integer> {
+
     protected final BackProptron<Float64> tron;
     private final int dim;
 
@@ -51,22 +52,21 @@ public class PerzeptronHighestValueClassifier
         return best;
     }
 
-    public void train(Collection<Entry<Vectorable, Integer>> trainingData) {
-        tron.trainOffline(
-            Collections2.transform(trainingData,
-            new Function<Entry<Vectorable, Integer>,
-            Entry<? extends Vector<Float64>,? extends Vector<Float64>>>() {
-            public Entry<? extends Vector<Float64>, ? extends Vector<Float64>>
-            apply(Entry<Vectorable, Integer> entry) {
-
-                // map data to (0 0 0 ... 0 1 0 ... 0) vectors
-                Vector<Float64> in = Vectors.valueOf(entry.getData());
-                Vector<Float64> target = SparseVector.valueOf(
-                        dim, Float64.ZERO, entry.getClassification(), Float64.ONE);
-
-                return new Entry<Vector<Float64>, Vector<Float64>>(in, target);
-            }
-        }));
+    public double train(Collection<Entry<Vectorable, Integer>> trainingData) {
+        try {
+            return tron.trainOffline(Threads.doParralell(trainingData, new Function<Entry<Vectorable, Integer>, Entry<? extends Vector<Float64>, ? extends Vector<Float64>>>() {
+                public Entry<? extends Vector<Float64>, ? extends Vector<Float64>> apply(Entry<Vectorable, Integer> entry) {
+                    // map data to (0 0 0 ... 0 1 0 ... 0) vectors
+                    Vector<Float64> in =
+                            Vectors.valueOf(entry.getData());
+                    Vector<Float64> target =
+                            SparseVector.valueOf(dim, Float64.ZERO, entry.getClassification(), Float64.ONE);
+                    return new Entry<Vector<Float64>, Vector<Float64>>(in, target);
+                }
+            })).doubleValue()/(double)trainingData.size();
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 }

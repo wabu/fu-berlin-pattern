@@ -14,5 +14,5 @@ import de.berlin.fu.inf.pattern.data.Entry;
  * @param <C> type of classes
  */
 public interface SupervisedClassifier<D, C> extends Classifier<D, C> {
-	void train(Collection<Entry<D,C>> trainingData);
+	double train(Collection<Entry<D,C>> trainingData);
 }

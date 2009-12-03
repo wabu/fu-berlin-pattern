@@ -31,6 +31,7 @@ public class KMeanClassifier<V extends Vectorable> implements SelflearningClassi
 	private final List<Double> scales;
 	
 	private int iterations = DEFAULT_ITERATIONS;
+    private double estimate = 0;
 	//TODO terminate by stability: private int terminationBehavior = TERMINATE_BY_ITERATION;
 	
 	public KMeanClassifier(int dimension) {
@@ -71,9 +72,10 @@ public class KMeanClassifier<V extends Vectorable> implements SelflearningClassi
 	 * @param c
 	 * @return
 	 */
-	public void train(Collection<V> c) {
+	public double train(Collection<V> c) {
 		log.debug("anaylsing data");
 		runEM(c);
+        return estimate/(double)c.size();
 	}
 	
 	// TODO abstraction
@@ -86,6 +88,7 @@ public class KMeanClassifier<V extends Vectorable> implements SelflearningClassi
 			log.debug("iteration "+k+" ...");
 			
 			log.debug(" calculating expectation");
+            estimate = 0;
 			for(V v : data){
 				bestCluster(v).add(v);
 			}
@@ -130,6 +133,7 @@ public class KMeanClassifier<V extends Vectorable> implements SelflearningClassi
 		}
 		
 		assert (bestCluster == null) == (clusters.isEmpty());
+        this.estimate += bestProb;
 		return bestCluster;
 	}
 	

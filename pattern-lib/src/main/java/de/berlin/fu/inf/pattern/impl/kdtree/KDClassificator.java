@@ -18,7 +18,7 @@ public class KDClassificator<D extends Dimensionable<D>, C> implements Supervise
 	}
 	
 	@SuppressWarnings("unchecked") /* can't create generic array */
-	public void train(Collection<Entry<D, C>> trainingData) {
+	public double train(Collection<Entry<D, C>> trainingData) {
 		DimensionableEntry<D, C>[] kdEntries = (DimensionableEntry<D, C>[]) 
 			Collections2.transform(trainingData, new Function<Entry<D,C>, DimensionableEntry<D, C>>() {
 				public DimensionableEntry<D, C> apply(Entry<D, C> e) {
@@ -26,6 +26,7 @@ public class KDClassificator<D extends Dimensionable<D>, C> implements Supervise
 				}
 			}).toArray(new DimensionableEntry<?, ?>[trainingData.size()]);
 		kdTree.buildTree(kdEntries);
+        return Double.NaN;
 	}
 
 	public C classify(D data) {
