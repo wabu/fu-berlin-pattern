@@ -69,7 +69,7 @@ public class Main10 {
      * @param elements
      */
     @SuppressWarnings({"unchecked"})
-    private void run(int dim, int elements) {
+    private void run(int dim, int elements) throws InterruptedException {
         double classificationRateKNN = 0.0d;
         double classificationRateFisher = 0.0d;
         double rate;
@@ -130,7 +130,7 @@ public class Main10 {
         return fisher;
     }
 
-    public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector>... gens) {
+    public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector>... gens) throws InterruptedException {
         logger.debug("running "+num+" tests on "+c);
         IntClassifierTest<DoubleVector> test = new IntClassifierTest<DoubleVector>(c);
         return test.runTest(num, gens);

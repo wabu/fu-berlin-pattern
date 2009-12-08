@@ -1,7 +1,6 @@
 package de.berlin.fu.inf.pattern.tasks;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -19,7 +18,7 @@ import de.berlin.fu.inf.pattern.util.types.Vectorable;
 public class Main16 {
     private Logger log = Logger.getLogger(Main16.class);
     private final int maxIterations = 1000;
-    private final int minNeuros = 5;
+    private final int minNeuros = 20;
     private final int maxNeuros = 100;
     private ClassifierTest<Vectorable, Integer> classifierTest;
     
@@ -29,8 +28,6 @@ public class Main16 {
 		String training = "pendigits-training.txt";
 		String testing = "pendigits-testing.txt";
 		
-		
-		
     	DigitReader digitReader = new DigitReader();
     	Controller controller = new Controller();
     	
@@ -39,10 +36,8 @@ public class Main16 {
     	Collection<Digit> digitsTrain;
     	Collection<Digit> digitsTest;
     	try {
-			digitsTrain = digitReader.readDigitsFromStream(
-					new InputStreamReader(ClassLoader.getSystemResourceAsStream(training)));
-			digitsTest = digitReader.readDigitsFromStream(
-					new InputStreamReader(ClassLoader.getSystemResourceAsStream(testing)));
+			digitsTrain = digitReader.readDigits(training);
+			digitsTest = digitReader.readDigits(testing);
     	} catch( IOException ioEx ) {
     		log.fatal("reading data failed", ioEx);
     		return;

@@ -57,6 +57,9 @@ public class DigitReader {
         try{
            return readDigitsFromStream(new FileReader(name));
         } catch (IOException ioEx) {
+            if(ClassLoader.getSystemResourceAsStream(name)==null){
+                throw new IOException("can't find ressource "+name);
+            }
 	        return readDigitsFromStream(new InputStreamReader(ClassLoader.getSystemResourceAsStream(name)));
         }
     }

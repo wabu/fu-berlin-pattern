@@ -43,7 +43,7 @@ public class Main11 {
     private final double delta[] = {0.1, 0.0, -0.01, -0.005};
 
     @SuppressWarnings("unchecked")
-    public void run() {
+    public void run() throws InterruptedException {
         double classificationRateFisher = 0.0d;
         double rate;
         RandomFish fish;
@@ -114,7 +114,7 @@ public class Main11 {
         return fisher;
     }
 
-    public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector>... gens) {
+    public double runTest(int num, Classifier<DoubleVector, Integer> c, Generator<DoubleVector>... gens) throws InterruptedException {
         logger.trace("running "+num+" tests on "+c);
         IntClassifierTest<DoubleVector> test = new IntClassifierTest<DoubleVector>(c);
         return test.runTest(num, gens);

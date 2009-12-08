@@ -6,6 +6,8 @@
 package de.berlin.fu.inf.pattern.impl.perzeptron;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.berlin.fu.inf.pattern.data.Entry;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import org.apache.log4j.Logger;
 import org.jscience.mathematics.structure.Field;
 import org.jscience.mathematics.vector.DenseMatrix;
@@ -112,10 +115,10 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         // ds = { delta(l), delta(l-1), ... , delta(1) }
         List<Vector<F>> ds = new ArrayList<Vector<F>>(super.getDepth());
 
-        Vector<F> err = intend(out).minus(target);
+        Vector<F> epsilon = intend(out).minus(target);
         F error = zero;
-        for(int i=0; i<err.getDimension(); i++) {
-            F e = err.get(i);
+        for(int i=0; i<epsilon.getDimension(); i++) {
+            F e = epsilon.get(i);
             error = error.plus(e.times(e));
         }
         grad.setError(error);
@@ -123,11 +126,11 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         Iterator<Matrix<F>> ls = Iterables.reverse(layers).iterator();
         for(Matrix<F> D : Iterables.reverse(Ds)) {
             // delta(i) = D(i) x err(i)
-            Vector<F> d = D.times(err);
+            Vector<F> d = D.times(epsilon);
             ds.add(d);
 
             Matrix<F> W = ls.next();
-            err = intend(W.transpose().times(d));
+            epsilon = intend(W.transpose().times(d));
             // err(i-1) = W(i)T x d(i)
             // => delta(i-1) = D(i-1) x err = D(i-1) x W(i)T x d(i)
         }
@@ -162,6 +165,7 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
      * train the network with the given data once
      * @param data collection of input/target pairs
      * @return total Error
+     * @throws InterruptedException
      * @see getGamma, setGamma
      */
     public F trainOffline(Collection<Entry<? extends Vector<F>, ? extends Vector<F>>> data) throws InterruptedException {
@@ -184,6 +188,23 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
             dWs.applyTo(layers);
         }
         return error;
+    }
+
+    /**
+     * blend between online and offline learning
+     * @param data collection of input/target pairs
+     * @param onfRate
+     * @return total Error
+     * @throws InterruptedException
+     * @see trainOnline, trainOffline
+     */
+    public F trainOnfline(Collection<Entry<? extends Vector<F>, ? extends Vector<F>>> data, final double onfRate) throws InterruptedException {
+        final Random rnd = new Random();
+        return trainOffline(Collections2.filter(data, new Predicate<Object>() {
+            public boolean apply(Object input) {
+                return rnd.nextDouble() <= onfRate;
+            }
+        }));
     }
 
     public void incGamma(F factor) {

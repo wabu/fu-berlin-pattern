@@ -40,6 +40,7 @@ public class PerzeptronHighestValueClassifier
             fs.add(Float64.valueOf(d));
         }
         Vector<Float64> out = tron.apply(DenseVector.valueOf(fs));
+        assert out.getDimension() == dim;
 
         int best=-1;
         double v, val = Double.NEGATIVE_INFINITY;

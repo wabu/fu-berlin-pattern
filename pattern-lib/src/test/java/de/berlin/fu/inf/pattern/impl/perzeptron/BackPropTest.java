@@ -12,10 +12,6 @@ import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.DenseVector;
 import org.jscience.mathematics.vector.Vector;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
