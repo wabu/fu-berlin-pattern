@@ -5,12 +5,14 @@
 
 package de.berlin.fu.inf.pattern.impl.ada;
 
-import Jama.Matrix;
 import de.berlin.fu.inf.pattern.iface.Classifier;
 import de.berlin.fu.inf.pattern.iface.DiscriminatingClassifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import org.jscience.mathematics.vector.Float64Matrix;
+import org.jscience.mathematics.vector.Float64Vector;
 
 /**
  *
@@ -27,31 +29,32 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
 
     /**
      * Calculates a matrix containing the error for each classifier and each data
-     * @param c1 0 class
-     * @param c2 1 class
+     * @param c1 possitive class
+     * @param c2 negative class
      * @return
      */
-    protected Matrix calcFMatrix(Collection<D> c1, Collection<D> c2) {
+    protected Float64Matrix calcFMatrix(Collection<D> c1, Collection<D> c2) {
         //TODO debug, fucking jama javadoc does not state which is row/collumn
         int num = c1.size() + c2.size();
         double bad = Math.E;
         double good = 1d/Math.E;
 
-        Matrix F = new Matrix(num, cloud.size());
-        for(int column=0; column<cloud.size(); column++){
-            Classifier<D, Integer> c = cloud.get(column);
-            int row=0;
+        double[][] values = new double[cloud.size()][num];
+        for(int x=0; x<cloud.size(); x++){
+            Classifier<D, Integer> c = cloud.get(x);
+            int y=0;
             for(D d : c1) {
                 int klass = 0;
-                F.set(row, column, c.classify(d)==klass ? good : bad);
-                row++;
+                values[x][y] = c.classify(d)==klass ? good : bad;
+                y++;
             }
             for(D d : c2) {
                 int klass = 1;
-                F.set(row, column, c.classify(d)==klass ? good : bad);
-                row++;
+                values[x][y] = c.classify(d)==klass ? good : bad;
+                y++;
             }
         }
+        Float64Matrix F = Float64Matrix.valueOf(values);
         return F;
     }
 
@@ -60,9 +63,12 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
      * @param num
      * @return
      */
-    protected Matrix getInitalWeights(int num){
+    protected Float64Vector getInitalWeights(int num){
         double v = 1/(double)num;
-        return new Matrix(1, num, v);
+        double[] values = new double[num];
+
+        Arrays.fill(values, v);
+        return Float64Vector.valueOf(values);
     }
 
     /**
@@ -70,12 +76,13 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
      * @param weights column-vector containing the weights
      * @return
      */
-    protected Classifier<D, Integer>selectNextComitteeMemeber(Matrix weights, Matrix F){
-        Matrix valuation = weights.times(F);
+    protected Classifier<D, Integer>selectNextComitteeMemeber(
+            Float64Vector weights, Float64Matrix F){
+        Float64Vector valuation = F.times(weights);
         double v, val = Double.NEGATIVE_INFINITY;
         int best = -1;
-        for(int i=0; i<valuation.getRowDimension(); i++) {
-            if((v = valuation.get(i, 0)) > val) {
+        for(int i=0; i<valuation.getDimension(); i++) {
+            if((v = valuation.get(i).doubleValue()) > val) {
                 best = i;
                 val = v;
             }
@@ -84,8 +91,8 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
     }
 
     public double train(Collection<D> c1, Collection<D> c2) {
-        Matrix F = calcFMatrix(c1, c2);
-        Matrix weights = getInitalWeights(c1.size() + c2.size());
+        Float64Matrix F = calcFMatrix(c1, c2);
+        Float64Vector weights = getInitalWeights(c1.size() + c2.size());
 
         for(;;) {
             Classifier<D, Integer> next = selectNextComitteeMemeber(weights, F);
@@ -103,5 +110,4 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
     public Integer classify(D data) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

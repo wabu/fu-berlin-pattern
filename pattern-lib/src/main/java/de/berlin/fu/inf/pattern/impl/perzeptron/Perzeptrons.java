@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.DenseMatrix;
+import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Matrix;
 
 /**
@@ -31,13 +32,13 @@ public class Perzeptrons {
             int inSize = sizeSpec[i-1] + 1;
             int outSize = sizeSpec[i];
 
-            Float64[][] weights = new Float64[outSize][inSize];
+            double[][] weights = new double[outSize][inSize];
             for(int x=0; x<outSize; x++) {
                 for(int y=0; y<inSize; y++) {
-                    weights[x][y]= Float64.valueOf(rnd.nextDouble()*2.0d-1.0d);
+                    weights[x][y]= rnd.nextDouble()*2.0d-1.0d;
                 }
             }
-            layers.add(DenseMatrix.valueOf(weights));
+            layers.add(Float64Matrix.valueOf(weights));
         }
         return new BackProptron<Float64>(
                 new Sigmoid(), Float64.valueOf(2d), Float64.ZERO, Float64.ONE, layers);
