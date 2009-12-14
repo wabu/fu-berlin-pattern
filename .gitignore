@@ -7,6 +7,9 @@
 .pmd
 .manager/
 
+# nb files
+nb*.xml
+
 # vim tmp flies
 .*.swp
 

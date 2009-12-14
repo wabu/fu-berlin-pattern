@@ -109,10 +109,10 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>jdepend-maven-plugin</artifactId>
-      </plugin> 
+      </plugin>
     </plugins>
   </reporting>
-  
+
   <modules>
     <module>pattern-lib</module>
     <module>u01</module>
