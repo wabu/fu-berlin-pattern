@@ -18,7 +18,7 @@ import de.berlin.fu.inf.pattern.util.types.Vectorable;
 public class Main16 {
     private Logger log = Logger.getLogger(Main16.class);
     private final int maxIterations = 1000;
-    private final int minNeuros = 20;
+    private final int minNeuros = 5;
     private final int maxNeuros = 100;
     private ClassifierTest<Vectorable, Integer> classifierTest;
     
