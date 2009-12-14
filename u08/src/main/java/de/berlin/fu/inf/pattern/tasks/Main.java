@@ -12,8 +12,10 @@ import org.apache.log4j.Logger;
  *
  * @author wabu
  */
-public class Main {
-    private final static Logger logger = Logger.getLogger(Main.class);
+public final class Main {
+    private Main() {}
+    private final static Logger LOG = Logger.getLogger(Main.class);
+
     private static Runnable[] tasks = {
         new Task17(),
     };
@@ -21,11 +23,11 @@ public class Main {
     public static void main(String args[]) throws InterruptedException {
         try{
             for (Runnable t : tasks) {
-                logger.info("running "+t.getClass().getSimpleName());
+                LOG.info("running "+t.getClass().getSimpleName());
                 try {
                     t.run();
                 } catch(Exception e) {
-                    logger.error("execution of "+t.getClass()+" failed", e);
+                    LOG.error("execution of "+t.getClass()+" failed", e);
                 }
             }
         } finally {
