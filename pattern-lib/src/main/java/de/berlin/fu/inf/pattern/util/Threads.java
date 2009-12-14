@@ -22,9 +22,11 @@ import java.util.concurrent.Future;
  * @author wabu
  */
 public class Threads {
-    private final static ExecutorService exec = Executors.newCachedThreadPool();
+    public final static int DEFAULT_POO_LSIZE=4;
+    private final static ExecutorService exec = Executors.newFixedThreadPool(DEFAULT_POO_LSIZE);
 
-    public static <F,T> Collection<T> doParralell(Collection<F> it, final Function<F, T> task) {
+    public static <F,T> Collection<T> doParralell(Collection<F> it,
+            final Function<? super F, T> task) {
         try {
             return Collections2.transform(exec.invokeAll(Collections2.transform(it, new Function<F, Callable<T>>() {
                 public Callable<T> apply(final F from) {
@@ -40,7 +42,8 @@ public class Threads {
         }
     }
 
-    public static <F,T> Iterable<T> doParralell(Iterable<F> it, final Function<F, T> task) {
+    public static <F,T> Iterable<T> doParralell(Iterable<F> it,
+            final Function<? super F, T> task) {
         final LinkedList<Future<T>> result = new LinkedList<Future<T>>();
         for(final F elem : it) {
             result.add(exec.submit(new Callable<T>() {
@@ -64,7 +67,7 @@ public class Threads {
         }
     }
 
-    public static <E> void doParralell(Iterable<E> it, final Proc<E> proc) {
+    public static <E> void doParralell(Iterable<E> it, final Proc<? super E> proc) {
         LinkedList<Future<?>> fs = new LinkedList<Future<?>>();
         for(final E elem : it) {
             fs.add(exec.submit(new Runnable() {
