@@ -15,14 +15,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Iterator;
+import org.apache.log4j.Logger;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
 
 /**
- *
  * @author wabu
  */
 public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
+    private final Logger log = Logger.getLogger(AdaBoosting.class);
+
     private final List<Classifier<D, Integer>> cloud;
     private final List<Classifier<D, Integer>> comittee;
     private final List<Double> betas;
@@ -33,8 +35,8 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
         this.betas = new ArrayList<Double>();
     }
 
-    protected Iterable<Boolean> rightMapping(
-            Classifier<D,Integer> cf, Collection<D> c1, Collection<D> c2){
+    protected Iterable<Boolean> rightMapping(Classifier<D,Integer> cf, 
+            Collection<? extends D> c1, Collection<? extends D> c2){
         Collection<Boolean> b1 =
                 Collections2.transform(c1, new GuessedRightTransform<D, Integer>(cf, 0));
         Collection<Boolean> b2 =
@@ -48,7 +50,8 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
      * @param c2 negative class
      * @return
      */
-    protected Float64Matrix calcFMatrix(Collection<D> c1, Collection<D> c2) {
+    protected Float64Matrix calcFMatrix(
+            Collection<? extends D> c1, Collection<? extends D> c2) {
         //TODO debug, fucking jama javadoc does not state which is row/collumn
         int num = c1.size() + c2.size();
         double bad = Math.E;
@@ -62,8 +65,7 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
                 values[x][y++] = b ? good : bad;
             }
         }
-        Float64Matrix F = Float64Matrix.valueOf(values);
-        return F;
+        return Float64Matrix.valueOf(values);
     }
 
     /**
@@ -98,7 +100,8 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
         return cloud.get(best);
     }
 
-    protected double calcErr(Classifier<D,Integer> c, Collection<D> c1, Collection<D> c2,
+    protected double calcErr(Classifier<D,Integer> c, 
+            Collection<? extends D> c1, Collection<? extends D> c2,
             Float64Vector weights){
         int y=0;
         double err = 0, sum = 0;
@@ -112,17 +115,24 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
         return err/sum;
     }
 
-    public double train(Collection<D> c1, Collection<D> c2) {
+    public double train(Collection<? extends D> c1, Collection<? extends D> c2) {
+        log.debug("boosting "+cloud.size()+" classifiers");
+
         Float64Matrix F = calcFMatrix(c1, c2);
         Float64Vector weights = getInitalWeights(c1.size() + c2.size());
+
+        log.debug("error matrix F calculated.");
 
         for(;;) {
             Classifier<D, Integer> next = selectNextComitteeMemeber(weights, F);
             comittee.add(next);
 
+            log.debug("next comittee member is "+next);
+
             double err = calcErr(next, c1, c2, weights);
             double beta = 0.5 * Math.log((1-err)/err);
             betas.add(beta);
+            log.debug("his weighted error is "+err+", beta is "+beta);
 
             double ws[] = new double[weights.getDimension()];
             int y=0;
@@ -133,8 +143,12 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
             }
             weights = Float64Vector.valueOf(ws);
 
+            log.debug("weights updated");
+
             //TODO call callback to know when to stop
-            return err;
+            if(comittee.size() > 10) {
+                return err;
+            }
         }
     }
 
