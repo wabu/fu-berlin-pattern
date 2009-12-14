@@ -162,7 +162,7 @@
           <artifactId>exec-maven-plugin</artifactId>
           <configuration>
             <mainClass>de.berlin.fu.inf.pattern.tasks.Main</mainClass>
-            <commandlineArgs>-Xmx2g -Xms1g</commandlineArgs>
+            <commandlineArgs>-Xmx2g -Xms1g ${exec.args}</commandlineArgs>
           </configuration>
         </plugin>
         <plugin>
