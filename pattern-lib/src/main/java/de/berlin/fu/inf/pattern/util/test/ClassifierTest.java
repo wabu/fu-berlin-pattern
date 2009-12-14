@@ -25,7 +25,7 @@ public class ClassifierTest<V, C> {
         this.classifier = classifier;
     }
 
-    public double runTest(Iterable<Entry<? extends V,C>> testData) {
+    public double runTest(Iterable<? extends Entry<? extends V,C>> testData) {
         final AtomicInteger total = new AtomicInteger();
         final AtomicInteger correct = new AtomicInteger();
 
