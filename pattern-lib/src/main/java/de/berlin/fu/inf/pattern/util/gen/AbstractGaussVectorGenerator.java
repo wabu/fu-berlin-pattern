@@ -19,5 +19,4 @@ public class AbstractGaussVectorGenerator extends AbstractGenerator<DoubleVector
 		}
 		return new DoubleVector(data);
 	}
-
 }

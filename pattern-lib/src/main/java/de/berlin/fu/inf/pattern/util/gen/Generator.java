@@ -2,6 +2,8 @@ package de.berlin.fu.inf.pattern.util.gen;
 
 
 import de.berlin.fu.inf.pattern.data.Entry;
+import java.util.Collection;
+import java.util.List;
 
 public interface Generator<V> {
     /**
@@ -23,4 +25,7 @@ public interface Generator<V> {
 
     Iterable<V> getGenerator(int size);
     <C> Iterable<Entry<V,C>> getEntryGenerator(C klass, int size);
+
+    List<V> getGeneratedData(int size);
+    <C> List<Entry<V,C>> getGeneratedEntries(C klass, int size);
 }

@@ -16,18 +16,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author wabu
  */
 public class Threads {
-    public final static int DEFAULT_POO_LSIZE=4;
-
-    private final static ExecutorService exec = Executors.newFixedThreadPool(DEFAULT_POO_LSIZE);
+    private final static ExecutorService exec = Executors.newCachedThreadPool();
 
     public static <F,T> Collection<T> doParralell(Collection<F> it, final Function<F, T> task) {
         try {
@@ -87,5 +82,9 @@ public class Threads {
                 throw new ThreadingExecption(ex);
             }
         }
+    }
+
+    public static void shutdown() {
+        exec.shutdown();
     }
 }

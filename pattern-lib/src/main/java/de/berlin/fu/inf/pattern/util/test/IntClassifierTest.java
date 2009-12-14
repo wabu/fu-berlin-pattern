@@ -26,27 +26,27 @@ public class IntClassifierTest<V> extends ClassifierTest<V, Integer> {
         super(classifier);
     }
 
-    public double runTest(final Iterable<V> ... colls) {
+    public double runTest(final Iterable<? extends V> ... colls) {
         return runTest(Iterables.concat(Iterables.transform(
             Lists.newArrayList(colls),
-            new Function<Iterable<V>, Iterable<Entry<V,Integer>>>(){
+            new Function<Iterable<? extends V>, Iterable<Entry<? extends V,Integer>>>(){
                 int k = 0;
-                public Iterable<Entry<V, Integer>> apply(Iterable<V> from) {
+                public Iterable<Entry<? extends V, Integer>> apply(Iterable<? extends V> from) {
                     return Iterables.transform(from,
-                    new Function<V,Entry<V,Integer>>() {
+                    new Function<V,Entry<? extends V,Integer>>() {
                         final int klass = k++;
-                        public Entry<V, Integer> apply(V from) {
+                        public Entry<? extends V, Integer> apply(V from) {
                             return new Entry<V, Integer>(from, klass);
                         }});
             }})));
 
     }
 
-    public double runTest(int num, Generator<V> ... gens) {
+    public double runTest(int num, Generator<? extends V> ... gens) {
         log.debug("running "+num+" test with generated data");
 
         @SuppressWarnings("unchecked")
-        Iterable<V>[] its = (Iterable<V>[]) new Iterable<?>[gens.length];
+        Iterable<? extends V>[] its = (Iterable<? extends V>[]) new Iterable<?>[gens.length];
         for (int i = 0; i < gens.length; i++) {
             its[i] = gens[i].getGenerator(num);
         }

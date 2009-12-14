@@ -12,8 +12,20 @@ import org.jscience.mathematics.vector.Float64Vector;
  *
  * @author wabu
  */
-public class Vectors {
+public final class Vectors {
+    private Vectors() {}
+
+    public static Float64Vector valueOf(double[] data) {
+        return Float64Vector.valueOf(data);
+    }
+
     public static Float64Vector valueOf(Vectorable vec) {
         return Float64Vector.valueOf(vec.getVectorData());
+    }
+    public static Float64Vector expendedOf(Vectorable vec) {
+        double[] data = new double[vec.getDimension()+1];
+        System.arraycopy(vec.getVectorData(), 0, data, 0, vec.getDimension());
+        data[vec.getDimension()]=1;
+        return Float64Vector.valueOf(data);
     }
 }

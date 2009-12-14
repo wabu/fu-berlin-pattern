@@ -25,12 +25,12 @@ public class ClassifierTest<V, C> {
         this.classifier = classifier;
     }
 
-    public double runTest(Iterable<Entry<V,C>> testData) {
+    public double runTest(Iterable<Entry<? extends V,C>> testData) {
         final AtomicInteger total = new AtomicInteger();
         final AtomicInteger correct = new AtomicInteger();
 
-        Threads.doParralell(testData, new Proc<Entry<V,C>>() {
-            public void apply(Entry<V, C> t) {
+        Threads.doParralell(testData, new Proc<Entry<? extends V,C>>() {
+            public void apply(Entry<? extends V, C> t) {
                 if(t.getClassification().equals(classifier.classify(t.getData()))) {
                     correct.incrementAndGet();
                 }

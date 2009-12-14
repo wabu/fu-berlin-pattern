@@ -46,7 +46,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 		this.dimension = dimension;
 	}
 
-	public double train(Collection<V> c1, Collection<V> c2) {
+	public double train(Collection<? extends V> c1, Collection<? extends V> c2) {
 		Matrix m;
 		
 		float size1 = c1.size();
@@ -139,7 +139,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	 * @param c
 	 * @return
 	 */
-	private Vec calcMiddlePoint(Collection<V> c) {
+	private Vec calcMiddlePoint(Collection<? extends V> c) {
 		if(c.size() == 0) {
 			throw new IllegalArgumentException("size of collection must be >0");
 		}
@@ -159,7 +159,7 @@ public class FisherLinearDiscriminant<V extends Vectorable> implements Discrimin
 	 * @param mPoint - middle point, which belongs to this collection
 	 * @return covariance matrix
 	 */
-	private Matrix calcCovariance(Collection<V> c, Vec mPoint) {
+	private Matrix calcCovariance(Collection<? extends V> c, Vec mPoint) {
 		Matrix summed = new Matrix(this.dimension, this.dimension);
 		for(Vectorable item : c) {
 			Vec x = new Vec(item).minus(mPoint);

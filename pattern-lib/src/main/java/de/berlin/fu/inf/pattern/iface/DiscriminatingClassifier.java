@@ -14,5 +14,5 @@ import java.util.Collection;
  * @return value describing estimated error of the classifier
  */
 public interface DiscriminatingClassifier<D> extends Classifier<D, Integer> {
-	double train(Collection<D> c1, Collection<D> c2);
+	double train(Collection<? extends D> c1, Collection<? extends D> c2);
 }

@@ -6,7 +6,9 @@ import java.util.Iterator;
 import com.google.common.base.Function;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import de.berlin.fu.inf.pattern.data.Entry;
+import java.util.List;
 
 public abstract class AbstractGenerator<V> implements Generator<V> {
     private class GeneratingIterator implements Iterator<V> {
@@ -49,5 +51,13 @@ public abstract class AbstractGenerator<V> implements Generator<V> {
                 return new Entry<V, C>(data, klass);
             }
         });
+    }
+
+    public List<V> getGeneratedData(int size) {
+        return Lists.newArrayList(getGenerator(size));
+    }
+
+    public <C> List<Entry<V, C>> getGeneratedEntries(C klass, int size) {
+        return Lists.newArrayList(getEntryGenerator(klass, size));
     }
 }
