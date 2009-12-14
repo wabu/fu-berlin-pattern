@@ -23,7 +23,7 @@ public class Main6 {
 		String srcImage = "0049a.jpg";
 		String outputFile = "bin_" + srcImage;
 		
-		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		BufferedImage img;
 		
 		int white = 0xFFFFFFFF;

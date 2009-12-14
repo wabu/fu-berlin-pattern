@@ -8,6 +8,7 @@ package de.berlin.fu.inf.pattern.tasks.u02.data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,10 +58,13 @@ public class DigitReader {
         try{
            return readDigitsFromStream(new FileReader(name));
         } catch (IOException ioEx) {
-            if(ClassLoader.getSystemResourceAsStream(name)==null){
-                throw new IOException("can't find ressource "+name);
+            InputStream strm =
+                    Thread.currentThread().getContextClassLoader().
+                    getResourceAsStream(name);
+            if(strm== null) {
+                throw new IOException("can't find ressource "+name, ioEx);
             }
-	        return readDigitsFromStream(new InputStreamReader(ClassLoader.getSystemResourceAsStream(name)));
+	        return readDigitsFromStream(new InputStreamReader(strm));
         }
     }
 

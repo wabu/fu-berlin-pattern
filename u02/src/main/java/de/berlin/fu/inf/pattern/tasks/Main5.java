@@ -22,7 +22,7 @@ public class Main5 {
 		String maskFile = dir+"flowers-train.png";
 		String outputFile = "flower-output.jpg";
 		
-		ClassLoader cl = ClassLoader.getSystemClassLoader();
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		BufferedImage img, mask;
 		
 		try {
