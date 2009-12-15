@@ -16,9 +16,7 @@ import de.berlin.fu.inf.pattern.tasks.u02.data.Digit;
 import de.berlin.fu.inf.pattern.tasks.u02.data.DigitPoint;
 import de.berlin.fu.inf.pattern.tasks.u02.data.DigitReader;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
-import de.berlin.fu.inf.pattern.util.gen.MultiNormalGenerator;
 import de.berlin.fu.inf.pattern.util.test.ClassifierTest;
-import de.berlin.fu.inf.pattern.util.test.IntClassifierTest;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import org.apache.log4j.Logger;
 
@@ -66,7 +64,7 @@ public class Task18 implements Runnable {
 			if( logger.isTraceEnabled() ) {
 				logger.trace("new Entry: Vect" + vec + " Group:" + digit.getGroup());
 			}
-			return new Entry<Vectorable, Integer>(vec, digit.getGroup() == SEVEN_GROUP ? 1 : 0);
+			return new Entry<Vectorable, Integer>(vec, digit.getGroup() == SEVEN_GROUP ? 0 : 1);
 		}
 	}
     
