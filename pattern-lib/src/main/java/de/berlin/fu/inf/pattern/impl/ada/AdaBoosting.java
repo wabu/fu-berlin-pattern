@@ -5,6 +5,7 @@
 
 package de.berlin.fu.inf.pattern.impl.ada;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import de.berlin.fu.inf.pattern.iface.Classifier;
@@ -23,17 +24,34 @@ import org.jscience.mathematics.vector.Float64Vector;
  * @author wabu
  */
 public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
+    public final static int DEFUALT_COMITTEESIZE = 20;
+
     private final Logger log = Logger.getLogger(AdaBoosting.class);
 
     private final List<Classifier<D, Integer>> cloud;
     private final List<Classifier<D, Integer>> comittee;
     private final List<Double> betas;
+    private final Predicate<? super AdaBoosting<D>> continueDecision;
 
-    public AdaBoosting(List<Classifier<D, Integer>> cloud) {
+    public AdaBoosting(List<Classifier<D, Integer>> cloud,
+            final Predicate<? super AdaBoosting<D>> continueDecision) {
         this.cloud = cloud;
         this.comittee = new ArrayList<Classifier<D, Integer>>();
         this.betas = new ArrayList<Double>();
+        this.continueDecision = continueDecision;
     }
+
+    public AdaBoosting(List<Classifier<D, Integer>> cloud, int comitteeSize) {
+        this(cloud, new ComitteeSizePredicate(comitteeSize));
+    }
+
+    public AdaBoosting(List<Classifier<D, Integer>> cloud) {
+        this(cloud, DEFUALT_COMITTEESIZE);
+    }
+
+
+
+
 
     protected Iterable<Boolean> rightMapping(Classifier<D,Integer> cf, 
             Collection<? extends D> c1, Collection<? extends D> c2){
@@ -122,14 +140,15 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
         Float64Vector weights = getInitalWeights(c1.size() + c2.size());
 
         log.debug("error matrix F calculated.");
+        double err = Float.NaN;
 
-        for(;;) {
+        do {
             Classifier<D, Integer> next = selectNextComitteeMemeber(weights, F);
             comittee.add(next);
 
             log.debug("next comittee member is "+next);
 
-            double err = calcErr(next, c1, c2, weights);
+            err = calcErr(next, c1, c2, weights);
             double beta = 0.5 * Math.log((1-err)/err);
             betas.add(beta);
             log.debug("his weighted error is "+err+", beta is "+beta);
@@ -144,12 +163,9 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
             weights = Float64Vector.valueOf(ws);
 
             log.debug("weights updated");
+        } while(continueDecision.apply(this));
 
-            //TODO call callback to know when to stop
-            if(comittee.size() > 10) {
-                return err;
-            }
-        }
+        return err;
     }
 
 
@@ -164,5 +180,9 @@ public class AdaBoosting<D> implements DiscriminatingClassifier<D> {
             }
         }
         return sum >= 0 ? 0 : 1;
+    }
+
+    public int getComitteeSize() {
+        return comittee.size();
     }
 }

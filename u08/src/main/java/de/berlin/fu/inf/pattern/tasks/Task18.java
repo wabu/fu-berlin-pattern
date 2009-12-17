@@ -21,15 +21,22 @@ import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import javax.annotation.Nullable;
 
 /**
  * Run Adaboosting on Pen-Digits
  * 
  * @author covin
  */
-public class Task18 implements Runnable {
+public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
     private final Logger logger = Logger.getLogger(Task18.class);
+
+    @Nullable
+    private ClassifierTest<Vectorable,Integer> test = null;
+    @Nullable
+    private Collection<Entry<Vectorable, Integer>> testDigits = null;
 
     // transformation classes for Collections2.transform
     class DigitToVec implements Function<Digit, Vectorable> {
@@ -101,18 +108,47 @@ public class Task18 implements Runnable {
     		}
     	}
     	
-    	Collection<Entry<Vectorable,Integer>> testDigits = Collections2.transform(digitsTest, new DigitToEntrySplitSeven());
-    	
-    	
-    	
-    	AdaBoosting<Vectorable> ada = Ada.get(16, 10000);
+    	AdaBoosting<Vectorable> ada = Ada.get(16, 10000, this);
+    	testDigits =
+                Collections2.transform(digitsTest, new DigitToEntrySplitSeven());
+        test = new ClassifierTest<Vectorable, Integer>(ada);
+
     	logger.info("run training");
         ada.train(sevenDigits, nonSevenDigits);
 
-        ClassifierTest<Vectorable,Integer> test =
-                new ClassifierTest<Vectorable, Integer>(ada);
-
         double rate = test.runTest(testDigits);
         logger.info("rate is "+rate);
+    }
+
+    private double bestRate = 0;
+    private double badCount = 0;
+
+    public boolean apply(AdaBoosting<Vectorable> ada) {
+        logger.debug("checking wether to train more");
+
+        assert test != null;
+        assert testDigits != null;
+
+        double rate = test.runTest(testDigits);
+        logger.info("rate with "+ada.getComitteeSize()+" members is "+rate);
+
+        if(ada.getComitteeSize() >= 500) {
+            logger.info("comittee gets to big, stopping boost.");
+            return false;
+        }
+        if(rate <= bestRate) {
+            badCount++;
+        } else {
+            bestRate = rate;
+        }
+        if(badCount > 5) {
+            logger.info("last 5 comittee entries weren't good, stoping boost");
+            return false;
+        }
+        return true;
+    }
+
+    public static void main(String args[]){
+        new Task18().run();
     }
 }

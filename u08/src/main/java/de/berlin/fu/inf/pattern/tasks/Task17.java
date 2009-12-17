@@ -19,7 +19,7 @@ public class Task17 implements Runnable {
     private final Logger logger = Logger.getLogger(Task17.class);
 
     public void run() {
-        AdaBoosting<Vectorable> ada = Ada.get(10, 10000);
+        AdaBoosting<Vectorable> ada = Ada.get(10, 10000, 5);
 
         MultiNormalGenerator g1 = new MultiNormalGenerator(10,0.5d);
         MultiNormalGenerator g2 = new MultiNormalGenerator(10,0.5d);
