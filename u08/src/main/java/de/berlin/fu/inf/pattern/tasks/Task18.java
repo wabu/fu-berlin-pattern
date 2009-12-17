@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import de.berlin.fu.inf.pattern.util.Threads;
 import javax.annotation.Nullable;
 
 /**
@@ -115,9 +116,6 @@ public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
 
     	logger.info("run training");
         ada.train(sevenDigits, nonSevenDigits);
-
-        double rate = test.runTest(testDigits);
-        logger.info("rate is "+rate);
     }
 
     private double bestRate = 0;
@@ -139,10 +137,12 @@ public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
         if(rate <= bestRate) {
             badCount++;
         } else {
+            badCount = 0;
             bestRate = rate;
         }
-        if(badCount > 5) {
-            logger.info("last 5 comittee entries weren't good, stoping boost");
+        if(badCount > 25) {
+            logger.info("last 25 comittee entries weren't good, stoping boost");
+            logger.info("best rate was "+bestRate);
             return false;
         }
         return true;
@@ -150,5 +150,6 @@ public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
 
     public static void main(String args[]){
         new Task18().run();
+        Threads.shutdown();
     }
 }
