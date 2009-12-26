@@ -115,6 +115,7 @@
 
   <modules>
     <module>pattern-lib</module>
+    <module>u-archetype-template</module>
     <module>u01</module>
     <module>u02</module>
     <module>u03</module>
@@ -123,6 +124,7 @@
     <module>u06</module>
     <module>u07</module>
     <module>u08</module>
+    <module>u09</module>
   </modules>
 
   <dependencies>
@@ -162,7 +164,6 @@
           <artifactId>exec-maven-plugin</artifactId>
           <configuration>
             <mainClass>de.berlin.fu.inf.pattern.tasks.Main</mainClass>
-            <commandlineArgs>-Xmx2g -Xms1g ${exec.args}</commandlineArgs>
           </configuration>
         </plugin>
         <plugin>
