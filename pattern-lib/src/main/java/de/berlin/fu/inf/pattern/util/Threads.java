@@ -55,6 +55,16 @@ public class Threads {
         return Iterables.transform(result, new Force<T>());
     }
 
+    public static void run(Runnable ... tasks) {
+        try {
+            for(Runnable t : tasks) {
+                t.run();
+            }
+        } finally {
+            shutdown();
+        }
+    }
+
     public static class Force<T> implements Function<Future<T>, T> {
         public T apply(Future<T> from) {
             try {
