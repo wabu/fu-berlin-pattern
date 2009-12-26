@@ -141,7 +141,7 @@ public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
             bestRate = rate;
         }
         if(badCount > 25) {
-            logger.info("last 25 comittee entries weren't good, stoping boost");
+            logger.info("last 25 comittee additions weren't good, stoping boost");
             logger.info("best rate was "+bestRate);
             return false;
         }
