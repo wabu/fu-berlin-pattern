@@ -2,8 +2,8 @@ package de.berlin.fu.inf.pattern.util.gen;
 
 import Jama.Matrix;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
-import de.berlin.fu.inf.pattern.util.jama.MatrixString;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.MatrixString;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 
 public class MultiNormalGenerator extends AbstractGaussVectorGenerator {
 	private Matrix mapping;

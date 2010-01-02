@@ -6,7 +6,7 @@
 package de.berlin.fu.inf.pattern.impl.ada;
 
 import de.berlin.fu.inf.pattern.iface.Classifier;
-import de.berlin.fu.inf.pattern.util.jama.Vectors;
+import de.berlin.fu.inf.pattern.util.matrix.Vectors;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.Random;
 import org.jscience.mathematics.number.Float64;

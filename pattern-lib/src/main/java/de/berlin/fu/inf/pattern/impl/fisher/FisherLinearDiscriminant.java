@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.pattern.impl.fisher;
 
-import static de.berlin.fu.inf.pattern.util.jama.MatrixString.ms;
+import static de.berlin.fu.inf.pattern.util.matrix.MatrixString.ms;
 
 import java.util.Collection;
 
@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import de.berlin.fu.inf.pattern.iface.DiscriminatingClassifier;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 
 public class FisherLinearDiscriminant<V extends Vectorable> implements DiscriminatingClassifier<V> {

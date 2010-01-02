@@ -9,7 +9,7 @@ import com.google.common.base.Function;
 import de.berlin.fu.inf.pattern.data.Entry;
 import de.berlin.fu.inf.pattern.iface.SupervisedClassifier;
 import de.berlin.fu.inf.pattern.util.Threads;
-import de.berlin.fu.inf.pattern.util.jama.Vectors;
+import de.berlin.fu.inf.pattern.util.matrix.Vectors;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.ArrayList;
 import java.util.Collection;

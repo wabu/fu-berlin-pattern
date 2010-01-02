@@ -21,7 +21,7 @@ public final class Ada {
     private Ada() {}
 
     public static AdaBoosting<Vectorable> get(int dim, int cloudSize,
-            Predicate<? super AdaBoosting<Vectorable>> boostPredicate) {
+            Predicate<? super AbstractAda<Vectorable>> boostPredicate) {
         List<Classifier<Vectorable, Integer>> cloud =
                 new ArrayList<Classifier<Vectorable,Integer>>(cloudSize);
         LOG.debug("generating "+cloudSize+" random classifiers");

@@ -1,7 +1,7 @@
 package de.berlin.fu.inf.pattern.util.data;
 
 import static org.junit.Assert.*;
-import static de.berlin.fu.inf.pattern.util.jama.MatrixString.ms;
+import static de.berlin.fu.inf.pattern.util.matrix.MatrixString.ms;
 
 import java.util.Collection;
 
@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 
 import Jama.Matrix;
 

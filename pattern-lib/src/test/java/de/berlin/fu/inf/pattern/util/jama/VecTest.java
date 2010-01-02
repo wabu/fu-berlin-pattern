@@ -1,5 +1,6 @@
 package de.berlin.fu.inf.pattern.util.jama;
 
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 import static org.junit.Assert.*;
 
 import org.apache.log4j.Logger;

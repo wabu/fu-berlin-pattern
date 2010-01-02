@@ -1,4 +1,4 @@
-package de.berlin.fu.inf.pattern.util.jama;
+package de.berlin.fu.inf.pattern.util.matrix;
 
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import Jama.Matrix;

@@ -1,6 +1,6 @@
 package de.berlin.fu.inf.pattern.impl.kmean;
 
-import static de.berlin.fu.inf.pattern.util.jama.MatrixString.ms;
+import static de.berlin.fu.inf.pattern.util.matrix.MatrixString.ms;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import Jama.Matrix;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 
 /**

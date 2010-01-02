@@ -7,9 +7,9 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 
-import static de.berlin.fu.inf.pattern.util.jama.MatrixString.ms;
+import static de.berlin.fu.inf.pattern.util.matrix.MatrixString.ms;
 
 import Jama.CholeskyDecomposition;
 import Jama.Matrix;

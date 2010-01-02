@@ -11,14 +11,14 @@ import com.google.common.base.Predicate;
  *
  * @author wabu
  */
-public class ComitteeSizePredicate implements Predicate<AdaBoosting<?>> {
+public class ComitteeSizePredicate implements Predicate<AbstractAda<?>> {
     private final int size;
     public ComitteeSizePredicate(int size) {
         this.size = size;
     }
 
 
-    public boolean apply(AdaBoosting<?> input) {
+    public boolean apply(AbstractAda<?> input) {
         return input.getComitteeSize()<=size;
     }
 }
