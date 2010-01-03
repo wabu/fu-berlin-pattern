@@ -17,7 +17,7 @@ public final class Main {
 
     private final static Logger LOG = Logger.getLogger(Main.class);
     private static Runnable[] tasks = {
-        new TaskX(),
+        new Task19(),
     };
 
     public static void main(String args[]) throws InterruptedException {
