@@ -71,4 +71,9 @@ public class AdaBoosting<D> extends AbstractAda<D> implements DiscriminatingClas
         }
         return cloud.get(best);
     }
+
+    @Override
+    protected void endTraingin() {
+        F.remove();
+    }
 }

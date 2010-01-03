@@ -56,6 +56,7 @@ public abstract class AbstractAda<D> implements DiscriminatingClassifier<D> {
 
     abstract protected void beginTraingin();
     abstract public Classifier<D, Integer> getNextComitteeMemeber(Float64Vector weights);
+    abstract protected void endTraingin();
 
     protected Collection<? extends D> getPositiveSamples(){
         if(samples.get() == null) {
@@ -102,6 +103,7 @@ public abstract class AbstractAda<D> implements DiscriminatingClassifier<D> {
 
             } while (continueDecision.apply(this));
         } finally {
+            endTraingin();
             samples.remove();
         }
         return Float.NaN;
@@ -133,8 +135,7 @@ public abstract class AbstractAda<D> implements DiscriminatingClassifier<D> {
         double[] ws = new double[weights.getDimension()];
         int y = 0;
         for (boolean b : rightMapping(next)) {
-            ws[y] =
-                    weights.getValue(y) *
+            ws[y] = weights.getValue(y) *
                     (b ? Math.exp(-beta) : Math.exp(beta));
             y++;
         }

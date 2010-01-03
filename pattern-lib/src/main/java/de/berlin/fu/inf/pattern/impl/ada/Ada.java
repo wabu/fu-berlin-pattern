@@ -26,7 +26,7 @@ public final class Ada {
                 new ArrayList<Classifier<Vectorable,Integer>>(cloudSize);
         LOG.debug("generating "+cloudSize+" random classifiers");
         for(int i=0; i<cloudSize; i++) {
-            cloud.add(RandomLinearClassifier.generate(dim));
+            cloud.add(LinearClassifier.generate(dim));
         }
         return new AdaBoosting<Vectorable>(cloud, boostPredicate);
     }
