@@ -8,8 +8,8 @@ package de.berlin.fu.inf.pattern.tasks;
 import Jama.Matrix;
 import de.berlin.fu.inf.pattern.iface.Classifier;
 import de.berlin.fu.inf.pattern.util.data.DoubleVector;
-import de.berlin.fu.inf.pattern.util.jama.MatrixString;
-import de.berlin.fu.inf.pattern.util.jama.Vec;
+import de.berlin.fu.inf.pattern.util.matrix.MatrixString;
+import de.berlin.fu.inf.pattern.util.matrix.Vec;
 import java.util.Random;
 
 /**

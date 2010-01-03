@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import de.berlin.fu.inf.pattern.impl.ada.AbstractAda;
 import de.berlin.fu.inf.pattern.util.Threads;
 import javax.annotation.Nullable;
 
@@ -31,7 +32,7 @@ import javax.annotation.Nullable;
  * 
  * @author covin
  */
-public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
+public class Task18 implements Runnable, Predicate<AbstractAda<Vectorable>> {
     private final Logger logger = Logger.getLogger(Task18.class);
 
     @Nullable
@@ -121,7 +122,7 @@ public class Task18 implements Runnable, Predicate<AdaBoosting<Vectorable>> {
     private double bestRate = 0;
     private double badCount = 0;
 
-    public boolean apply(AdaBoosting<Vectorable> ada) {
+    public boolean apply(AbstractAda<Vectorable> ada) {
         logger.debug("checking wether to train more");
 
         assert test != null;
