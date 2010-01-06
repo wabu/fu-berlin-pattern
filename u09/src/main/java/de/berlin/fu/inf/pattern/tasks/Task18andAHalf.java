@@ -24,6 +24,7 @@ import com.google.common.collect.Collections2;
 import de.berlin.fu.inf.pattern.impl.ada.AbstractAda;
 import de.berlin.fu.inf.pattern.impl.ada.LinearRegressionBoosting;
 import de.berlin.fu.inf.pattern.util.Threads;
+import java.util.List;
 import javax.annotation.Nullable;
 
 /**
@@ -98,7 +99,7 @@ public class Task18andAHalf implements Runnable, Predicate<AbstractAda<Vectorabl
     	// 
         int size = digitsTrain.size()/10;
     	Collection<Vectorable> sevenDigits = new ArrayList<Vectorable>(size);
-    	Collection<Vectorable> nonSevenDigits = new ArrayList<Vectorable>(size);
+    	List<Vectorable> nonSevenDigits = new ArrayList<Vectorable>(size);
     	 
     	DigitToVec digitToVec = new DigitToVec();
     	int sevenGroup = 7;
@@ -111,7 +112,13 @@ public class Task18andAHalf implements Runnable, Predicate<AbstractAda<Vectorabl
                     nonSevenDigits.add(digitToVec.apply(digit));
     		}
     	}
-    	
+
+        int nSevenDigits = sevenDigits.size();
+        int nNonSevenDigits = nonSevenDigits.size();
+        logger.info("number of sevenDigits = " + nSevenDigits);
+        logger.info("number of non sevenDigits = " + nNonSevenDigits);
+        List<Vectorable> limitedNonSevenDigits = nonSevenDigits.subList(0, nSevenDigits < nNonSevenDigits ? nSevenDigits : nNonSevenDigits);
+
         LinearRegressionBoosting<Vectorable> ada = 
                 new LinearRegressionBoosting<Vectorable>(this);
     	testDigits =
@@ -119,7 +126,7 @@ public class Task18andAHalf implements Runnable, Predicate<AbstractAda<Vectorabl
         test = new ClassifierTest<Vectorable, Integer>(ada);
 
     	logger.info("run training");
-        ada.train(sevenDigits, nonSevenDigits);
+        ada.train(sevenDigits, limitedNonSevenDigits);
     }
 
     private double bestRate = 0;
