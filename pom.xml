@@ -15,7 +15,7 @@
   <repositories>
     <repository>
       <id>inf.fu-berlin.de</id>
-      <url>http://page.inf.fu-berlin.de/waeber/maven/</url>
+      <url>http://page.inf.fu-berlin.de/wabu/maven/</url>
     </repository>
     <repository>
       <id>wwmm.ch.cam.ac.uk</id>
@@ -30,19 +30,19 @@
   <distributionManagement>
     <site>
       <id>inf.fu-berlin.de</id>
-      <url>scp://paste.imp.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/waeber/public_html/pattern/</url>
+      <url>scp://paste.imp.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/wabu/public_html/pattern/</url>
     </site>
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>inf.fu-berlin.de</id>
       <name>fu-m2-repo</name>
-      <url>scp://paste.imp.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/waeber/public_html/maven/</url>
+      <url>scp://paste.imp.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/wabu/public_html/maven/</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
       <id>inf.fu-berlin.de</id>
       <name>fu-m2-snaps</name>
-      <url>scp://paste.mi.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/waeber/public_html/maven/</url>
+      <url>scp://paste.mi.fu-berlin.de/web/page.mi.fu-berlin.de/web-home/wabu/public_html/maven/</url>
     </snapshotRepository>
   </distributionManagement>
   
