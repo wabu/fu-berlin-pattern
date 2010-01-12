@@ -26,8 +26,6 @@ class ComponentReductionTransformator implements Function<Float64Vector, Float64
     }
 
     public Float64Vector apply(Float64Vector vec) {
-        Float64Vector v = vec.cross(component);
-        assert v.getDimension() != 1;
-        return vec.minus(component.times(v.get(1)));
+        return vec.minus(component.times(vec.times(component)));
     }
 }
