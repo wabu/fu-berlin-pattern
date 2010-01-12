@@ -44,6 +44,32 @@ public class LinearRegressionBoosting<D extends Vectorable> extends AbstractAda<
     private Float64Matrix X;
     private Float64Vector Y;
 
+    // callbacks for training form AdaBossting
+
+    @Override
+    protected void beginTraingin() {
+        X = calcDataMatrix(getPositiveSamples(), getNetativeSamples());
+        Y = calcValueVector(getPositiveSamples(), getNetativeSamples());
+    }
+
+    @Override
+    public Classifier<D, Integer> getNextComitteeMemeber(final Float64Vector weights) {
+        log.debug("new weights are: "+weights);
+        // returns linear classifier optaint by weightend linear regreression
+        return new LinearClassifier<D>(calcAlpha(weights));
+    }
+
+    @Override
+    protected void endTraingin() {
+        X = null;
+        Y = null;
+    }
+
+    /**
+     * @param c1 positive samples
+     * @param c2 negitive samples
+     * @return matrix containing all the data form c1 and c2
+     */
     protected Float64Matrix calcDataMatrix(Collection<? extends D> c1, Collection<? extends D> c2) {
         List<? extends D> joined = Lists.newLinkedList(Iterables.concat(c1,c2));
         List<Float64Vector> transformed =
@@ -51,6 +77,11 @@ public class LinearRegressionBoosting<D extends Vectorable> extends AbstractAda<
         return Float64Matrix.valueOf(transformed);
     }
 
+    /**
+     * @param c1 positive samples
+     * @param c2 negative samples
+     * @return vector containing 1/-1 for each data in c1/c2
+     */
     protected Float64Vector calcValueVector(Collection<? extends D> c1, Collection<? extends D> c2) {
         Iterable<Float64> f1 =
                 Iterables.transform(c1, new Function<Object, Float64>() {
@@ -69,29 +100,15 @@ public class LinearRegressionBoosting<D extends Vectorable> extends AbstractAda<
         return Float64Vector.valueOf(joined);
     }
 
+    /**
+     * @param weights
+     * @return vector for linear regression
+     */
     protected Vector<Float64> calcAlpha(Float64Vector weights) { //NOPMD not java.vector
         Float64Matrix weightend = X.transpose().times(
                 SparseMatrix.valueOf(weights, Float64.ZERO));
         Float64Matrix sqr = weightend.times(X);
         Float64Vector foo = weightend.times(Y);
         return sqr.inverse().times(foo);
-    }
-
-    @Override
-    protected void beginTraingin() {
-        X = calcDataMatrix(getPositiveSamples(), getNetativeSamples());
-        Y = calcValueVector(getPositiveSamples(), getNetativeSamples());
-    }
-
-    @Override
-    public Classifier<D, Integer> getNextComitteeMemeber(final Float64Vector weights) {
-        log.debug("new weights are: "+weights);
-        return new LinearClassifier<D>(calcAlpha(weights));
-    }
-
-    @Override
-    protected void endTraingin() {
-        X = null;
-        Y = null;
     }
 }
