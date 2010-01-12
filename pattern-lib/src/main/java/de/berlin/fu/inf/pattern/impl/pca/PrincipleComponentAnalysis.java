@@ -7,6 +7,7 @@ package de.berlin.fu.inf.pattern.impl.pca;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +33,7 @@ public abstract class PrincipleComponentAnalysis {
     private final int                              dimension;
     private final ComponentReductionTransformator  trans = new ComponentReductionTransformator();
 
-    protected Collection<Float64Vector> analysisData;
+    protected List<Float64Vector> analysisData;
 
     public PrincipleComponentAnalysis(Collection<Float64Vector> floatVectors) {
         if( floatVectors == null || floatVectors.size() == 0)
@@ -62,7 +63,7 @@ public abstract class PrincipleComponentAnalysis {
             this.principleComponents.add(vec);
             logger.info("component " + currentComponent + ": " + vec );
             this.trans.setComponent(vec);
-            analysisData = Collections2.transform(analysisData, trans);
+            analysisData = Lists.transform(analysisData, trans);
 
             return vec;
         } else {

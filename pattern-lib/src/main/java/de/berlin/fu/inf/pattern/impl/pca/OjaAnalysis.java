@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
-import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
 
 /**
@@ -19,7 +18,7 @@ import org.jscience.mathematics.vector.Float64Vector;
  * @author alex
  */
 public class OjaAnalysis extends PrincipleComponentAnalysis {
-    public static double DEFAULT_LAMBDA = 0.05;
+    public static double DEFAULT_LAMBDA = 0.0001;
     /** learn constant */
     private final Logger logger = Logger.getLogger(OjaAnalysis.class);
     private final double lambda;
@@ -43,15 +42,12 @@ public class OjaAnalysis extends PrincipleComponentAnalysis {
         Float64Vector omega = Vectors.random(this.getDimension());
 
         final Float64Vector center = Vectors.centerOf(analysisData);
-
         // int i = analysisData.size();
-        Iterator<Float64Vector> iter = analysisData.iterator();
 
-        int i = 0;
-        while ( iter.hasNext() )
-        {
-            i++;
-            Float64Vector randomVec = iter.next();
+        int i = analysisData.size();
+        int range = i;
+        do {
+            Float64Vector randomVec = analysisData.get(rand.nextInt(range));
             
             randomVec = randomVec.minus(center);
             if( logger.isDebugEnabled() )
@@ -60,7 +56,7 @@ public class OjaAnalysis extends PrincipleComponentAnalysis {
 
             omega = refreshOmega(omega,randomVec);
 
-        }// while(i-- > 0);
+        } while(i-- > 0);
         
         return omega;
     }
@@ -69,7 +65,7 @@ public class OjaAnalysis extends PrincipleComponentAnalysis {
         Float64 scalar = omega.times(vec);
         // w_neu = w + lambda*scalar(vec-scalar*w)
         Float64Vector omegaNeu = omega.plus(vec.minus(omega.times(scalar)).times(scalar.times(lambda)));
-        omegaNeu = omegaNeu.times(1/omegaNeu.normValue());
+        // omegaNeu = omegaNeu.times(1/omegaNeu.normValue());
 
         return omegaNeu;
     }
