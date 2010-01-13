@@ -50,7 +50,7 @@ public class CovarianceMethodAnalysis implements PrincipleComponentAnalysis {
         Matrix d  = ed.getD();
         Matrix v = ed.getV();
         logger.trace("eigenvalues are "+ms(d));
-	logger.trace("eigenvectors are "+ms(v));
+        logger.trace("eigenvectors are "+ms(v));
 
 
         double lambda = 0.0d;
@@ -60,7 +60,7 @@ public class CovarianceMethodAnalysis implements PrincipleComponentAnalysis {
                 lambda = d.get(i, i);
                 components.put(
                         lambda, 
-                        Vectors.valueOf(v.transpose().getArray()[i]));
+                        Vectors.valueOf(v.getArray()[i]));
             }
 	}
         logger.debug("found components=" + components);
