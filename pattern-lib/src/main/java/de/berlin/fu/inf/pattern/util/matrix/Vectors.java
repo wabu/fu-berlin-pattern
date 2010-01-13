@@ -5,6 +5,7 @@
 
 package de.berlin.fu.inf.pattern.util.matrix;
 
+import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.Collection;
 import java.util.Random;
@@ -35,6 +36,14 @@ public final class Vectors {
         return Float64Vector.valueOf(data);
     }
 
+    public static Vectorable convert(Float64Vector vec) {
+        double[] data = new double[vec.getDimension()];
+        for( int i=0; i<vec.getDimension(); i++) {
+            data[i] = vec.getValue(i);
+        }
+        return new DoubleVector(data);
+    }
+
     /**
      *
      * @param vecs
@@ -54,9 +63,9 @@ public final class Vectors {
             centerVec = vec.plus(centerVec);
         }
         centerVec = centerVec.times(1d/vecs.size());
-
         return centerVec;
     }
+
 
     /**
      *
@@ -90,9 +99,9 @@ public final class Vectors {
 
         for (Float64Vector vec : vectors ) {
             Float64Matrix m = Float64Matrix.valueOf(vec.minus(center));
-            cov.plus(m.transpose().times(m));
+            cov = cov.plus(m.transpose().times(m));
         }
-        cov.times(Float64.valueOf(1d/vectors.size()));
+        cov = cov.times(Float64.valueOf(1d/vectors.size()));
         
         return cov;
     }
