@@ -11,10 +11,20 @@
 
 package de.berlin.fu.inf.pattern.tasks.gui;
 
+import com.google.common.collect.Collections2;
+import de.berlin.fu.inf.pattern.impl.pca.CovarianceMethodAnalysis;
+import de.berlin.fu.inf.pattern.impl.pca.OjaAnalysis;
+import de.berlin.fu.inf.pattern.impl.pca.PrincipleComponentAnalysis;
+import de.berlin.fu.inf.pattern.util.matrix.Float64Vector2VectorableTransform;
+import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
+import org.jscience.mathematics.vector.Float64Vector;
 
 /**
  *
@@ -27,12 +37,21 @@ public class MainJFrame extends javax.swing.JFrame {
     private TrajectoryController controller;
     private int selectedTrajectory;
 
+    private final List<PrincipleComponentAnalysis> pcAnalyser;
+    private PrincipleComponentAnalysis selectedPCA;
+
     // data
 
     /** Creates new form MainJFrame */
     public MainJFrame() {
+
+        pcAnalyser = new ArrayList<PrincipleComponentAnalysis>();
+        pcAnalyser.add(new OjaAnalysis());
+        pcAnalyser.add(new CovarianceMethodAnalysis());
         initComponents();
         postInit();
+
+
     }
 
 
@@ -49,6 +68,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPlotContainer = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListTrajectories = new javax.swing.JList();
+        jComboPCAnalyser = new JComboBox(this.pcAnalyser.toArray());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Trajectory");
@@ -59,11 +79,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jPlotContainer.setLayout(jPlotContainerLayout);
         jPlotContainerLayout.setHorizontalGroup(
             jPlotContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGap(0, 416, Short.MAX_VALUE)
         );
         jPlotContainerLayout.setVerticalGroup(
             jPlotContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
         jListTrajectories.setModel(new javax.swing.AbstractListModel() {
@@ -78,18 +98,30 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jListTrajectories);
 
+        jComboPCAnalyser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "OjaAnalysis", "CovAnalysis" }));
+        jComboPCAnalyser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboPCAnalyserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboPCAnalyser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPlotContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jComboPCAnalyser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE))
             .addComponent(jPlotContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -103,14 +135,18 @@ public class MainJFrame extends javax.swing.JFrame {
         this.showTrajectory(index);
     }//GEN-LAST:event_jListTrajectoriesValueChanged
 
+    private void jComboPCAnalyserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboPCAnalyserActionPerformed
+        this.setPrincipleComponentAnalyser(this.jComboPCAnalyser.getSelectedIndex());
+    }//GEN-LAST:event_jComboPCAnalyserActionPerformed
+
     private void postInit() {
         jSimplePlot = new JSimplePlot();
         // jSimplePlot.setBackground(Color.WHITE);
-        jSimplePlot.setPlotRange(20, 60, 420, 460);
+        jSimplePlot.setPlotRange(25, 61, 430, 452);
         this.jPlotContainer.setLayout(new BorderLayout());
         this.jPlotContainer.add(jSimplePlot, BorderLayout.CENTER);
 
-        this.selectedTrajectory = -1;
+        this.setPrincipleComponentAnalyser(0);
     }
 
     private void controllerInit() {
@@ -119,20 +155,41 @@ public class MainJFrame extends javax.swing.JFrame {
 
     }
 
+    synchronized private void updatePlot() {
+        new Thread(new Runnable() {
+
+            public void run() {
+                jSimplePlot.setData(controller.getTrajecotryAsVectorable(selectedTrajectory));
+                Collection<Float64Vector> components = selectedPCA.principleComponents(controller.getTrajectoryAsVector(selectedTrajectory));
+
+                jSimplePlot.setVectors(
+                    Collections2.transform(components, new Float64Vector2VectorableTransform()));
+            }
+        }).start();
+        
+    }
+
     public void setTrajectoryController(TrajectoryController controller) {
         this.controller = controller;
         this.controllerInit();
+    }
+
+    protected void setPrincipleComponentAnalyser(int id) {
+        this.selectedPCA = this.pcAnalyser.get(id);
+        logger.debug(selectedPCA + " selected");
+        this.updatePlot();
     }
 
     protected void showTrajectory(final int id) {
         if( this.selectedTrajectory == id ) return;
         
         this.selectedTrajectory = id;
-        this.jSimplePlot.setData(controller.getTrajecotryData(id));
         
+        this.updatePlot();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox jComboPCAnalyser;
     private javax.swing.JList jListTrajectories;
     private javax.swing.JPanel jPlotContainer;
     private javax.swing.JScrollPane jScrollPane1;
