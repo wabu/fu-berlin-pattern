@@ -41,7 +41,7 @@ public class TrajectoryReader {
         return doubleVector;
     }
     
-    public Collection<Collection<Vectorable>> readTrajectoryDataFromStream(InputStream istream) throws IOException {
+    public List<Collection<Vectorable>> readTrajectoryDataFromStream(InputStream istream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
 
         String line = null;
