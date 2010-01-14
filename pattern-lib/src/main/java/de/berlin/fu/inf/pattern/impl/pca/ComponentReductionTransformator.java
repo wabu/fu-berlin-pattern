@@ -1,6 +1,7 @@
 package de.berlin.fu.inf.pattern.impl.pca;
 
 import com.google.common.base.Function;
+import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Vector;
 
 /**
@@ -22,7 +23,7 @@ class ComponentReductionTransformator implements Function<Float64Vector, Float64
     }
 
     public void setComponent(Float64Vector component) {
-        this.component = component;
+        this.component = component.times(1/component.normValue());
     }
 
     public Float64Vector apply(Float64Vector vec) {
