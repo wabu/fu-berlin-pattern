@@ -76,10 +76,11 @@ public final class Vectors {
     public static Float64Vector random(int dimension) {
         if( dimension <= 0) return null;
 
+        //FIXME I don't think that this is a good random vector ... (wabu)
         double[] data = new double[dimension];
         // init random data
         for( int i = 0; i<dimension; i++) {
-            data[i] = rand.nextDouble();
+            data[i] = 1-2*rand.nextDouble();
         }
         // create and norm vector
         Float64Vector randVec = valueOf(data);

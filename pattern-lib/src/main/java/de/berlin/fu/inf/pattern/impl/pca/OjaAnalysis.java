@@ -21,7 +21,7 @@ import org.jscience.mathematics.vector.Float64Vector;
  */
 public class OjaAnalysis implements PrincipleComponentAnalysis {
     private static String NAME = "OjaAnalyser";
-    public static double DEFAULT_LAMBDA = 0.00001;
+    public static double DEFAULT_LAMBDA = 0.001;
     /** learn constant */
     private final Logger logger = Logger.getLogger(OjaAnalysis.class);
 
@@ -59,19 +59,19 @@ public class OjaAnalysis implements PrincipleComponentAnalysis {
             Float64Vector omega = Vectors.random(dimension);
             Float64Vector center = Vectors.centerOf(analysisData);
 
-            int i = analysisData.size()*3;
             int range = analysisData.size();
-            do {
+
+            for(int i=0; i<analysisData.size()*10; i++) {
                 Float64Vector randomVec = analysisData.get(rand.nextInt(range));
 
                 randomVec = randomVec.minus(center);
-                if( logger.isDebugEnabled() )
+                if( logger.isTraceEnabled() || i%100 == 0 ) {
                     logger.debug("round " + i + ": omega="+omega+", random="+ randomVec);
-
+                }
 
                 omega = refreshOmega(omega,randomVec);
 
-            } while(i-- > 0);
+            }
             logger.debug("component " + component + " is " + omega);
             trans.setComponent(omega);
             trans.setTranslation(center.times(-1));
