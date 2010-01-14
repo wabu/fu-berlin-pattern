@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 import org.apache.log4j.Logger;
+import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
 import static de.berlin.fu.inf.pattern.util.matrix.MatrixString.ms;
@@ -59,8 +60,8 @@ public class CovarianceMethodAnalysis implements PrincipleComponentAnalysis {
             if(d.get(i, i) > 0.0d) {
                 lambda = d.get(i, i);
                 components.put(
-                        lambda, 
-                        Vectors.valueOf(v.getArray()[i]));
+                        -lambda,
+                        Vectors.valueOf(v.getArray()[i]).times(-1));
             }
 	}
         logger.debug("found components=" + components);
