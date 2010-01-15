@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.jscience.mathematics.vector.Float64Vector;
 
 /**
@@ -50,9 +51,11 @@ public class TrajectoryController {
         return trajectories.get(trajectoryNumber);
     }
 
+    @Nullable
     public Collection<Float64Vector> getTrajectoryAsVector(int trajectoryNumber) {
         if( trajectoryNumber < 0 || trajectoryNumber >= getNumberOfTrajectories())
             throw new IllegalArgumentException("trajectory index out of range");
+        if( trajectories2 == null ) return null;
         return trajectories2.get(trajectoryNumber);
     }
 

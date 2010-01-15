@@ -156,6 +156,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     synchronized private void updatePlot() {
+        if( controller == null ) return;
         new Thread(new Runnable() {
 
             public void run() {

@@ -102,6 +102,8 @@ public class JSimplePlot extends JPanel {
     }
 
     public void setVectors(Collection<Vectorable> vectors) {
+        if( vectors == null ) return;
+
         this.vectors = vectors;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
