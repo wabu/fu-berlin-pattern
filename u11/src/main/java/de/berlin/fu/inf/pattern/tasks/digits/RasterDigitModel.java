@@ -44,4 +44,24 @@ public class RasterDigitModel extends AbstractRasterModel {
         else
             return Double.NaN;
     }
+
+    public void setData(RasterDigit digit) {
+        this.setData(digit.getVec(), digit.getWidth(), digit.getHeight());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        builder.append(RasterDigitModel.class.getSimpleName());
+        builder.append(" raster=");
+        builder.append(getCols());
+        builder.append("x");
+        builder.append(getRows());
+        builder.append("]");
+
+        return builder.toString();
+    }
+
+
 }

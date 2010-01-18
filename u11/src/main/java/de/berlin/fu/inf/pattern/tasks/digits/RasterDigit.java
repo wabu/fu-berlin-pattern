@@ -21,4 +21,16 @@ public class RasterDigit {
         this.height = height;
         this.vec = vec;
     }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Float64Vector getVec() {
+        return vec;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }

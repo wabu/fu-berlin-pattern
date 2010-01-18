@@ -15,14 +15,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.SwingUtilities;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author alex
  */
 public class JRasterVisualizer extends javax.swing.JPanel {
+    private final Logger logger = Logger.getLogger(JRasterVisualizer.class);
+
     public static final int DEFAULT_RASTERSCALE = 5;
-    private static final Dimension ZERO_DIMENSION = new Dimension(0, 0);
+    private static final Dimension ZERO_DIMENSION = new Dimension(10, 10);
 
     private RasterModel model;
     private ModelChangedListener modelListener;
@@ -38,6 +41,7 @@ public class JRasterVisualizer extends javax.swing.JPanel {
         this.rasterScale = rasterScale;
         modelListener = new ModelChangedListener() {
             public void onModelChanged(ModelChangedEvent evt) {
+                logger.trace("onModelChanged: " + evt);
                 if( evt.getSource() == model ) {
                     updateView();
                 }
@@ -54,15 +58,17 @@ public class JRasterVisualizer extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 394, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 294, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -71,14 +77,14 @@ public class JRasterVisualizer extends javax.swing.JPanel {
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
         // TODO: synchronization?!
-
+        if( model == null ) return;
         // draw the raster
         // draw an rect for any element of raster
         for( int x = 0; x<model.getCols(); x++) {
             for( int y = 0; y<model.getRows(); y++) {
                 float greyScale = (float) model.getColor(x, y);
                 grphcs.setColor(new Color(greyScale, greyScale, greyScale));
-                grphcs.drawRect(
+                grphcs.fillRect(
                         rasterScale*x,      // x
                         rasterScale*y,      // y
                         rasterScale,        // width
@@ -96,9 +102,12 @@ public class JRasterVisualizer extends javax.swing.JPanel {
         if( this.model != null ) {
             model.removeModelChangedListener(modelListener);
         }
-
+        logger.debug("set model to " + model);
         this.model = model;
         this.model.addModelChangedListener(modelListener);
+
+        // cause of new model
+        this.updateView();
     }
 
     @Override
@@ -119,11 +128,17 @@ public class JRasterVisualizer extends javax.swing.JPanel {
      */
     @Override
     public Dimension getPreferredSize() {
-        if( this.model == null ) return ZERO_DIMENSION;
-        else
-            return new Dimension(
+        if( this.model == null ) {
+            logger.trace("return preferredSize: " + ZERO_DIMENSION);
+            return ZERO_DIMENSION;
+        }
+        else {
+            Dimension dim = new Dimension(
                     rasterScale*model.getCols(),
                     rasterScale*model.getRows());
+            logger.trace("return preferredSize: " + dim);
+            return dim;
+        }
     }
 
 
@@ -132,9 +147,14 @@ public class JRasterVisualizer extends javax.swing.JPanel {
      * on model or view
      */
     protected void updateView() {
+        logger.trace("update view");
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-               repaint();
+                // need to update layout before painting
+                invalidate();
+                getParent().validate();
+
+                repaint();
             }
         });
 

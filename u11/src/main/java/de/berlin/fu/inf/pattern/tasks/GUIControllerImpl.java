@@ -11,7 +11,11 @@ import de.berlin.fu.inf.pattern.tasks.gui.GUIController;
 import de.berlin.fu.inf.pattern.tasks.gui.RasterModel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import javax.swing.AbstractListModel;
+import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import org.apache.log4j.Logger;
@@ -20,22 +24,23 @@ import org.apache.log4j.Logger;
  *
  * @author alex
  */
-public class GUIControllerImpl implements GUIController {
+public class GUIControllerImpl extends AbstractListModel implements GUIController {
     private final Logger logger = Logger.getLogger(GUIControllerImpl.class);
 
     // our real data
-    private final Map<RasterDigit, Integer> digits;
+    //private final Map<RasterDigit, Integer> digits;
+    private List<Entry<RasterDigit, Integer>> digits;
     // models for GUI-Components
     private final RasterDigitModel selectedDigitModel, reconstructedDigitModel;
     private final ArrayList<RasterModel> basicVectorModels;
-    private final RasterDigitListModel listModel;
     
     public GUIControllerImpl(Map<RasterDigit, Integer> digits) {
-        this.digits = digits;
+        this.digits = new ArrayList<Entry<RasterDigit, Integer>>(digits.entrySet());
+        
         selectedDigitModel      = new RasterDigitModel();
         reconstructedDigitModel = new RasterDigitModel();
         basicVectorModels       = new ArrayList<RasterModel>();
-        listModel               = new RasterDigitListModel(digits);
+
     }
 
 
@@ -44,7 +49,7 @@ public class GUIControllerImpl implements GUIController {
     }
 
     public ListModel getDigitListModel() {
-        return listModel;
+        return this;
     }
 
     public RasterModel getRecontructedDigitModel() {
@@ -55,10 +60,28 @@ public class GUIControllerImpl implements GUIController {
         return selectedDigitModel;
     }
 
+    @SuppressWarnings("unchecked")
     public void valueChanged(ListSelectionEvent lse) {
-        logger.debug("valueChanged - " + lse);
-        throw new UnsupportedOperationException("Not supported yet.");
+        logger.debug("valueChanged - " + "adjusting="+lse.getValueIsAdjusting() + " first=" + lse.getFirstIndex() + " last=" + lse.getLastIndex());
+
+        if( lse.getSource() instanceof JList ) {
+            JList list = (JList) lse.getSource();
+            int index = list.getSelectedIndex();
+            this.selectedDigitModel.setData(digits.get(index).getKey());
+        }
+
     }
+
+    public Object getElementAt(int i) {
+        return i + " - " + digits.get(i).getValue();
+    }
+
+    public int getSize() {
+        if( digits != null )
+            return digits.size();
+        else return 0;
+    }
+
 
 
 }

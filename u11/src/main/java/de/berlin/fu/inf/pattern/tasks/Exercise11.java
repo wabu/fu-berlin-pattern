@@ -39,14 +39,20 @@ public class Exercise11 implements Runnable {
 
         // start GUI
         final JMainFrameNMF mainFrame = new JMainFrameNMF();
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JMainFrameNMF().setVisible(true);
+                mainFrame.setVisible(true);
             }
         });
 
+
         GUIControllerImpl ctrl = new GUIControllerImpl(digits);
         mainFrame.setGUIController(ctrl);
+
+
+        
+
 
     }
 

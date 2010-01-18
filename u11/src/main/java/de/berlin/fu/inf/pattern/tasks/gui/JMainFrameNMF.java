@@ -11,9 +11,6 @@
 
 package de.berlin.fu.inf.pattern.tasks.gui;
 
-import java.awt.FlowLayout;
-import javax.swing.DefaultListModel;
-
 /**
  *
  * @author alex
@@ -33,8 +30,7 @@ public class JMainFrameNMF extends javax.swing.JFrame {
     
     protected void postInitComponents() {
         jSelectedDigit = new JRasterVisualizer();
-        
-        this.jMainPanel.setLayout(new FlowLayout());
+
         this.jMainPanel.add(jSelectedDigit);
     }
 
@@ -54,6 +50,8 @@ public class JMainFrameNMF extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         jDigitList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "HUHU", ":P" };
             public int getSize() { return strings.length; }
@@ -62,19 +60,6 @@ public class JMainFrameNMF extends javax.swing.JFrame {
         jDigitList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jDigitList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jScrollPane1.setViewportView(jDigitList);
-
-        jMainPanel.setBackground(new java.awt.Color(248, 223, 209));
-
-        javax.swing.GroupLayout jMainPanelLayout = new javax.swing.GroupLayout(jMainPanel);
-        jMainPanel.setLayout(jMainPanelLayout);
-        jMainPanelLayout.setHorizontalGroup(
-            jMainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 526, Short.MAX_VALUE)
-        );
-        jMainPanelLayout.setVerticalGroup(
-            jMainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 287, Short.MAX_VALUE)
-        );
 
         jBasicRasters.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
@@ -98,7 +83,7 @@ public class JMainFrameNMF extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                     .addComponent(jBasicRasters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -109,7 +94,7 @@ public class JMainFrameNMF extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBasicRasters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -136,12 +121,11 @@ public class JMainFrameNMF extends javax.swing.JFrame {
 
 
         this.controller = ctrl;
-        this.jDigitList.setPrototypeCellValue("XXXX) Digit x");
+
         this.jDigitList.setModel(controller.getDigitListModel());
-        
+
         this.jDigitList.addListSelectionListener(controller);
         this.jSelectedDigit.setModel(this.controller.getSlectedDigitModel());
 
-        this.validate();
     }
 }
