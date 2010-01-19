@@ -24,8 +24,8 @@ import org.apache.log4j.Logger;
 import org.jscience.mathematics.structure.Field;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
+import org.jscience.mathematics.vector.DiagonalMatrix;
 import org.jscience.mathematics.vector.Matrix;
-import org.jscience.mathematics.vector.SparseMatrix;
 import org.jscience.mathematics.vector.Vector;
 
 /**
@@ -108,7 +108,7 @@ public class BackProptron<F extends Field<F>> extends Perzeptron<F> {
         // Ds = { D1, D2, ..., Dl }
         List<Matrix<F>> Ds = Lists.transform(derives, new Function<Vector<F>,Matrix<F>>() {
             public Matrix<F> apply(Vector<F> from) {
-                return SparseMatrix.valueOf(from, zero);
+                return DiagonalMatrix.valueOf(from);
             }
         });
 

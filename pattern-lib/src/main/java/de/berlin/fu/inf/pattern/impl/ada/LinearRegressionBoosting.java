@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
+import org.jscience.mathematics.vector.DenseMatrix;
+import org.jscience.mathematics.vector.DiagonalMatrix;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
 import org.jscience.mathematics.vector.SparseMatrix;
@@ -105,10 +107,10 @@ public class LinearRegressionBoosting<D extends Vectorable> extends AbstractAda<
      * @return vector for linear regression
      */
     protected Vector<Float64> calcAlpha(Float64Vector weights) { //NOPMD not java.vector
-        Float64Matrix weightend = X.transpose().times(
-                SparseMatrix.valueOf(weights, Float64.ZERO));
-        Float64Matrix sqr = weightend.times(X);
-        Float64Vector foo = weightend.times(Y);
+        DenseMatrix<Float64> weightend = X.transpose().times(
+                DiagonalMatrix.valueOf(weights));
+        DenseMatrix<Float64> sqr = weightend.times(X);
+        Vector<Float64> foo = weightend.times(Y);
         return sqr.inverse().times(foo);
     }
 }

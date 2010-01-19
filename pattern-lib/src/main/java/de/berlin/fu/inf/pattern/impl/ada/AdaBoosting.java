@@ -11,8 +11,10 @@ import de.berlin.fu.inf.pattern.iface.DiscriminatingClassifier;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
+import org.jscience.mathematics.vector.Vector;
 
 /**
  * @author wabu
@@ -60,7 +62,7 @@ public class AdaBoosting<D> extends AbstractAda<D> implements DiscriminatingClas
 
     @Override
     public Classifier<D, Integer> getNextComitteeMemeber(Float64Vector weights) {
-        Float64Vector valuation = F.get().times(weights);
+        Vector<Float64> valuation = F.get().times(weights);
         double v, val = Double.NEGATIVE_INFINITY;
         int best = -1;
         for(int i=0; i<valuation.getDimension(); i++) {

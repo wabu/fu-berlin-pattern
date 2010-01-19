@@ -79,4 +79,8 @@ public class MonochromePixel implements Vectorable {
     public int getDimension() {
         return val.length;
     }
+
+    public double get(int i) {
+        return val[i];
+    }
 }

@@ -61,7 +61,7 @@ public class PerzeptronHighestValueClassifier
                     Vector<Float64> in =
                             Vectors.valueOf(entry.getData());
                     Vector<Float64> target =
-                            SparseVector.valueOf(dim, Float64.ZERO, entry.getClassification(), Float64.ONE);
+                            SparseVector.valueOf(entry.getClassification(), Float64.ONE, dim);
                     return new Entry<Vector<Float64>, Vector<Float64>>(in, target);
                 }
             })).doubleValue()/(double)trainingData.size();

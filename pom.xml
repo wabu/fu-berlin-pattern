@@ -25,6 +25,10 @@
       <id>jcurl-repository</id>
       <url>http://jcurl.berlios.de/m2/repo</url>
     </repository>
+    <repository>
+      <id>java-net-repository</id>
+      <url>http://download.java.net/maven/2/</url>
+    </repository>
   </repositories>
   
   <distributionManagement>
