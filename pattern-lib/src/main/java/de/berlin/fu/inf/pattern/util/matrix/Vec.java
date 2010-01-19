@@ -57,4 +57,8 @@ public class Vec extends Matrix implements Vectorable {
     public int getDimension() {
         return super.getRowDimension();
     }
+
+    public double get(int i) {
+        return super.get(i, 0);
+    }
 }

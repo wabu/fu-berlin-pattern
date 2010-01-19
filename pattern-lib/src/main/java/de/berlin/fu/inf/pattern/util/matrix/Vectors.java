@@ -37,11 +37,7 @@ public final class Vectors {
     }
 
     public static Vectorable convert(Float64Vector vec) {
-        double[] data = new double[vec.getDimension()];
-        for( int i=0; i<vec.getDimension(); i++) {
-            data[i] = vec.getValue(i);
-        }
-        return new DoubleVector(data);
+        return new VectorableDeligate(vec);
     }
 
     /**
@@ -49,20 +45,21 @@ public final class Vectors {
      * @param vecs
      * @return center vector or null if collection is empty
      */
-    @Nullable
-    public static Float64Vector centerOf(Collection<Float64Vector> vecs) {
+    public static Float64Vector centerOf(Iterable<Float64Vector> vecs) {
         int expectedDimension = 0;
-        if( vecs.size()>0)
+        if( vecs.iterator().hasNext() ) {
             expectedDimension = vecs.iterator().next().getDimension();
-        else
-            return null;
+        } else {
+            throw new IllegalArgumentException("collection must not be empty");
+        }
 
-
+        int size = 0;
         Float64Vector centerVec = Float64Vector.valueOf(new double[expectedDimension]);
         for( Float64Vector vec : vecs ) {
             centerVec = vec.plus(centerVec);
+            size++;
         }
-        centerVec = centerVec.times(1d/vecs.size());
+        centerVec = centerVec.times(1d/size);
         return centerVec;
     }
 
