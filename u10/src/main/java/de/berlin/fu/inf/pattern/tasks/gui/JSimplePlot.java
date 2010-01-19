@@ -5,7 +5,6 @@
 
 package de.berlin.fu.inf.pattern.tasks.gui;
 
-import com.sun.java.swing.SwingUtilities3;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.awt.Color;
 import java.awt.Graphics;
