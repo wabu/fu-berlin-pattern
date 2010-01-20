@@ -91,7 +91,7 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
 
         // calculate sums of each row
         vec = vec.times(m);
-        vec = vec.times(Float64.valueOf(1/m.getNumberOfRows()));
+        vec = vec.times(Float64.valueOf(1d/m.getNumberOfRows()));
         assert vec.getNumberOfRows() == 1;
         // create diagonal matrix
         Matrix<Float64> diag = DiagonalMatrix.valueOf(vec.getRow(0));
