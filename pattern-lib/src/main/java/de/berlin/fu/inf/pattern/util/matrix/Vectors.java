@@ -11,8 +11,11 @@ import java.util.Collection;
 import java.util.Random;
 import javax.annotation.Nullable;
 import org.jscience.mathematics.number.Float64;
+import org.jscience.mathematics.vector.DiagonalMatrix;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
+import org.jscience.mathematics.vector.SparseMatrix;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -24,6 +27,14 @@ public final class Vectors {
 
     public static Float64Vector valueOf(double[] data) {
         return Float64Vector.valueOf(data);
+    }
+
+    public static Float64Matrix randomMatrix(int rows, int collumns) {
+        throw new NotImplementedException();
+    }
+
+    public static Float64Matrix randomMatrix(int rows, int collumns, double minVal, double maxVal) {
+        throw new NotImplementedException();
     }
 
     public static Float64Vector valueOf(Vectorable vec) {
