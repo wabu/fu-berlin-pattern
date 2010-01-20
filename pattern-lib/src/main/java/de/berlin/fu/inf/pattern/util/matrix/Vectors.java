@@ -5,16 +5,13 @@
 
 package de.berlin.fu.inf.pattern.util.matrix;
 
-import de.berlin.fu.inf.pattern.util.data.DoubleVector;
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.Collection;
 import java.util.Random;
 import javax.annotation.Nullable;
 import org.jscience.mathematics.number.Float64;
-import org.jscience.mathematics.vector.DiagonalMatrix;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
-import org.jscience.mathematics.vector.SparseMatrix;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -30,11 +27,21 @@ public final class Vectors {
     }
 
     public static Float64Matrix randomMatrix(int rows, int collumns) {
-        throw new NotImplementedException();
+        return randomMatrix(rows, collumns, 0, 1);
     }
 
     public static Float64Matrix randomMatrix(int rows, int collumns, double minVal, double maxVal) {
-        throw new NotImplementedException();
+        if(minVal > maxVal) {
+            throw new IllegalArgumentException(
+                "minVal must be less then maxVal, but got " + minVal + " and " + maxVal);
+        }
+        double data[][] = new double[rows][collumns];
+        for(int i=0; i<rows; i++) {
+            for (int j = 0; j < collumns; j++) {
+                data[i][j] = rand.nextDouble()*(maxVal-minVal)-minVal;
+            }
+        }
+        return Float64Matrix.valueOf(data);
     }
 
     public static Float64Vector valueOf(Vectorable vec) {
