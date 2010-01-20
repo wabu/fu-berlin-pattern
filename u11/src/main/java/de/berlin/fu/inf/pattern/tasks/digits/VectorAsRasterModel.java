@@ -9,6 +9,7 @@ import de.berlin.fu.inf.pattern.tasks.gui.AbstractRasterModel;
 import de.berlin.fu.inf.pattern.tasks.gui.ModelChangedEvent;
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Vector;
+import org.jscience.mathematics.vector.Vector;
 
 /**
  *
@@ -16,7 +17,7 @@ import org.jscience.mathematics.vector.Float64Vector;
  */
 public class VectorAsRasterModel extends AbstractRasterModel {
 
-    private Float64Vector vector;
+    private Vector<Float64> vector;
     private double maxVal = 0d;
 
     public VectorAsRasterModel() {}
@@ -25,7 +26,7 @@ public class VectorAsRasterModel extends AbstractRasterModel {
         setData(vector, cols, rows);
     }
 
-    public void setData(Float64Vector vector, int cols, int rows) {
+    public void setData(Vector<Float64> vector, int cols, int rows) {
         if( vector == null)
             throw new IllegalArgumentException("vector must not be null");
         if(vector.getDimension() != cols*rows || cols <0 || rows < 0)
@@ -37,9 +38,10 @@ public class VectorAsRasterModel extends AbstractRasterModel {
 
         // normalize output
         this.maxVal = 0d;
-        for(Float64 v : vector.asList()) {
-            if(maxVal < v.doubleValue()) {
-                maxVal = v.doubleValue();
+        for(int i=0; i<vector.getDimension(); i++) {
+            double v = vector.get(i).doubleValue();
+            if(maxVal < v) {
+                maxVal = v;
             }
         }
 
@@ -51,7 +53,7 @@ public class VectorAsRasterModel extends AbstractRasterModel {
         if( x<0 || x >= this.cols || y < 0 || y >= this.rows)
             throw new IndexOutOfBoundsException();
         if( vector != null )
-            return vector.getValue(y*cols+x)/maxVal;
+            return vector.get(y*cols+x).doubleValue()/maxVal;
         else
             return Double.NaN;
     }

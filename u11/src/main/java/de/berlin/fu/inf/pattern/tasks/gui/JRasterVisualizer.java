@@ -83,7 +83,11 @@ public class JRasterVisualizer extends javax.swing.JPanel {
         for( int x = 0; x<model.getCols(); x++) {
             for( int y = 0; y<model.getRows(); y++) {
                 float greyScale = (float) model.getColor(x, y);
-                grphcs.setColor(new Color(greyScale, greyScale, greyScale));
+                if(greyScale >= 0 ) {
+                    grphcs.setColor(new Color(greyScale, greyScale, greyScale));
+                } else {
+                    grphcs.setColor(new Color(-greyScale, 0, 0));
+                }
                 grphcs.fillRect(
                         rasterScale*x,      // x
                         rasterScale*y,      // y

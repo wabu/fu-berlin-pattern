@@ -24,7 +24,9 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import org.apache.log4j.Logger;
+import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Vector;
+import org.jscience.mathematics.vector.Vector;
 
 /**
  *
@@ -48,7 +50,7 @@ public class GUIControllerImpl
     public GUIControllerImpl(Map<RasterDigit, Integer> digits) {
         this.digits = new ArrayList<Entry<RasterDigit, Integer>>(digits.entrySet());
         
-        featureNumber = 10;
+        featureNumber = 20;
 
         selectedDigitModel      = new VectorAsRasterModel();
         reconstructedDigitModel = new VectorAsRasterModel();
@@ -62,14 +64,12 @@ public class GUIControllerImpl
         this.setMatrixFac(new EMNegativeMatrixFactorization(featureNumber));
     }
 
-    public void setMatrixFac(MatrixFactorization mf) {
-        this.matrixFac = mf;
-
+    public void setMatrixFac(final MatrixFactorization mf) {
         new Thread( new Runnable() {
 
             @Override
             public void run() {
-                matrixFac.learn(
+                mf.learn(
                 Lists.transform(digits, new Function<Entry<RasterDigit,Integer>, Float64Vector>() {
                     @Override
                     public Float64Vector apply(Entry<RasterDigit,Integer> from) {
@@ -79,7 +79,7 @@ public class GUIControllerImpl
 
                 // update basicVectors
                 int i = 0;
-                List<Float64Vector> basics = matrixFac.getFeatures();
+                List<? extends Vector<Float64>> basics = mf.getFeatures();
                 for( VectorAsRasterModel vecRasterModel : basicVectorModels) {
                     if( i >= basics.size() ) {
                         logger.warn("feature size is smaller than expected");
@@ -92,8 +92,9 @@ public class GUIControllerImpl
 
                     i++;
                 }
+                matrixFac = mf;
             }
-        }).run();
+        }).start();
         
     }
 
@@ -129,8 +130,7 @@ public class GUIControllerImpl
             this.selectedDigitModel.setData(rDigit);
             
             if( isMatrixFacSet() ) {
-                Float64Vector recVec = matrixFac.decode(
-                                            matrixFac.encode(rDigit.getVec()));
+                Vector<Float64> recVec = matrixFac.decode(matrixFac.encode(rDigit.getVec()));
                 this.reconstructedDigitModel.setData(
                         recVec, rDigit.getWidth(), rDigit.getHeight());
             }
@@ -150,7 +150,7 @@ public class GUIControllerImpl
     }
 
     public boolean isMatrixFacSet() {
-        return matrixFac == null;
+        return matrixFac != null;
     }
 
 
