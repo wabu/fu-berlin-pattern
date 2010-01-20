@@ -18,6 +18,6 @@ public interface GUIController extends ListSelectionListener {
     public ListModel getDigitListModel();
     public RasterModel getSlectedDigitModel();
     public RasterModel getRecontructedDigitModel();
-    public Collection<RasterModel> getBasicVectorDigitModels();
+    public Collection<? extends RasterModel> getBasicVectorDigitModels();
 
 }
