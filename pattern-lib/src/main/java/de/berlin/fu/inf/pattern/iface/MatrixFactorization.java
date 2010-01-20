@@ -5,16 +5,17 @@
 
 package de.berlin.fu.inf.pattern.iface;
 
-import de.berlin.fu.inf.pattern.util.types.Vectorable;
 import java.util.List;
+import org.jscience.mathematics.vector.Float64Vector;
 
 /**
  *
  * @author wabu
  */
 public interface MatrixFactorization {
-    void learn(List<Vectorable> data);
+    void learn(List<Float64Vector> data);
 
-    List<Vectorable> getFeatures();
-    Vectorable getCode(Vectorable data);
+    public List<Float64Vector> getFeatures();
+    public Float64Vector encode(Float64Vector data);
+    public Float64Vector decode(Float64Vector data);
 }
