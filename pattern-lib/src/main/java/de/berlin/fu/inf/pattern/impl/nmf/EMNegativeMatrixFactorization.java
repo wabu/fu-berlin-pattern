@@ -15,6 +15,7 @@ import org.jscience.mathematics.vector.DiagonalMatrix;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
 import org.jscience.mathematics.vector.Matrix;
+import org.jscience.mathematics.vector.Vector;
 
 /**
  *
@@ -37,12 +38,12 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
 
 
 
-    public Float64Vector decode(Float64Vector data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Vector<Float64> decode(Vector<Float64> code) {
+        return features.times(code);
     }
 
-    public Float64Vector encode(Float64Vector data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Vector<Float64> encode(Vector<Float64> data) {
+        return features.pseudoInverse().times(data);
     }
 
     public List<Float64Vector> getFeatures() {
@@ -52,7 +53,7 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
      *
      * @param data
      */
-    public void learn(List<Float64Vector> data) {
+    public void learn(List<? extends Vector<Float64>> data) {
         final int sampleSize = data.size();
         // create V from data
         final Matrix<Float64> v = Float64Matrix.valueOf(data).transpose();
@@ -65,9 +66,10 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
         Float64Matrix h = Vectors.randomMatrix(featureNumber, sampleSize);
 
         // EM Algo
-        for( int i = 0; i<100; i++ )
-        {
-            logger.debug("em-step "+i+"/100");
+        for( int i = 0; i<200; i++ ) {
+            if(i%10==0) {
+                logger.debug("em-step "+i+"/200");
+            }
             // -> V/V'
             Float64Matrix vQuot = componentwiseQuot(v, w.times(h));
             // -> W korrigieren ( und normieren)
