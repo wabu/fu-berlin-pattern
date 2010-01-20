@@ -7,6 +7,7 @@ package de.berlin.fu.inf.pattern.tasks.digits;
 
 import de.berlin.fu.inf.pattern.tasks.gui.AbstractRasterModel;
 import de.berlin.fu.inf.pattern.tasks.gui.ModelChangedEvent;
+import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Vector;
 
 /**
@@ -16,6 +17,7 @@ import org.jscience.mathematics.vector.Float64Vector;
 public class VectorAsRasterModel extends AbstractRasterModel {
 
     private Float64Vector vector;
+    private double maxVal = 0d;
 
     public VectorAsRasterModel() {}
 
@@ -33,6 +35,14 @@ public class VectorAsRasterModel extends AbstractRasterModel {
         this.cols = cols;
         this.rows = rows;
 
+        // normalize output
+        this.maxVal = 0d;
+        for(Float64 v : vector.asList()) {
+            if(maxVal < v.doubleValue()) {
+                maxVal = v.doubleValue();
+            }
+        }
+
         notifyModelChangedListeners(new ModelChangedEvent(this));
     }
 
@@ -41,7 +51,7 @@ public class VectorAsRasterModel extends AbstractRasterModel {
         if( x<0 || x >= this.cols || y < 0 || y >= this.rows)
             throw new IndexOutOfBoundsException();
         if( vector != null )
-            return vector.getValue(y*cols+x);
+            return vector.getValue(y*cols+x)/maxVal;
         else
             return Double.NaN;
     }

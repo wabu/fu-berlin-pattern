@@ -65,8 +65,9 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
         Float64Matrix h = Vectors.randomMatrix(featureNumber, sampleSize);
 
         // EM Algo
-        for( int i = 0; i<200; i++ )
+        for( int i = 0; i<100; i++ )
         {
+            logger.debug("em-step "+i+"/100");
             // -> V/V'
             Float64Matrix vQuot = componentwiseQuot(v, w.times(h));
             // -> W korrigieren ( und normieren)
@@ -86,13 +87,13 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
      * @return
      */
     protected Float64Matrix normColumns(Float64Matrix m) {
-        Matrix<Float64> vec = Float64Matrix.valueOf(
-                Vectors.filledVector(m.getNumberOfRows(), 1.0d));
+        Matrix<Float64> vec = Float64Matrix.valueOf(Vectors.filledVector(m.getNumberOfRows(), 1d));
 
         // calculate sums of each row
         vec = vec.times(m);
-        vec = vec.times(Float64.valueOf(1d/m.getNumberOfRows()));
-        assert vec.getNumberOfRows() == 1;
+        // 1/vec
+        Matrix<Float64> ones = Float64Matrix.valueOf(Vectors.filledVector(vec.getNumberOfColumns(), 1d));
+        vec = componentwiseQuot(ones, vec);
         // create diagonal matrix
         Matrix<Float64> diag = DiagonalMatrix.valueOf(vec.getRow(0));
         return m.times(diag);
