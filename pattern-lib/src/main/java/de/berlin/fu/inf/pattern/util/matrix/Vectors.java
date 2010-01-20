@@ -6,13 +6,13 @@
 package de.berlin.fu.inf.pattern.util.matrix;
 
 import de.berlin.fu.inf.pattern.util.types.Vectorable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 import javax.annotation.Nullable;
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.Float64Matrix;
 import org.jscience.mathematics.vector.Float64Vector;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -42,6 +42,12 @@ public final class Vectors {
             }
         }
         return Float64Matrix.valueOf(data);
+    }
+
+    public static Float64Vector filledVector(int size, double value) {
+        double data[] = new double[size];
+        Arrays.fill(data, value);
+        return Float64Vector.valueOf(data);
     }
 
     public static Float64Vector valueOf(Vectorable vec) {
