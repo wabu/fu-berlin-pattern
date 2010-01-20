@@ -11,6 +11,7 @@ import org.jscience.mathematics.vector.Float64Vector;
  */
 class ComponentReductionTransformator implements Function<Float64Vector, Float64Vector> {
 
+    // TODO remove state
     private Float64Vector component;
     private Float64Vector translation;
 

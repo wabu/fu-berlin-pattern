@@ -73,8 +73,11 @@ public class OjaAnalysis implements PrincipleComponentAnalysis {
 
             }
             logger.debug("component " + component + " is " + omega);
+           
+            // FIXME goes wrong when dim > 2 because of lazy list
             trans.setComponent(omega);
             trans.setTranslation(center.times(-1));
+
             mainComponents.add(omega);
 
             analysisData = Lists.transform(analysisData, trans);

@@ -26,6 +26,12 @@ public final class Vectors {
         return Float64Vector.valueOf(data);
     }
 
+    /**
+     * Matrix filled 
+     * @param rows
+     * @param collumns
+     * @return
+     */
     public static Float64Matrix randomMatrix(int rows, int collumns) {
         return randomMatrix(rows, collumns, 0, 1);
     }
@@ -89,15 +95,16 @@ public final class Vectors {
 
 
     /**
-     *
      * @param dimension
      * @return
      */
     @Nullable
     public static Float64Vector random(int dimension) {
-        if( dimension <= 0) return null;
+        if( dimension <= 0) {
+            throw new IllegalArgumentException("dimension must be >0");
+        }
 
-        //FIXME I don't think that this is a good random vector ... (wabu)
+        //XXX I don't think that this is a good random vector ... (wabu)
         double[] data = new double[dimension];
         // init random data
         for( int i = 0; i<dimension; i++) {
