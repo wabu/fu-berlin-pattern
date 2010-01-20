@@ -13,13 +13,13 @@ import org.jscience.mathematics.vector.Float64Vector;
  *
  * @author alex
  */
-public class RasterDigitModel extends AbstractRasterModel {
+public class VectorAsRasterModel extends AbstractRasterModel {
 
     private Float64Vector vector;
 
-    public RasterDigitModel() {}
+    public VectorAsRasterModel() {}
 
-    public RasterDigitModel(Float64Vector vector, int cols, int rows) {
+    public VectorAsRasterModel(Float64Vector vector, int cols, int rows) {
         setData(vector, cols, rows);
     }
 
@@ -35,7 +35,8 @@ public class RasterDigitModel extends AbstractRasterModel {
 
         notifyModelChangedListeners(new ModelChangedEvent(this));
     }
-    
+
+    @Override
     public double getColor(int x, int y) {
         if( x<0 || x >= this.cols || y < 0 || y >= this.rows)
             throw new IndexOutOfBoundsException();
@@ -53,7 +54,7 @@ public class RasterDigitModel extends AbstractRasterModel {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
-        builder.append(RasterDigitModel.class.getSimpleName());
+        builder.append(VectorAsRasterModel.class.getSimpleName());
         builder.append(" raster=");
         builder.append(getCols());
         builder.append("x");

@@ -11,6 +11,8 @@
 
 package de.berlin.fu.inf.pattern.tasks.gui;
 
+import java.util.Collection;
+
 /**
  *
  * @author alex
@@ -21,6 +23,7 @@ public class JMainFrameNMF extends javax.swing.JFrame {
 
     // further GUI-Elements
     private JRasterVisualizer jSelectedDigit;
+    private JRasterVisualizer jReconstructedDigit;
 
     /** Creates new form JMainFrameNMF */
     public JMainFrameNMF() {
@@ -29,9 +32,11 @@ public class JMainFrameNMF extends javax.swing.JFrame {
     }
     
     protected void postInitComponents() {
-        jSelectedDigit = new JRasterVisualizer();
+        jSelectedDigit = new JRasterVisualizer(10);
+        jReconstructedDigit = new JRasterVisualizer(10);
 
         this.jMainPanel.add(jSelectedDigit);
+        this.jMainPanel.add(jReconstructedDigit);
     }
 
     /** This method is called from within the constructor to
@@ -63,17 +68,6 @@ public class JMainFrameNMF extends javax.swing.JFrame {
 
         jBasicRasters.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        javax.swing.GroupLayout jBasicRastersLayout = new javax.swing.GroupLayout(jBasicRasters);
-        jBasicRasters.setLayout(jBasicRastersLayout);
-        jBasicRastersLayout.setHorizontalGroup(
-            jBasicRastersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
-        );
-        jBasicRastersLayout.setVerticalGroup(
-            jBasicRastersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 90, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,8 +77,8 @@ public class JMainFrameNMF extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
-                    .addComponent(jBasicRasters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBasicRasters, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                    .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -94,9 +88,9 @@ public class JMainFrameNMF extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                        .addComponent(jMainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBasicRasters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jBasicRasters, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -125,7 +119,18 @@ public class JMainFrameNMF extends javax.swing.JFrame {
         this.jDigitList.setModel(controller.getDigitListModel());
 
         this.jDigitList.addListSelectionListener(controller);
+        
         this.jSelectedDigit.setModel(this.controller.getSlectedDigitModel());
+        this.jReconstructedDigit.setModel(this.controller.getRecontructedDigitModel());
+
+        Collection<? extends RasterModel> basicModel = this.controller.getBasicVectorDigitModels();
+        for( RasterModel model : basicModel ) {
+            JRasterVisualizer vis = new JRasterVisualizer(3);
+            vis.setModel(model);
+            this.jBasicRasters.add(vis);
+        }
+        this.validate();
+
 
     }
 }
