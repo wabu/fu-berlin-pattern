@@ -3,13 +3,12 @@
  * and open the template in the editor.
  */
 
-package de.berlin.fu.inf.pattern.data;
+package de.berlin.fu.inf.pattern.data.feature;
 
 /**
  *
  * @author wabu
  */
-public interface Featured {
-    Enum getFeature(int i);
-    int getSize();
+public interface FeatureDescription {
+    Enum<?>[] values();
 }
