@@ -5,44 +5,41 @@
 
 package de.berlin.fu.inf.pattern.tasks;
 
-import de.berlin.fu.inf.pattern.data.Featured;
+import de.berlin.fu.inf.pattern.data.feature.Feature;
+import de.berlin.fu.inf.pattern.data.feature.FeatureImpl;
+import de.berlin.fu.inf.pattern.data.feature.FeatureVector;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  *
  * @author wabu
  */
-public class CarData implements Featured {
-    private final Enum klass;
-    private final List<Enum> attributes;
+public class CarData implements FeatureVector {
+    private final Enum<?> klass;
+    private final List<Feature> attributes;
 
     public CarData(String value) throws IndexOutOfBoundsException, IllegalArgumentException{
         String[] vals = value.split(",");
         int i=0;
 
-        attributes = new ArrayList<Enum>(vals.length-1);
-        attributes.add(Buying.valueOf(foo(vals[i++])));
-        attributes.add(Maint.valueOf(foo(vals[i++])));
-        attributes.add(Doors.valueOf(foo(vals[i++])));
-        attributes.add(Persons.valueOf(foo(vals[i++])));
-        attributes.add(LugBoot.valueOf(foo(vals[i++])));
-        attributes.add(Safty.valueOf(foo(vals[i++])));
+        attributes = new ArrayList<Feature>(vals.length-1);
+        // can't abstract funcalls to class without maior pain in da ass
+        attributes.add(
+                new FeatureImpl(Buying.values(), Buying.valueOf(foo(vals[i++]))));
+        attributes.add(
+                new FeatureImpl(Maint.values(), Maint.valueOf(foo(vals[i++]))));
+        attributes.add(
+                new FeatureImpl(Doors.values(), Doors.valueOf(foo(vals[i++]))));
+        attributes.add(
+                new FeatureImpl(Persons.values(), Persons.valueOf(foo(vals[i++]))));
+        attributes.add(
+                new FeatureImpl(LugBoot.values(), LugBoot.valueOf(foo(vals[i++]))));
+        attributes.add(
+                new FeatureImpl(Safty.values(), Safty.valueOf(foo(vals[i++]))));
 
         klass = Acceptability.valueOf(foo(vals[i++]));
-    }
-
-    public Enum getKlass() {
-        return klass;
-    }
-
-    @Override
-    public Enum getFeature(int i) {
-        return attributes.get(i);
-    }
-    @Override
-    public int getSize() {
-        return attributes.size();
     }
 
 
@@ -54,9 +51,29 @@ public class CarData implements Featured {
         }
     }
 
+    public Enum<?> getKlass() {
+        return klass;
+    }
+
+    @Override
+    public int getSize() {
+        return attributes.size();
+    }
+
+    @Override
+    public Feature getFeature(int i) {
+        return attributes.get(i);
+    }
+
+    @Override
+    public List<Feature> getFeatures() {
+        return Collections.unmodifiableList(attributes);
+    }
+
     public static enum Acceptability {
         unacc, acc, good, vgood
     }
+
     public static enum Buying {
         vhigh, high, med, low
     }
