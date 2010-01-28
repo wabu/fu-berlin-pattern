@@ -18,6 +18,7 @@ import de.berlin.fu.inf.pattern.iface.SupervisedClassifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 public class ID3Tree<D extends FeatureVector,C> implements
         SupervisedClassifier<D, C>{
+    private final Logger logger = Logger.getLogger(ID3Tree.class);
     private Node root;
 
     @Override
@@ -72,6 +74,8 @@ public class ID3Tree<D extends FeatureVector,C> implements
     }
 
     private Node createTree(Collection<Entry<D,C>> examples) {
+        logger.debug("subtree size is "+examples.size());
+
         if(examples.isEmpty()) {
             throw new IllegalArgumentException("can't create subtree based on no data");
         }
@@ -79,10 +83,10 @@ public class ID3Tree<D extends FeatureVector,C> implements
             return new Leaf(examples.iterator().next().getClassification());
         }
 
-
         final int i = getBestFeature(examples);
         FeatureDescription d =
                 examples.iterator().next().getData().getFeature(i).getDescription();
+        logger.info("decided on feature "+i);
 
         Internal n = new Internal(new Decision<D> () {
             @Override
@@ -135,7 +139,7 @@ public class ID3Tree<D extends FeatureVector,C> implements
     private int getBestFeature(final Collection<Entry<D,C>> examples) {
         FeatureVector fs = examples.iterator().next().getData();
         int best = 0;
-        double val = 0;
+        double val = Double.POSITIVE_INFINITY;
 
         for(int i=0; i<fs.getSize(); i++) {
             Feature f = fs.getFeature(i);
@@ -156,7 +160,9 @@ public class ID3Tree<D extends FeatureVector,C> implements
             )) {
                  sumed += d;
             }
-            if(sumed > val) {
+            logger.debug("entrophy of "+i+" is "+sumed/examples.size());
+
+            if(sumed < val) {
                 best = i;
                 val = sumed;
             }

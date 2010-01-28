@@ -17,7 +17,7 @@ import java.util.List;
  * @author wabu
  */
 public class CarData implements FeatureVector {
-    private final Enum<?> klass;
+    private final Acceptability klass;
     private final List<Feature> attributes;
 
     public CarData(String value) throws IndexOutOfBoundsException, IllegalArgumentException{
@@ -51,7 +51,7 @@ public class CarData implements FeatureVector {
         }
     }
 
-    public Enum<?> getKlass() {
+    public Acceptability getKlass() {
         return klass;
     }
 

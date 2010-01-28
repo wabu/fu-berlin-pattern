@@ -5,6 +5,7 @@
 
 package de.berlin.fu.inf.pattern.tasks;
 
+import de.berlin.fu.inf.pattern.util.Threads;
 import org.apache.log4j.Logger;
 
 /**
@@ -26,5 +27,6 @@ public class Main {
                 logger.error("execution of "+t.getClass()+" failed", e);
             }
         }
+        Threads.shutdown();
     }
 }

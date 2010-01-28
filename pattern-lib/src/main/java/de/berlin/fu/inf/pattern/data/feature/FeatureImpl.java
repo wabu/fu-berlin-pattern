@@ -21,12 +21,17 @@ public class FeatureImpl implements Feature {
 
     @Override
     public FeatureDescription getDescription() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new FeatureDescription() {
+            @Override
+            public Enum<?>[] values() {
+                return values;
+            }
+        };
     }
 
     @Override
     public Enum<?> getValue() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return val;
     }
 
 }
