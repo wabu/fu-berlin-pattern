@@ -131,6 +131,7 @@
     <module>u09</module>
     <module>u10</module>
     <module>u11</module>
+    <module>u12</module>
   </modules>
 
   <dependencies>
