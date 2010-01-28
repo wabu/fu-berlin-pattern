@@ -49,10 +49,8 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
     public List<Float64Vector> getFeatures() {
         return new MatrixColumnList(features);
     }
-    /**
-     *
-     * @param data
-     */
+
+    @Override
     public void learn(List<? extends Vector<Float64>> data) {
         final int sampleSize = data.size();
         // create V from data
@@ -84,17 +82,15 @@ public class EMNegativeMatrixFactorization implements MatrixFactorization {
         this.features = w;
     }
 
-    /**
-     * @param m
-     * @return
-     */
     protected Float64Matrix normColumns(Float64Matrix m) {
-        Matrix<Float64> vec = Float64Matrix.valueOf(Vectors.filledVector(m.getNumberOfRows(), 1d));
-
+        Matrix<Float64> vec = Float64Matrix.valueOf(
+                Vectors.filledVector(m.getNumberOfRows(), 1d));
         // calculate sums of each row
         vec = vec.times(m);
+
         // 1/vec
-        Matrix<Float64> ones = Float64Matrix.valueOf(Vectors.filledVector(vec.getNumberOfColumns(), 1d));
+        Matrix<Float64> ones = Float64Matrix.valueOf(
+                Vectors.filledVector(vec.getNumberOfColumns(), 1d));
         vec = componentwiseQuot(ones, vec);
         // create diagonal matrix
         Matrix<Float64> diag = DiagonalMatrix.valueOf(vec.getRow(0));

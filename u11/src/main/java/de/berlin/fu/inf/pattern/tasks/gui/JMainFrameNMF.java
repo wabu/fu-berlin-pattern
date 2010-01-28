@@ -63,10 +63,13 @@ public class JMainFrameNMF extends javax.swing.JFrame {
             public Object getElementAt(int i) { return strings[i]; }
         });
         jDigitList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jDigitList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jDigitList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(jDigitList);
 
+        jMainPanel.setLayout(new java.awt.GridLayout());
+
         jBasicRasters.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        jBasicRasters.setLayout(new java.awt.GridLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,7 +133,5 @@ public class JMainFrameNMF extends javax.swing.JFrame {
             this.jBasicRasters.add(vis);
         }
         this.validate();
-
-
     }
 }

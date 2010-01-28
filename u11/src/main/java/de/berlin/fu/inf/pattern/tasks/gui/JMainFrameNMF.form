@@ -72,7 +72,7 @@
             </Property>
             <Property name="selectionMode" type="int" value="0"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Handcursor"/>
+              <Color id="Default Cursor"/>
             </Property>
           </Properties>
         </Component>
@@ -80,7 +80,10 @@
     </Container>
     <Container class="javax.swing.JPanel" name="jMainPanel">
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
     </Container>
     <Container class="javax.swing.JPanel" name="jBasicRasters">
       <Properties>
@@ -91,7 +94,10 @@
         </Property>
       </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
     </Container>
   </SubComponents>
 </Form>

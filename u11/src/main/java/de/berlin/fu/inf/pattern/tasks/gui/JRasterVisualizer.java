@@ -89,10 +89,10 @@ public class JRasterVisualizer extends javax.swing.JPanel {
                     grphcs.setColor(new Color(-greyScale, 0, 0));
                 }
                 grphcs.fillRect(
-                        rasterScale*x,      // x
-                        rasterScale*y,      // y
-                        rasterScale,        // width
-                        rasterScale);       // height
+                        getWidth()*x/model.getCols(),      // x
+                        getHeight()*y/model.getRows(),      // y
+                        getWidth(),        // width
+                        getHeight());       // height
             }
         }
     }
@@ -161,10 +161,7 @@ public class JRasterVisualizer extends javax.swing.JPanel {
                 repaint();
             }
         });
-
     }
-
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
