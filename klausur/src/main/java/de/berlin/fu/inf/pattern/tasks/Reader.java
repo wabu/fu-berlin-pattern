@@ -50,6 +50,9 @@ public class Reader {
 
         String line;
         while((line = reader.readLine()) != null) {
+            if(line.charAt(0) == '#') {
+                continue;
+            }
             data.add(parseLine(line));
         }
     }

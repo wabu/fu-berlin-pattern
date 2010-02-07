@@ -18,12 +18,16 @@ import java.util.List;
 public class QueuedIterator<E> extends AbstractIterator<List<E>> {
     private final LinkedList<E> queue; //NOPMD
     private final Iterator<E> base;
+    private final int n;
 
     public QueuedIterator(int n, Iterable<E> base) {
         super();
+        this.n = n;
         this.queue = new LinkedList<E>();
         this.base = base.iterator();
 
+        // the iterator always removes the first element, so we add a null here
+        this.queue.add(null);
         for(int i=0; i<n-1; i++) {
             Preconditions.checkArgument(this.base.hasNext(), 
                     "base must have at least %s items", n);
@@ -35,6 +39,7 @@ public class QueuedIterator<E> extends AbstractIterator<List<E>> {
     @Override
     @SuppressWarnings("unchecked")
     protected List<E> computeNext() {
+        assert queue.size() == n;
         if(!base.hasNext()) {
             return endOfData();
         }

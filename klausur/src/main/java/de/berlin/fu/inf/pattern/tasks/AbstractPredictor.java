@@ -123,7 +123,13 @@ public abstract class AbstractPredictor {
         Preconditions.checkState(params!=null, "predictor not trained yet");
 
         Vector<Float64> s = transformOriginalToInternState(states); //NOPMD
-        Vector<Float64> s_ = params.times(s); //NOPMD
+
+        Vector<Float64> s_ = 
+            Float64Matrix.valueOf(s).times(params).getRow(0);
         return transformInternToOriginalState(states, s_);
+    }
+
+    public int getHistorySize() {
+        return historySize;
     }
 }
