@@ -5,8 +5,7 @@
 
 package de.berlin.fu.inf.pattern.tasks;
 
-import de.berlin.fu.inf.pattern.tasks.impls.WabusNotSoooSimplePredictor;
-import de.berlin.fu.inf.pattern.tasks.impls.WabusSimplePredictor;
+import de.berlin.fu.inf.pattern.tasks.impls.SimplePredictor;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.jscience.mathematics.number.Float64;
@@ -31,7 +30,8 @@ public class TaskX implements Runnable {
         List<Vector<Float64>> train = data.subList(0, data.size() / 2);
         List<Vector<Float64>> test = data.subList(data.size()/2, data.size());
 
-        AbstractPredictor pred = new WabusNotSoooSimplePredictor(3);
+        AbstractPredictor pred = new SimplePredictor(3);
+        //AbstractPredictor pred = new OriginInCarPredictor(3);
         pred.train(train);
 
         double xsum = 0;
@@ -43,6 +43,9 @@ public class TaskX implements Runnable {
             states.remove(states.size()-1);
 
             Vector<Float64> prediction = pred.predict(states);
+
+            logger.debug("target: "+target);
+            logger.debug("predic: "+prediction);
 
             //Vector<Float64> diff = prediction.minus(target);
             //sum += diff.times(diff).doubleValue();

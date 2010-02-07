@@ -5,34 +5,46 @@
 
 package de.berlin.fu.inf.pattern.tasks.impls;
 
+import com.google.common.collect.Lists;
 import de.berlin.fu.inf.pattern.tasks.AbstractPredictor;
 import de.berlin.fu.inf.pattern.util.Pair;
+import java.util.ArrayList;
 import java.util.List;
 import org.jscience.mathematics.number.Float64;
 import org.jscience.mathematics.vector.DenseVector;
 import org.jscience.mathematics.vector.Float64Vector;
 import org.jscience.mathematics.vector.Vector;
+import static de.berlin.fu.inf.pattern.tasks.impls.DataEntry.*;
 
 /**
  *
  * @author wabu
  */
-public class WabusSimplePredictor extends AbstractPredictor {
-    public WabusSimplePredictor() {
-        super(1);
+public class SimplePredictor extends AbstractPredictor {
+    public SimplePredictor() {
+        super(5);
+    }
+
+    public SimplePredictor(int i) {
+        super(i);
     }
 
     @Override
-    protected Vector<Float64> transformOriginalToInternState(List<Vector<Float64>> data) {
-        assert data.size() == 1;
-        Vector<Float64> v = data.get(0);
+    protected Vector<Float64> transformOriginalToInternState(
+            List<Vector<Float64>> data) {
+        List<Float64> concated =
+                new ArrayList<Float64>(getHistorySize()*4);
 
-        return Float64Vector.valueOf(
-                v.get(0), // X
-                v.get(1), // Y
-                v.get(2).times(v.get(4)), // cos*v
-                v.get(3).times(v.get(4)) // cos*v
-            );
+        for(Vector<Float64> v : data) {
+            concated.addAll(
+               Lists.newArrayList(
+                    v.get(X),
+                    v.get(Y),
+                    v.get(COS).times(v.get(V)),
+                    v.get(SIN).times(v.get(V))
+                ));
+        }
+        return Float64Vector.valueOf(concated);
     }
 
     @Override
